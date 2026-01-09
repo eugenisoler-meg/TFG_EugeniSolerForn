@@ -1,5 +1,6 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useState } from 'react';
+import * as SecureStore from 'expo-secure-store';
 import { Alert, Button, Platform, Text, TextInput, View } from 'react-native';
 
 export default function App() {
@@ -9,19 +10,24 @@ export default function App() {
 
   const login = async () => {
     try {
-      const response = await fetch(
-        'https://login.escoltesiguies.cat/API_TEST/api/test_2.php',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: `id=${encodeURIComponent(id)}&date=${date.toISOString().split('T')[0]}`
-        }
-      );
+      const res = await fetch("https://testapi.escoltesiguies.cat/auth/login", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({dni: "24414832X", birthdate: "2003-03-02"})
+      });
 
-      const text = await response.text();
+      const text = await res.text();
       console.log(text);
+      
+      const data = await res.json();
+
+      if (res.ok) {
+        await SecureStore.setItemAsync("token", data.token);
+        console.log("Logged in!", data.user);
+      } else {
+        alert(data.error);
+      }
+
       // Extract JSON part
       const jsonStart = text.indexOf('{');
       const jsonText = text.slice(jsonStart);

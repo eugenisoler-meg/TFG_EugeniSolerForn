@@ -2,6 +2,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { useState } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import { Alert, Button, Platform, Text, TextInput, View } from 'react-native';
+import * as Utils from '../../constants/utils';
 
 export default function App() {
   const [dni, setDNI] = useState('');
@@ -10,7 +11,7 @@ export default function App() {
 
   const login = async () => {
     try {
-       const res = await fetch(`https://testapi.escoltesiguies.cat/login?dni=${dni}&data_naixement=${data_naixement.toISOString().split('T')[0]}`, {
+       const res = await fetch(`https://testapi.escoltesiguies.cat/login?dni=${dni}&data_naixement=${Utils.parseDate(data_naixement)}`, {
         method: "GET",
         headers: {"Content-Type": "application/json"},
       }).then(response => response.text())

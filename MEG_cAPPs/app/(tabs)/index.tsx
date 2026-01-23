@@ -14,15 +14,15 @@ export default function App() {
        const res = await fetch(`https://testapi.escoltesiguies.cat/login?dni=${dni}&data_naixement=${Utils.parseDate(data_naixement)}`, {
         method: "GET",
         headers: {"Content-Type": "application/json"},
-      }).then(response => response.text())
+      }).then(response => response.json())
       .then(async r => {
-          console.log("Response:", r);
-          // if(!r.error) {
-          //   await SecureStore.setItemAsync("token", r.token);
-          //   console.log("Logged in!", r.user);
-          // } else {
-          //   console.log("Error logging in:", r.error);
-          // }
+          if(!r.error) {
+            await SecureStore.setItemAsync("USER", r.user);
+            Alert.alert("SESSIÓ INICIADA", `Benvingut/da ${JSON.parse(r.afiliat).nom + ' ' + JSON.parse(r.afiliat).cognoms}`);
+          } else {
+            console.log("Error logging in:", r.error);
+            Alert.alert("ERROR", JSON.parse(r.error).message);
+          }
         }
       );
     } catch (error: unknown) {
@@ -37,7 +37,9 @@ export default function App() {
 
   return (
     <View style={{ padding: 20 }}>
-      <Text>ID</Text>
+      <Text></Text>
+      <Text></Text>
+       <Text>ID</Text>
       <TextInput
         value={dni}
         onChangeText={setDNI}
@@ -46,7 +48,7 @@ export default function App() {
       />
 
       <Text>Date</Text>
-      <Button title="Pick date" onPress={() => setShowPicker(true)} />
+      <Button title="Escull data" onPress={() => setShowPicker(true)} />
 
       {showPicker && (
         <DateTimePicker

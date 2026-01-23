@@ -17,8 +17,8 @@ export default function App() {
       }).then(response => response.json())
       .then(async r => {
           if(!r.error) {
-            await SecureStore.setItemAsync("USER", r.user);
             Alert.alert("SESSIÓ INICIADA", `Benvingut/da ${JSON.parse(r.afiliat).nom + ' ' + JSON.parse(r.afiliat).cognoms}`);
+            await SecureStore.setItemAsync("USER", r.user);
           } else {
             console.log("Error logging in:", r.error);
             Alert.alert("ERROR", JSON.parse(r.error).message);
@@ -28,9 +28,9 @@ export default function App() {
     } catch (error: unknown) {
       console.log(error);
       if (error instanceof Error) {
-        Alert.alert('Network error', error.message);
+        Alert.alert('ERROR', error.message);
       } else {
-        Alert.alert('Network error', 'An unknown error occurred');
+        Alert.alert('ERROR', 'An unknown error occurred');
       }
     }
   };

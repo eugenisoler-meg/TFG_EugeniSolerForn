@@ -24,13 +24,15 @@ export const MAP_LABELS: { [key: string]: string } = {
     "cap_grups_rangers_noies_guia": "Rangers/Noies/Guia",
     "cap_grups_pioners_caraveles": "Pioners/Caraveles",
     "cap_grups_truc": "Truc",
+    "cap_grups_suport": "Suport",
 
-    "intendencia" : "Cap",
+    "intendencia" : "Intendència",
     "intendencia_castors_lludrigues": "Castors/Lludrigues",
     "intendencia_llops_daines": "Llops/Daines",
     "intendencia_rangers_noies_guia": "Rangers/Noies/Guia",
     "intendencia_pioners_caraveles": "Pioners/Caraveles",
     "intendencia_truc": "Truc",
+    "intendencia_suport": "Suport",
 
     "cap_agrupament" : "Cap d'Agrupament",
     "cap_agrupament_equip_agrupament":"Equip d'Agrupament",
@@ -40,4 +42,6 @@ export const MAP_LABELS: { [key: string]: string } = {
     "tresoreria_equip_agrupament" : "Equip d'Agrupament",
     "responsable_pedagogia" : "Responsable de Pedagogia",
     "responsable_pedagogia_equip_agrupament" : "Equip d'Agrupament",
+
+    "personal_tecnic" : "Personal Tècnic",
 };

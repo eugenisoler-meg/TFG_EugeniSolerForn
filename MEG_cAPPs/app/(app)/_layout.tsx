@@ -1,29 +1,46 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+import { Stack, router } from "expo-router";
+import { View, Pressable, StyleSheet, Alert } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import * as Utils from "@/constants/utils";
 
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-
-export default function AppTabs() {
-  const colorScheme = useColorScheme();
-
+export default function AppLayout() {
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-        }}
-      />
-      
-    </Tabs>
+    <View style={styles.container}>
+      {/* All pages render here */}
+      <View style={styles.content}>
+        <Stack screenOptions={{ headerShown: false }} />
+      </View>
+
+      {/* Persistent bottom bar */}
+      <View style={styles.footer}>
+        <Pressable onPress={() => router.push("/profile")}>
+          <Ionicons name="person-circle-outline" size={35} />
+        </Pressable>
+
+        <Pressable onPress={Utils.confirmLogout}>
+          <Ionicons name="log-out-outline" size={35} />
+        </Pressable>
+      </View>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+
+  content: {
+    flex: 1,
+  },
+
+  footer: {
+    height: 50,
+    borderTopWidth: 1,
+    borderColor: "#ddd",
+    backgroundColor: "white",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
+});

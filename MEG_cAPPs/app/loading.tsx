@@ -5,7 +5,7 @@ export default function LoadingScreen() {
   const puntLlei = __LLEI[Math.floor(Math.random() * __LLEI.length)];
     return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 20 }}>
-        <Text>{puntLlei}</Text>
+        <Text style={{ fontSize: 24}}>{puntLlei}</Text>
         <View style={{ marginTop: 20 }}>
             <ActivityIndicator size="large" />
         </View>

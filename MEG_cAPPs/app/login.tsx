@@ -1,8 +1,9 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { useState } from 'react';
-import * as SecureStore from 'expo-secure-store';
+import { useEffect, useState } from 'react';
 import { Alert, Button, Platform, Text, TextInput, View } from 'react-native';
 import * as Utils from '../constants/utils';
+import * as DATABASE from '../constants/database';
+import * as MODEL from '../constants/model';
 import LoadingScreen from './loading';
 import { router } from "expo-router";
 import ErrorScreen from './error';
@@ -14,12 +15,26 @@ export default function App() {
 
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any>(null);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const preLoad = async () => {
+      const USER = await Utils.getUserLoggedIn();
+      if (USER) {
+        // TESTING PURPOSES ONLY
+        router.push('./(app)/dashboard');
+        setDNI(USER.dni);
+        setDataNaixement(new Date(USER.data_naixement));
+      }
+    };
+    preLoad();
+  }, []);
+  
 
   const login = async () => {
     setLoading(true);
-    setError(false);
-    
+    setError(null);
+
     try {
       if(dni === '' || data_naixement === null) {
         Alert.alert('ERROR', 'Els dos camps són necessaris per iniciar sessió.');
@@ -27,25 +42,25 @@ export default function App() {
         return;
       }
       const res = await Utils.tryLogin(dni, data_naixement);
-      const text = await res.text();
+      const user = await Utils.cleanResponse(res);
+      setData(user);
 
-      text.replace("<pre></pre>", ""); // Remove the pre tag
-      const json = JSON.parse(text);
-      setData(json);
+      const USER = JSON.parse(user.user) as MODEL.User;
+      await Utils.storeUser(USER)
+        .then(async() => await DATABASE.getAfiliatByAfiliatID(USER.afiliat_id))
+          .then(afiliat => {
+              afiliat = JSON.parse(afiliat);
 
-      if (json.error) throw new Error(json.error || 'An error occurred during login');
-
-      await SecureStore.setItemAsync('USER', json.success.user);
-
-      Alert.alert('SESSIÓ INICIADA', 'Benvigut/uda ' + json.success.user.dni + '!');
-      router.replace('./(app)/index');
+              Alert.alert('SESSIÓ INICIADA', 'Hola, ' + afiliat.nom + ' ' +afiliat.cognoms +'! \n :)');
+              router.replace('./(app)/dashboard');
+            });
 
     } catch (e) {
-      setError(true);
+      setError("Error iniciant sessió. Comprova les dades introduïdes.");
       console.log(e);
 
       if (e instanceof Error) 
-        return ErrorScreen(e.message);
+        return setError(e.message);
 
     } finally {
       setLoading(false);
@@ -54,6 +69,7 @@ export default function App() {
   };
 
   if(loading) return LoadingScreen();
+  if(error) return ErrorScreen(error);
   return (
     <View style={{ padding: 20, margin: "auto", minWidth: 300, flex: 1, justifyContent: 'center' }}>
       

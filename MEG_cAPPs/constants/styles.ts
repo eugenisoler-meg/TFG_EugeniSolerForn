@@ -1,9 +1,16 @@
 export const BRANCA_COLORS: { [key: string]: string } = {
+    //Funcions d'infant
     "infant_castors_lludrigues": "#f6b26b",
     "infant_llops_daines": "#ffd966", 
     "infant_rangers_noies_guia": "#6d9eeb", 
     "infant_pioners_caraveles": "#e06666", 
-    "infant_truc": "#93c47d", 
+    "infant_truc": "#93c47d",
+    //Unitats
+    "castors_lludrigues": "#f6b26b",
+    "llops_daines": "#ffd966", 
+    "rangers_noies_guia": "#6d9eeb", 
+    "pioners_caraveles": "#e06666", 
+    "trucs": "#93c47d",
 };
 
 export const MAP_LABELS: { [key: string]: string } = {

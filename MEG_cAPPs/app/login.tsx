@@ -45,6 +45,8 @@ export default function LoginScreen() {
 
       setData(data);
       const USER = JSON.parse(data.user) as MODEL.User;
+      const AEiGs = JSON.parse(data.agrupaments) as string[];
+      const Unitats = JSON.parse(data.unitats) as string[];
       await Utils.setUser(USER);
 
       const [afiliat_string, funcions_string] = await Promise.all([
@@ -54,9 +56,9 @@ export default function LoginScreen() {
 
       const afiliat_parsed = JSON.parse(afiliat_string) as MODEL.Afiliat;
       const funcions_parsed = JSON.parse(funcions_string) as MODEL.Funcio[];
-      await Utils.setFuncions(funcions_parsed);
-      await Utils.setAfiliat(afiliat_parsed);
-
+      await Promise.all([
+        Utils.setFuncions(funcions_parsed), Utils.setAfiliat(afiliat_parsed), Utils.setAEiGs_ID(AEiGs), Utils.setUnitats_ID(Unitats)
+      ]);
       Alert.alert(
         'SESSIÓ INICIADA',
         `Hola, ${afiliat_parsed.nom} ${afiliat_parsed.cognoms}! \n :)`

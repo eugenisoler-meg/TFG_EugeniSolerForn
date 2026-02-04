@@ -1,13 +1,10 @@
 import { useEffect, useState } from "react";
 import { View, Text, Pressable, StyleSheet, ActivityIndicator, Alert } from "react-native";
 import { router } from "expo-router";
-import * as MODEL from "@/constants/model";
 import * as Utils from "@/constants/utils";
 
-import * as SecureStore from "expo-secure-store";
 import ErrorScreen from "../error";
 import* as Database from "@/constants/database";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type Permissions = {
   AEiG: boolean;
@@ -26,7 +23,7 @@ export default function DashboardScreen() {
       setPermisos(null);
 
       const USER = await Utils.getUser();  
-      console.log('USER : ',USER);   
+
       if (!USER) {
         setLoading(false);
         return ErrorScreen("No hi ha cap usuari amb sessió iniciada vàlida.");
@@ -34,7 +31,7 @@ export default function DashboardScreen() {
   
       try {
         const permisos = parseInt(await Database.getPermisosNivell(USER.afiliat_id));
-        console.warn(permisos);
+
         setPermisos({
           AEiG: (permisos & 1) > 0,
           DEM:  (permisos & 2) > 0 , // TODO : Properament
@@ -91,7 +88,7 @@ export default function DashboardScreen() {
     <View style={styles.container}>
       {/* MAIN BUTTON AREA */}
       <View style={styles.content}>
-        <Button title="Agrupament" enabled={permisos.AEiG} route="./(aeig)/index" />
+        <Button title="Agrupament" enabled={permisos.AEiG} route="./(aeig)/" />
         <Button title="Demarcació" enabled={permisos.DEM} route="/todo" />
         <Button title="MEG" enabled={permisos.MEG} route="/todo" />
       </View>

@@ -16,7 +16,7 @@ export default function ProfileLayout() {
   const [error, setError] = useState<string | null>(null);
   const [user, setUser] = useState<MODEL.User | null>(null);
   const [afiliat, setAfiliat] = useState<MODEL.Afiliat | null>(null);
-  const [historial, setHistorial] = useState<MODEL.Funcio[]>([]);
+  const [funcions, setFuncions] = useState<MODEL.Funcio[]>([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -32,8 +32,8 @@ export default function ProfileLayout() {
         const AFILIAT = await Utils.getAfiliat() as MODEL.Afiliat;
         setAfiliat(AFILIAT);
 
-        const HISTORY = await Utils.getFuncions() as MODEL.Funcio[];
-        setHistorial(HISTORY);
+        const FUNCIONS = await Utils.getFuncions() as MODEL.Funcio[];
+        setFuncions(FUNCIONS);
 
       } catch (e) {
         console.log(e);
@@ -54,8 +54,6 @@ export default function ProfileLayout() {
   if (error) return ErrorScreen(error);
   if (!user || !afiliat) return ErrorScreen("Error carregant dades");
   
-  console.warn(user, afiliat, historial);
-
   const SmallCard = ({title, enabled, titol, color, }: {title: string; enabled: boolean; titol?: string|number|null; color?: string; }) => (
     <View style={[styles.smallCard, !enabled && styles.disabled, color && { backgroundColor: color } ]}>
       <Text style={styles.smallCardText}>{title}</Text>
@@ -92,14 +90,14 @@ export default function ProfileLayout() {
         <Text style={styles.funcionalitatText}>Currículum Escolta</Text>
         {/* row of 2 cards */}
         {!showHistory &&<View style={styles.row}>
-          <AnysCard title="Anys d'infant" enabled={historial.filter((f)=>f.rol === "infant").length > 0} titol={String(Math.round(Utils.anysFuncions(historial.filter((f)=>f.rol === "infant"))*100)/100)} />
-          <AnysCard title="Anys de cap" enabled={historial.filter((f)=>f.rol === "cap_grups").length > 0} titol={String(Math.round(Utils.anysFuncions(historial.filter((f)=>f.rol === "cap_grups"))*100)/100)} />
-          <AnysCard title="Anys de EA" enabled={historial.filter((f)=>f.grup.endsWith("equip_agrupament")).length > 0} titol={String(Math.round(Utils.anysFuncions(historial.filter((f)=>f.grup.endsWith("equip_agrupament")))*100)/100)} />
+          <AnysCard title="Anys d'infant" enabled={funcions.filter((f)=>f.rol === "infant").length > 0} titol={String(Math.round(Utils.anysFuncions(funcions.filter((f)=>f.rol === "infant"))*100)/100)} />
+          <AnysCard title="Anys de cap" enabled={funcions.filter((f)=>f.rol === "cap_grups").length > 0} titol={String(Math.round(Utils.anysFuncions(funcions.filter((f)=>f.rol === "cap_grups"))*100)/100)} />
+          <AnysCard title="Anys de EA" enabled={funcions.filter((f)=>f.grup?.endsWith("equip_agrupament")).length > 0} titol={String(Math.round(Utils.anysFuncions(funcions.filter((f)=>f.grup?.endsWith("equip_agrupament")))*100)/100)} />
         </View>
       }
       </TouchableOpacity>
       {/* history table */}
-      {showHistory && (<CurriculumEscolta history={historial} />)}
+      {showHistory && (<CurriculumEscolta history={funcions} />)}
 
       <TouchableOpacity
         style={styles.funcionalitatBtn}

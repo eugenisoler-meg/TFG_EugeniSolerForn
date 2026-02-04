@@ -88,6 +88,29 @@ export const getFuncions = async () : Promise<MODEL.Funcio[] > => {
 export const setFuncions = async (funcions: MODEL.Funcio[]) : Promise<void> => {await AsyncStorage.setItem('FUNCIONS', JSON.stringify(funcions));};
 export const clearFuncions = async () : Promise<void> => {await AsyncStorage.removeItem('FUNCIONS');};
 
+export const getAEiGs_ID = async () : Promise< string[] > => {
+    try{
+        const FUNCIONS = await AsyncStorage.getItem('AEiG_ID');
+        return FUNCIONS ? JSON.parse(FUNCIONS) as string[]: [];
+    }catch{
+        return [];
+    }
+};
+export const setAEiGs_ID = async (funcions: string[]) : Promise<void> => {await AsyncStorage.setItem('AEiG_ID', JSON.stringify(funcions));};
+export const clearAEiGs_ID = async () : Promise<void> => {await AsyncStorage.removeItem('AEiG_ID');};
+
+export const getUnitats_ID = async () : Promise< string[] > => {
+    try{
+        const FUNCIONS = await AsyncStorage.getItem('Unitats_ID');
+        return FUNCIONS ? JSON.parse(FUNCIONS) as string[]: [];
+    }catch{
+        return [];
+    }
+};
+export const setUnitats_ID = async (funcions: string[]) : Promise<void> => {await AsyncStorage.setItem('Unitats_ID', JSON.stringify(funcions));};
+export const clearUnitats_ID = async () : Promise<void> => {await AsyncStorage.removeItem('Unitats_ID');};
+
+
 export const confirmLogout = async () => {
     Alert.alert(
           "Tanca la sessió",
@@ -103,4 +126,11 @@ export const confirmLogout = async () => {
       );
   };
 export const DAY_MILLIS = 24*60*60*1000; 
-export const logout = async() => {Promise.all([clearAfiliat(), clearFuncions(), clearUser()]);}
+
+export const logout = async() => {Promise.all([clearAfiliat(), clearFuncions(), clearUnitats_ID(), clearAEiGs_ID(), ])}; // TEST clearUser()]);}
+
+export const funcioActiva = (f : MODEL.Funcio): boolean => {
+    if(!f.data_inici || f.data_inici > new Date()) return false;
+	else if(!f.data_fi || f.data_fi > new Date()) return true;
+	else return false;
+};

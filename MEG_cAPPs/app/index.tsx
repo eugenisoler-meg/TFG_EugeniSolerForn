@@ -2,20 +2,31 @@ import { Link } from 'expo-router';
 import { Image, StyleSheet } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import React from 'react';
+import React  from 'react';
+import { useEffect, useState } from 'react';
+import * as Utils from '@/constants/utils';
+import * as MODEL from '@/constants/model';
 
 export default function ModalScreen() {
   
-  // TODO : check if user.login is more than 1day ago and reset it to null
+  useEffect(() => {
+    const preLoad = async () => {
+      const user = await Utils.getUser();
+      if(!user)  return;
+      if(user.ultim_login < (new Date()).getTime() - Utils.DAY_MILLIS)
+        await Utils.logout();
+    };
+    preLoad();
+  }, []);  
   
   return (
-    <ThemedView style={styles.container}>
-      {Logo()}
-      <ThemedText type="title">MEG cAPP's</ThemedText>
-      <Link href="/login" dismissTo style={styles.link}>
-        <ThemedText type="link">Inicia sessió</ThemedText>
-      </Link>
-    </ThemedView>
+      <ThemedView style={styles.container}>
+        {Logo()}
+        <ThemedText type="title">MEG cAPP's</ThemedText>
+        <Link href="./login" dismissTo style={styles.link}>
+          <ThemedText type="link">Inicia sessió</ThemedText>
+        </Link>
+      </ThemedView>
   );
 }
 

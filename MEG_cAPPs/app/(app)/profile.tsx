@@ -1,41 +1,39 @@
 import { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Pressable, TouchableOpacity, FlatList,} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+
 import * as MODEL from "@/constants/model";
 import * as Utils from "@/constants/utils";
 import * as DATABASE from "@/constants/database";
-import * as STYLES from "@/constants/styles";
 
 import { router } from "expo-router";
 import ErrorScreen from "../error";
 import LoadingScreen from "../loading";
+import CurriculumEscolta from "@/components/curriculum-escolta";
 
-export default function Profile() {
-  const [history, setHistory] = useState<MODEL.Funcio[]>([]);
-  const [user, setUser] = useState<MODEL.User | null>(null);
-  const [afiliat, setAfiliat] = useState<MODEL.Afiliat | null>(null);
+export default function ProfileLayout() {
   const [showHistory, setShowHistory] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [user, setUser] = useState<MODEL.User | null>(null);
+  const [afiliat, setAfiliat] = useState<MODEL.Afiliat | null>(null);
+  const [historial, setHistorial] = useState<MODEL.Funcio[]>([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
       setError(null);
       try {
-        const USER = await Utils.getUserLoggedIn();
-
-        if (!USER) {
-          router.replace("/login");
+        const user = await Utils.getUser();
+        if (!user) {
+          router.replace("../login");
           return;
         }
+        setUser(user);
 
-        setUser(USER);
-
-        const AFILIAT = JSON.parse(await DATABASE.getAfiliatByAfiliatID(USER.afiliat_id)) as MODEL.Afiliat;
+        const AFILIAT = await Utils.getAfiliat() as MODEL.Afiliat;
         setAfiliat(AFILIAT);
 
-        const HISTORY = JSON.parse(await DATABASE.getFuncionsByAfiliatID(USER.afiliat_id)) as MODEL.Funcio[];
-        setHistory(HISTORY);
+        const HISTORY = await Utils.getFuncions() as MODEL.Funcio[];
+        setHistorial(HISTORY);
 
       } catch (e) {
         console.log(e);
@@ -52,23 +50,21 @@ export default function Profile() {
   }, []);
 
   // ✅ conditional rendering only (NO hooks here)
-  if (loading) return <LoadingScreen />;
+  if (loading) return LoadingScreen();
   if (error) return ErrorScreen(error);
   if (!user || !afiliat) return ErrorScreen("Error carregant dades");
+  
+  console.warn(user, afiliat, historial);
 
-
-  const SmallCard = ({
-    title,
-    enabled,
-    titol,
-    color,
-  }: {
-    title: string;
-    enabled: boolean;
-    titol?: string|number|null;
-    color?: string;
-  }) => (
+  const SmallCard = ({title, enabled, titol, color, }: {title: string; enabled: boolean; titol?: string|number|null; color?: string; }) => (
     <View style={[styles.smallCard, !enabled && styles.disabled, color && { backgroundColor: color } ]}>
+      <Text style={styles.smallCardText}>{title}</Text>
+      {titol && <Text style={styles.smallCardTextSmall}>{titol}</Text>}
+    </View>
+  );
+
+  const AnysCard = ({title, enabled, titol, }: {title: string; enabled: boolean; titol?: string|number|null; }) => (
+    <View style={[styles.AnysCard, !enabled && styles.disabled]}>
       <Text style={styles.smallCardText}>{title}</Text>
       {titol && <Text style={styles.smallCardTextSmall}>{titol}</Text>}
     </View>
@@ -92,37 +88,26 @@ export default function Profile() {
       </View>
 
       {/* history button */}
+      <TouchableOpacity style={styles.funcionalitatBtn} onPress={() => setShowHistory(!showHistory)}>
+        <Text style={styles.funcionalitatText}>Currículum Escolta</Text>
+        {/* row of 2 cards */}
+        {!showHistory &&<View style={styles.row}>
+          <AnysCard title="Anys d'infant" enabled={historial.filter((f)=>f.rol === "infant").length > 0} titol={String(Math.round(Utils.anysFuncions(historial.filter((f)=>f.rol === "infant"))*100)/100)} />
+          <AnysCard title="Anys de cap" enabled={historial.filter((f)=>f.rol === "cap_grups").length > 0} titol={String(Math.round(Utils.anysFuncions(historial.filter((f)=>f.rol === "cap_grups"))*100)/100)} />
+          <AnysCard title="Anys de EA" enabled={historial.filter((f)=>f.grup.endsWith("equip_agrupament")).length > 0} titol={String(Math.round(Utils.anysFuncions(historial.filter((f)=>f.grup.endsWith("equip_agrupament")))*100)/100)} />
+        </View>
+      }
+      </TouchableOpacity>
+      {/* history table */}
+      {showHistory && (<CurriculumEscolta history={historial} />)}
+
       <TouchableOpacity
-        style={styles.historyBtn}
-        onPress={() => setShowHistory(!showHistory)}
+        style={styles.funcionalitatBtn}
+        // onPress={() => setShowHistory(!showHistory)}
       >
-        <Text style={styles.historyText}>Currículum Escolta</Text>
+        <Text style={styles.funcionalitatText}>Cursos</Text>
       </TouchableOpacity>
 
-      {/* history table */}
-      {showHistory && (
-        <FlatList
-          data={history}
-          keyExtractor={(item) => item.funcio_id}
-          style={styles.table}
-          renderItem={({ item }) => (
-            <View style={[styles.rowItem, item.rol === "infant" && { backgroundColor: STYLES.BRANCA_COLORS[item.grup] }]}>
-              <Text style={styles.cell}>{STYLES.MAP_LABELS[item.rol]}</Text>
-              <Text style={styles.cell}>{STYLES.MAP_LABELS[item.grup]}</Text>
-              <Text style={styles.cell}>{Utils.parseDate(item.data_inici)}</Text>{/*{item.data_inici.toDateString()}</Text>*/}
-              <Text style={styles.cell}>{item.data_fi?Utils.parseDate(item.data_fi):''}</Text>{/*{item.data_inici.toDateString()}</Text>*/}
-            </View>
-          )}
-          ListHeaderComponent={() => (
-            <View style={[styles.rowItem, styles.header]}>
-              <Text style={styles.cell}>Funció</Text>
-              <Text style={styles.cell}>Grup</Text>
-              <Text style={styles.cell}>Data d'inici</Text>
-              <Text style={styles.cell}>Data de fi</Text>
-            </View>
-          )}
-        />
-      )}
     </View>
   );
 }
@@ -131,6 +116,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    marginTop: 20,
   },
 
   profileCard: {
@@ -161,12 +147,19 @@ const styles = StyleSheet.create({
 
   smallCard: {
     flex: 1,
-    backgroundColor: "gray",
-    padding: 20,
+    backgroundColor: "#7069EB",
+    padding: 10,
     borderRadius: 12,
     alignItems: "center",
   },
-
+  AnysCard: {
+    flex: 1,
+    backgroundColor: "gray",
+    height: 60,
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+  },
   smallCardText: {
     color: "white",
     fontWeight: "600",
@@ -177,17 +170,25 @@ const styles = StyleSheet.create({
   },
 
   disabled: {
+    backgroundColor: "gray",
+    color: "#444",
     opacity: 0.35,
   },
 
-  historyBtn: {
+  funcionalitatBtn: {
+    width: '100%',
     alignSelf: "center",
     paddingVertical: 10,
+    borderBottomColor: "#4f46e5",
+    borderBottomWidth: 2,
+    marginBottom: 20,
   },
 
-  historyText: {
+  funcionalitatText: {
     color: "#4f46e5",
-    fontWeight: "600",
+    fontWeight: "800",
+    textAlign: "center",
+    marginBottom: 10,
   },
 
   table: {

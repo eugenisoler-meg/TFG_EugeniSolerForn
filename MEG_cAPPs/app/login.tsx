@@ -7,8 +7,9 @@ import * as MODEL from '../constants/model';
 import LoadingScreen from './loading';
 import { router } from "expo-router";
 import ErrorScreen from './error';
+import { ThemedText } from '@/components/themed-text';
 
-export default function App() {
+export default function LoginScreen() {
   const [dni, setDNI] = useState('');
   const [data_naixement, setDataNaixement] = useState<Date | null>(null);
   const [showPicker, setShowPicker] = useState(false);
@@ -16,15 +17,13 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
-
+  
   useEffect(() => {
     const preLoad = async () => {
-      const USER = await Utils.getUserLoggedIn();
-      if (USER) {
-        // TESTING PURPOSES ONLY
-        router.push('./(app)/dashboard');
-        setDNI(USER.dni);
-        setDataNaixement(new Date(USER.data_naixement));
+      const user = await Utils.getUser();
+      if(user) {
+        setDNI(user.dni);
+        setDataNaixement(new Date(user.data_naixement));
       }
     };
     preLoad();
@@ -37,23 +36,33 @@ export default function App() {
 
     try {
       if(dni === '' || data_naixement === null) {
-        Alert.alert('ERROR', 'Els dos camps són necessaris per iniciar sessió.');
         setLoading(false);
+        setError("Els dos camps són necessaris per iniciar sessió.");
         return;
       }
       const res = await Utils.tryLogin(dni, data_naixement);
-      const user = await Utils.cleanResponse(res);
-      setData(user);
+      const data = await Utils.cleanResponse(res);
 
-      const USER = JSON.parse(user.user) as MODEL.User;
-      await Utils.storeUser(USER)
-        .then(async() => await DATABASE.getAfiliatByAfiliatID(USER.afiliat_id))
-          .then(afiliat => {
-              afiliat = JSON.parse(afiliat);
+      setData(data);
+      const USER = JSON.parse(data.user) as MODEL.User;
+      await Utils.setUser(USER);
 
-              Alert.alert('SESSIÓ INICIADA', 'Hola, ' + afiliat.nom + ' ' +afiliat.cognoms +'! \n :)');
-              router.replace('./(app)/dashboard');
-            });
+      const [afiliat_string, funcions_string] = await Promise.all([
+        DATABASE.getAfiliatByAfiliatID(USER.afiliat_id),
+        DATABASE.getFuncionsByAfiliatID(USER.afiliat_id)
+      ]);
+
+      const afiliat_parsed = JSON.parse(afiliat_string) as MODEL.Afiliat;
+      const funcions_parsed = JSON.parse(funcions_string) as MODEL.Funcio[];
+      await Utils.setFuncions(funcions_parsed);
+      await Utils.setAfiliat(afiliat_parsed);
+
+      Alert.alert(
+        'SESSIÓ INICIADA',
+        `Hola, ${afiliat_parsed.nom} ${afiliat_parsed.cognoms}! \n :)`
+      );
+
+      router.replace('./(app)/dashboard');
 
     } catch (e) {
       setError("Error iniciant sessió. Comprova les dades introduïdes.");
@@ -71,39 +80,41 @@ export default function App() {
   if(loading) return LoadingScreen();
   if(error) return ErrorScreen(error);
   return (
-    <View style={{ padding: 20, margin: "auto", minWidth: 300, flex: 1, justifyContent: 'center' }}>
-      
-      {/* CAPÇALERA */}
-      <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 20 }}>Login</Text>
-      
-      {/* FORMULARI */}
-      <Text>USUARI (DNI/NIE)</Text>
-      <TextInput
-        value={dni}
-        onChangeText={setDNI}
-        autoCapitalize='characters'
-        placeholder="Introdueix el teu DNI"
-        style={{ borderWidth: 1, padding: 8, marginBottom: 10 }}
-      />
+      <View style={{ padding: 20, margin: "auto", minWidth: 300, flex: 1, justifyContent: 'center' }}>
+        
+        {/* CAPÇALERA */}
+        <ThemedText type='title'>Login</ThemedText>
 
-      <Text>DATA DE NAIXEMENT</Text>
-      <Button title={data_naixement ? Utils.parseDate(data_naixement) : "Escull data"} onPress={() => setShowPicker(true)} />
-      
-      {/* DATE PICKER */}
-      {showPicker && (
-        <DateTimePicker
-          value={data_naixement ?? new Date()}
-          mode="date"
-          display="default"
-          onChange={(event, selectedDate) => {
-            setShowPicker(Platform.OS === 'ios');
-            if (selectedDate) setDataNaixement(selectedDate);
-          }}
+        {/* FORMULARI */}
+        <ThemedText type='subtitle'>USUARI (DNI/NIE)</ThemedText>
+        <TextInput
+          value={dni}
+          onChangeText={setDNI}
+          autoCapitalize='characters'
+          placeholder="Introdueix el teu DNI"
+          style={{ borderWidth: 1, padding: 8, marginBottom: 10 }}
         />
-      )}
 
-      {/* SUBMIT */}
-      <Button title="Inicia sessió" onPress={login} />
-    </View>
+        <ThemedText type='subtitle'>DATA DE NAIXEMENT</ThemedText>
+        <Button title={data_naixement ? Utils.parseDate(data_naixement) : "Escull data"} onPress={() => setShowPicker(true)} />
+        
+        {/* DATE PICKER */}
+        {showPicker && (
+          <DateTimePicker
+            value={data_naixement ?? new Date()}
+            mode="date"
+            display="default"
+            onChange={(event, selectedDate) => {
+              setShowPicker(Platform.OS === 'ios');
+              if (selectedDate) setDataNaixement(selectedDate);
+            }}
+          />
+        )}
+        
+        {/* SUBMIT */}
+        <View style={{ marginTop: 20 }}>
+          <Button title="Inicia sessió" onPress={async () => {await login()}} />
+        </View>
+      </View>
   );
 }

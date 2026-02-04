@@ -47,10 +47,12 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: 'bold',
     lineHeight: 32,
+    marginBottom: 20,
   },
   subtitle: {
     fontSize: 20,
     fontWeight: 'bold',
+    marginBottom: 12,
   },
   link: {
     lineHeight: 30,

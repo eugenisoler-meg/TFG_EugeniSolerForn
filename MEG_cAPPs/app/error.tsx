@@ -1,13 +1,29 @@
-import { View, Text, Button } from "react-native";
+import { StyleSheet } from 'react-native';
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
 
 export default function ErrorScreen(message: string) {
 
     return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 20 }}>
-        <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 20 }}>ERROR</Text>
-        <Text>{message}</Text>
-        <Button onPress={() => router.replace('/')} title="Torna a iniciar sessio" />
-    </View>
+    <ThemedView style={styles.container}>
+        <ThemedView>
+          <Ionicons name="alert-circle-outline" size={32} color="red"/>
+          <ThemedText type='title' >ERROR</ThemedText>
+        </ThemedView>
+        <ThemedText type='subtitle'>{typeof message === 'string' ? message : JSON.stringify(message)}</ThemedText>
+        <ThemedText type='link' onPress={() => router.replace('/login')}>Torna a iniciar sessio</ThemedText>
+    </ThemedView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  
+});

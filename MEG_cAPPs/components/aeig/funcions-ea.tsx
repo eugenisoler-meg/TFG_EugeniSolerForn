@@ -1,31 +1,37 @@
 import { View, Text, StyleSheet, TouchableOpacity, } from "react-native";
-
+import { generateCertificate } from "@/constants/utils";
 interface Permisos{
     secre: boolean,
     tresu: boolean,
     rp: boolean,
-    cons: boolean
+    cons: boolean,
     cap_agrupament: boolean,
 };
+interface IDsEA{
+    secre: string|null,
+    tresu: string|null,
+    rp: string|null,
+    cons: string|null,
+    cap_agrupament: string|null,
+};
 
-
-export default function FuncionsEA({ permisos }: { permisos: Permisos }){
+export default function FuncionsEA({ permisos, afiliat_id, ID_EA }: { permisos: Permisos, afiliat_id:string,  ID_EA : IDsEA}){
     return <View style={styles.bottomHalf}>
         <View style={styles.row}>
-          <ActionCard title="Secretaria" enabled={permisos.secre} />
-          <ActionCard title="Tresoreria" enabled={permisos.tresu} />
-          <ActionCard title="Resp. de Pedagogia" enabled={permisos.rp} />
-          <ActionCard title="Consiliari" enabled={permisos.secre} />
+          <ActionCard title="Secretaria" enabled={permisos.secre} afiliat_id={afiliat_id} funcio_id={ID_EA.secre}/>
+          <ActionCard title="Tresoreria" enabled={permisos.tresu} afiliat_id={afiliat_id} funcio_id={ID_EA.tresu}/>
+          <ActionCard title="Resp. de Pedagogia" enabled={permisos.rp} afiliat_id={afiliat_id} funcio_id={ID_EA.rp}/>
+          <ActionCard title="Consiliari" enabled={permisos.cons} afiliat_id={afiliat_id} funcio_id={ID_EA.cons}/>
         </View>
 
         <View style={styles.row}>
-          <ActionCard title="Cap d'Agrupament" enabled={permisos.cap_agrupament} big />
+          <ActionCard title="Cap d'Agrupament" enabled={permisos.cap_agrupament} big afiliat_id={afiliat_id} funcio_id={ID_EA.cap_agrupament}/>
         </View>
       </View>
 }
 
-function ActionCard({ title, enabled, big, }: 
-  { title: string; enabled: boolean; big?: boolean; }) {
+function ActionCard({ title, enabled, big, afiliat_id, funcio_id}: 
+  { title: string, enabled: boolean, big?: boolean, afiliat_id?:string|null, funcio_id?:string|null}) {
   return (
     <TouchableOpacity
       disabled={!enabled}
@@ -34,6 +40,7 @@ function ActionCard({ title, enabled, big, }:
         big && { flex: 1 },
         !enabled && styles.disabled,
       ]}
+      onPress={()=> { (funcio_id && afiliat_id) ? generateCertificate('funcio', afiliat_id, { funcio_id }) : null}}
     >
       <Text style={styles.actionText}>{title}</Text>
     </TouchableOpacity>

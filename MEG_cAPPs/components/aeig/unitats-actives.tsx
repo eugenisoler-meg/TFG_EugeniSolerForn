@@ -1,4 +1,4 @@
-import {View, Text, FlatList, TouchableOpacity, StyleSheet, Dimensions} from "react-native";
+import {View, Text, TouchableOpacity, StyleSheet, Dimensions} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Animated } from "react-native";
 import { useRef, useState } from "react";
@@ -75,7 +75,7 @@ export default function UnitatsActives({ unitats }: { unitats: UnitatCard[] }) {
                 onPress = { () => {
                   router.push({
                     pathname: "/(app)/(aeig)/(unitat)/unitat",
-                    params: { data: item.id }});
+                    params: { unitat_id: item.id }});
                   }}
               />
             )}

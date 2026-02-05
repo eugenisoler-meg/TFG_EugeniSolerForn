@@ -3,12 +3,11 @@ import { View, Text, StyleSheet, Pressable, TouchableOpacity, FlatList,} from "r
 
 import * as MODEL from "@/constants/model";
 import * as Utils from "@/constants/utils";
-import * as DATABASE from "@/constants/database";
 
 import { router } from "expo-router";
 import ErrorScreen from "../error";
 import LoadingScreen from "../loading";
-import CurriculumEscolta from "@/components/curriculum-escolta";
+import CurriculumEscolta from "@/components/profile/curriculum-escolta";
 
 export default function ProfileLayout() {
   const [showHistory, setShowHistory] = useState(false);

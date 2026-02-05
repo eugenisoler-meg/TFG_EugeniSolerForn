@@ -1,10 +1,9 @@
-import ToDoScreen from "@/app/todo";
 import * as Utils from "@/constants/utils";
 import * as MODEL from "@/constants/model";
 import * as DATABASE from "@/constants/database";
 import {router} from 'expo-router';
 import { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList, Dimensions, TouchableOpacity, } from "react-native";
+import { View, StyleSheet, Dimensions, } from "react-native";
 
 import UnitatsActives, {UnitatCard} from "@/components/aeig/unitats-actives";
 import FuncionsEA from "@/components/aeig/funcions-ea";
@@ -53,16 +52,13 @@ export default function AgrupamentIndex() {
             }
             setUnitats(unitats as MODEL.Unitat[]);
 
-
         } catch (e) {
             console.log(e);
             if (e instanceof Error)
             setError(e.message);
             else setError("S'ha produït un error desconegut.");
     
-        } finally {
-            setLoading(false);
-        }
+        } finally { setLoading(false); }
         };
 
         fetchUserData();
@@ -71,6 +67,12 @@ export default function AgrupamentIndex() {
     if(error || !user) return ErrorScreen(error??'Error desconegut.');
     if(loading) return LoadingScreen();
 
+    const funcio_rp = funcions.filter((f) => Utils.funcioActiva(f) && f.grup === "responsable_pedagogia_equip_agrupament").pop();
+    const funcio_secre = funcions.filter((f) => Utils.funcioActiva(f) && f.grup === "secretaria_equip_agrupament").pop();
+    const funcio_tresu = funcions.filter((f) => Utils.funcioActiva(f) && f.grup === "tresoreria_equip_agrupament").pop();
+    const funcio_cons = funcions.filter((f) => Utils.funcioActiva(f) && f.grup === "consiliari_equip_agrupament").pop();
+    const funcio_cap_agrupa = funcions.filter((f) => Utils.funcioActiva(f) && f.grup === "cap_agrupament_equip_agrupament").pop();
+
     const permisos = {
         rp: (user.permisos & 32) > 0,
         secre: (user.permisos & 64) > 0,
@@ -78,6 +80,15 @@ export default function AgrupamentIndex() {
         cons: (user.permisos & 256) > 0,
         cap_agrupament: (user.permisos & 512) > 0,
     };
+
+    const EA_IDs = {
+        rp: permisos.rp && funcio_rp ? funcio_rp.funcio_id : null,
+        secre: permisos.secre && funcio_secre ? funcio_secre.funcio_id : null,
+        tresu: permisos.tresu && funcio_tresu ? funcio_tresu.funcio_id : null,
+        cons: permisos.cons && funcio_cons? funcio_cons.funcio_id : null,
+        cap_agrupament: permisos.cap_agrupament && funcio_cap_agrupa ? funcio_cap_agrupa.funcio_id : null,
+    }
+
     const unitatCards:UnitatCard[] = unitats.map(unitat => {
         const aeig = AEiGs.find((a) => a.agrupament_id === unitat.agrupament_id);
 
@@ -94,7 +105,7 @@ export default function AgrupamentIndex() {
             <UnitatsActives unitats={unitatCards}></UnitatsActives>
         </View>
         <View style={styles.bottomHalf}>
-            <FuncionsEA permisos={permisos}></FuncionsEA>
+            <FuncionsEA permisos={permisos} afiliat_id={user.afiliat_id} ID_EA={EA_IDs}></FuncionsEA>
         </View>
     </View>;
 }

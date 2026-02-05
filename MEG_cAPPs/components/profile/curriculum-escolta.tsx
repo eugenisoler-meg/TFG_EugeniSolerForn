@@ -12,9 +12,9 @@ return (
             keyExtractor={(item) => item.funcio_id}
             style={styles.table}
             renderItem={({ item }) => (
-            <View style={[styles.rowItem, item.rol === "infant" && { backgroundColor: STYLES.BRANCA_COLORS[item.grup] }]}>
+            <View style={[styles.rowItem, item.rol === "infant" && { backgroundColor: STYLES.BRANCA_COLORS[item.grup??''] }]}>
                 <Text style={styles.cell}>{STYLES.MAP_LABELS[item.rol]}</Text>
-                <Text style={styles.cell}>{STYLES.MAP_LABELS[item.grup]}</Text>
+                <Text style={styles.cell}>{STYLES.MAP_LABELS[item.grup??'']}</Text>
                 <Text style={styles.cell}>{Utils.parseDate(item.data_inici)}</Text>{/*{item.data_inici.toDateString()}</Text>*/}
                 <Text style={styles.cell}>{item.data_fi?Utils.parseDate(item.data_fi):''}</Text>{/*{item.data_inici.toDateString()}</Text>*/}
             </View>
@@ -35,9 +35,9 @@ return (
             keyExtractor={(item) => item.funcio_id}
             style={styles.table}
             renderItem={({ item }) => (
-            <View style={[styles.rowItem, item.rol === "infant" && { backgroundColor: STYLES.BRANCA_COLORS[item.grup] }]}>
+            <View style={[styles.rowItem, item.rol === "infant" && { backgroundColor: STYLES.BRANCA_COLORS[item.grup??''] }]}>
                 <Text style={styles.cell}>{STYLES.MAP_LABELS[item.rol]}</Text>
-                <Text style={styles.cell}>{STYLES.MAP_LABELS[item.grup]}</Text>
+                <Text style={styles.cell}>{STYLES.MAP_LABELS[item.grup??'']}</Text>
                 <Text style={styles.cell}>{Utils.parseDate(item.data_inici)}</Text>{/*{item.data_inici.toDateString()}</Text>*/}
                 <Text style={styles.cell}>{item.data_fi?Utils.parseDate(item.data_fi):''}</Text>{/*{item.data_inici.toDateString()}</Text>*/}
             </View>
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
-table: {
+  table: {
     marginTop: 10,
   },
 

@@ -7,3 +7,5 @@ export const getFuncionsByAfiliatID = async (afiliat_id: string) => fetchQuery('
 export const getUnitatsByAgrupamentID = async (afiliat_id:string, agrupament_id: string) => fetchQuery('unitatsByAgrupament', {'afiliat_id': afiliat_id, 'agrupament_id': agrupament_id});
 export const getUnitatByID = async (afiliat_id:string, unitat_id: string) => fetchQuery('unitatByID', {'afiliat_id': afiliat_id, 'unitat_id': unitat_id});
 export const getAgrupamentByID = async (afiliat_id:string, agrupament_id: string) => fetchQuery('agrupamentByID', {'afiliat_id': afiliat_id, 'agrupament_id': agrupament_id});
+
+export const getFuncionsByUnitatID = async (afiliat_id:string, unitat_id: string) => fetchQuery('funcionsByUnitatID', {'afiliat_id': afiliat_id, 'unitat_id': unitat_id});

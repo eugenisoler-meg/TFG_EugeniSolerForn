@@ -8,7 +8,7 @@ export default function ErrorScreen(message: string) {
 
     return (
     <ThemedView style={styles.container}>
-        <ThemedView>
+        <ThemedView style={styles.row}>
           <Ionicons name="alert-circle-outline" size={32} color="red"/>
           <ThemedText type='title' >ERROR</ThemedText>
         </ThemedView>
@@ -24,6 +24,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
+  },
+  row: {
+    flexDirection: "row",
+    gap: 10,
+    marginBottom: 20,
   },
   
 });

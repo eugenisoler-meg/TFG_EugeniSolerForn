@@ -1,7 +1,12 @@
 import { router } from 'expo-router';
 import * as MODEL from './model';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Alert } from 'react-native';
+import { Alert, } from 'react-native';
+import { File, Directory, Paths } from 'expo-file-system';
+import * as Sharing from "expo-sharing";
+import { fetch } from 'expo/fetch';
+
+const API = 'https://testapi.escoltesiguies.cat';
 
 export const __LLEI:string[] = [
     "Ens esforcem a merèixer confiança i fem confiança a tothom.",
@@ -22,13 +27,17 @@ export const parseDate = (d:Date|string|null):string => {
     if (isNaN(date.getTime())) throw new Error("Invalid date");
     return date.toISOString().split('T')[0];
 };
+export function formatDate(date: Date|string) {
+  const d = typeof date === 'string' ? new Date(date): date;
+  return d.toLocaleDateString("ca-ES"); // or your locale
+}
 
 export const tryLogin = async (dni : string, data_naixement : Date) => 
-    fetch(`https://testapi.escoltesiguies.cat/login?dni=${dni}&data_naixement=${parseDate(data_naixement)}`, 
+    fetch(`${API}/login?dni=${dni}&data_naixement=${parseDate(data_naixement)}`, 
     {method: "GET", headers: {"Content-Type": "application/json"},});
 
 export const fetchQuery = async (query: string, params: Record<string, string>) => {
-    const url = new URL(`https://testapi.escoltesiguies.cat/fetch`);
+    const url = new URL(`${API}/fetch`);
     url.searchParams.append("q", query);
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
     const response = await fetch(url.toString(), {method: "GET", headers: {"Content-Type": "application/json"},});
@@ -133,4 +142,31 @@ export const funcioActiva = (f : MODEL.Funcio): boolean => {
     if(!f.data_inici || f.data_inici > new Date()) return false;
 	else if(!f.data_fi || f.data_fi > new Date()) return true;
 	else return false;
+};
+
+
+export const generateCertificate = async (type : 'funcio', solicitant_id:string, params : { [key: string]: string }) => {
+  const timestamp:string = String(new Date().getTime());
+  switch(type){
+    case 'funcio':
+        try {
+            const file = new File(Paths.cache, "certificat_"+timestamp+".pdf");
+            const funcio_id = params['funcio_id'];
+
+            const res = await fetch(`${API}/certificat/funcio?solicitant_id=${solicitant_id}&funcio_id=${funcio_id}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+
+            });
+
+            file.write(await res.bytes());
+            
+            await Sharing.shareAsync(file.uri);
+        } catch (err) {
+            console.log(err);
+        }
+        break;
+    default:
+        throw new Error("Tipus de certificat no vàlid");
+    }   
 };

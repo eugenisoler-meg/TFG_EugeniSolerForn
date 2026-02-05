@@ -98,7 +98,7 @@ export default function LoginScreen() {
         />
 
         <ThemedText type='subtitle'>DATA DE NAIXEMENT</ThemedText>
-        <Button title={data_naixement ? Utils.parseDate(data_naixement) : "Escull data"} onPress={() => setShowPicker(true)} />
+        <Button title={data_naixement ? Utils.formatDate(data_naixement) : "Escull data"} onPress={() => setShowPicker(true)} />
         
         {/* DATE PICKER */}
         {showPicker && (

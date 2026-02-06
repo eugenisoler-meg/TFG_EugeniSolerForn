@@ -8,7 +8,7 @@ import ErrorScreen from '@/app/error';
 import LoadingScreen from "@/app/loading";
 
 export default function UnitatIndex() {
-    const [loading, setLoading] = useState(false); 
+    const [loading, setLoading] = useState(true); 
     const [error, setError] = useState<string | null>(null); 
     const [funcions, setFuncions] = useState<FuncioUnitat[]>([]);
     const [user, setUser] = useState<MODEL.User | null>(null);

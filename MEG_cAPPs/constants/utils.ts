@@ -2,7 +2,7 @@ import { router } from 'expo-router';
 import * as MODEL from './model';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert, } from 'react-native';
-import { File, Directory, Paths } from 'expo-file-system';
+import { File, Paths } from 'expo-file-system';
 import * as Sharing from "expo-sharing";
 import { fetch } from 'expo/fetch';
 

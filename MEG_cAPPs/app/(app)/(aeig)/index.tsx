@@ -1,126 +1,81 @@
-import * as Utils from "@/constants/utils";
-import * as MODEL from "@/constants/model";
-import * as DATABASE from "@/constants/database";
-import {router} from 'expo-router';
+import ToDoScreen from "@/app/todo";
 import { useEffect, useState } from "react";
-import { View, StyleSheet, Dimensions, } from "react-native";
-
-import UnitatsActives, {UnitatCard} from "@/components/aeig/unitats-actives";
-import FuncionsEA from "@/components/aeig/funcions-ea";
-import ErrorScreen from "@/app/error";
+import * as MODEL from '@/constants/model';
+import * as DATABASE from '@/constants/database';
+import * as Utils from '@/constants/utils';
+import { router } from 'expo-router';
 import LoadingScreen from "@/app/loading";
+import ErrorScreen from "@/app/error";
+import {View, StyleSheet, FlatList } from 'react-native';
+import AgrupamentCard, {AgrupamentDetails} from '@/components/aeig/agrupament-details'
 
-const { width } = Dimensions.get("window");
-
-export default function AgrupamentIndex() {
-    const [loading, setLoading] = useState(false); 
+export default function AgrupamentDashboardScreen(){
     const [error, setError] = useState<string | null>(null); 
-    const [funcions, setFuncions] = useState<MODEL.Funcio[]>([]);
-    const [AEiGs, setAEiGs] = useState<MODEL.Agrupament[]>([]);
-    const [unitats, setUnitats] = useState<MODEL.Unitat[]>([]);
-
+    const [loading, setLoading] = useState(true); 
+    const [aeigs, setAEiGs] = useState<AgrupamentDetails[]>([]);
     const [user, setUser] = useState<MODEL.User | null>(null);
-    
+
     useEffect(() => {
         const fetchUserData = async () => {
-        setError(null);
+            setError(null);
         try {
             const user = await Utils.getUser();
             if (!user) {
                 setError("La sessió no s'ha iniciat correctament.");
                 router.replace("../login");
-                return;
+                return ;
             }
             setUser(user as MODEL.User);
-
-            const FUNCIONS = await Utils.getFuncions() as MODEL.Funcio[];
-            setFuncions(FUNCIONS);
             
-            const agrupament_id  = await Utils.getAEiGs_ID();
-            let aeigs : MODEL.Agrupament[] = [];
-            for(let i = 0; i < agrupament_id.length; i++){
-                const aeig = JSON.parse(await DATABASE.getAgrupamentByID(user.afiliat_id, agrupament_id[i])) as MODEL.Agrupament;
-                aeigs.push(aeig);
+            const AGRUPAMENTS_ID = await Utils.getAEiGs_ID();
+            const AGRUPAMENTS:AgrupamentDetails[] = [];
+            for(let i = 0; i<AGRUPAMENTS_ID.length; i++){
+                const aeig = JSON.parse(await DATABASE.getAgrupamentByID(user.afiliat_id, AGRUPAMENTS_ID[i], true)) as AgrupamentDetails;
+                AGRUPAMENTS.push(aeig);
             }
-            setAEiGs(aeigs as MODEL.Agrupament[]);
-            
-            const unitat_id  = await Utils.getUnitats_ID();
-            let unitats : MODEL.Unitat[] = [];
-            for(let i = 0; i < unitat_id.length; i++){
-                const unitat = JSON.parse(await DATABASE.getUnitatByID(user.afiliat_id, unitat_id[i])) as MODEL.Unitat;
-                unitats.push(unitat);
-            }
-            setUnitats(unitats as MODEL.Unitat[]);
+            setAEiGs(AGRUPAMENTS);
 
         } catch (e) {
             console.log(e);
             if (e instanceof Error)
             setError(e.message);
             else setError("S'ha produït un error desconegut.");
-    
-        } finally { setLoading(false); }
+        } finally {
+            setLoading(false);
+        }
         };
 
         fetchUserData();
     }, []);
 
-    if(error || !user) return ErrorScreen(error??'Error desconegut.');
     if(loading) return LoadingScreen();
-
-    const funcio_rp = funcions.filter((f) => Utils.funcioActiva(f) && f.grup === "responsable_pedagogia_equip_agrupament").pop();
-    const funcio_secre = funcions.filter((f) => Utils.funcioActiva(f) && f.grup === "secretaria_equip_agrupament").pop();
-    const funcio_tresu = funcions.filter((f) => Utils.funcioActiva(f) && f.grup === "tresoreria_equip_agrupament").pop();
-    const funcio_cons = funcions.filter((f) => Utils.funcioActiva(f) && f.grup === "consiliari_equip_agrupament").pop();
-    const funcio_cap_agrupa = funcions.filter((f) => Utils.funcioActiva(f) && f.grup === "cap_agrupament_equip_agrupament").pop();
-
-    const permisos = {
-        rp: (user.permisos & 32) > 0,
-        secre: (user.permisos & 64) > 0,
-        tresu: (user.permisos & 128) > 0,
-        cons: (user.permisos & 256) > 0,
-        cap_agrupament: (user.permisos & 512) > 0,
-    };
-
-    const EA_IDs = {
-        rp: permisos.rp && funcio_rp ? funcio_rp.funcio_id : null,
-        secre: permisos.secre && funcio_secre ? funcio_secre.funcio_id : null,
-        tresu: permisos.tresu && funcio_tresu ? funcio_tresu.funcio_id : null,
-        cons: permisos.cons && funcio_cons? funcio_cons.funcio_id : null,
-        cap_agrupament: permisos.cap_agrupament && funcio_cap_agrupa ? funcio_cap_agrupa.funcio_id : null,
-    }
-
-    const unitatCards:UnitatCard[] = unitats.map(unitat => {
-        const aeig = AEiGs.find((a) => a.agrupament_id === unitat.agrupament_id);
-
-        return {
-            id: unitat.unitat_id,
-            unitat_nom: unitat.nom,
-            aeig_nom: aeig?.nom ?? '-',
-            branca: unitat.branca,
-        };
-    });
+    if(error) return ErrorScreen(error);
     
-    return <View style={styles.container}>
-        <View style={styles.topHalf}>
-            <UnitatsActives unitats={unitatCards}></UnitatsActives>
-        </View>
-        <View style={styles.bottomHalf}>
-            <FuncionsEA permisos={permisos} afiliat_id={user.afiliat_id} ID_EA={EA_IDs}></FuncionsEA>
-        </View>
-    </View>;
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={aeigs}
+        keyExtractor={(item) => item.agrupament_id}
+        contentContainerStyle={{ padding: 16 }}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item }) => (
+          <AgrupamentCard
+            agrupament={item}
+            onPress={() => router.push({pathname: './aeig', params:{ agrupament_id: item.agrupament_id}})
+            }
+          />
+        )}
+      />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  bottomHalf: {
-    flex: 1,
-    padding: 12,
+    paddingVertical: 20,
+    width: '100%',
     justifyContent: "space-evenly",
+
   },
-  topHalf: {
-    justifyContent: "space-evenly",
-    flex: 1,
-    },
 });

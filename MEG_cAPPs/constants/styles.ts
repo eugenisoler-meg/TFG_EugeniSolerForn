@@ -14,10 +14,17 @@ export const BRANCA_COLORS: { [key: string]: string } = {
 };
 
 export const MAP_LABELS: { [key: string]: string } = {
+    // Unitats
+    "castors_lludrigues": "Castors i Llúdrigues",
+    "llops_daines": "Llops i Daines", 
+    "rangers_noies_guia": "Ràngers i Noies Guia", 
+    "pioners_caraveles": "Pioners i Caravel·les", 
+    "trucs": "Truc",
+    // Nivells
     "meg" : "MEG",
     "agrupament" : "Agrupament",
     "demarcacio" : "Demarcació",
-    
+    // Funcions i grups
     "infant" : "Infant",
     "infant_castors_lludrigues": "CiLL",
     "infant_llops_daines": "LLiD",

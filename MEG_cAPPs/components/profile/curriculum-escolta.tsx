@@ -3,6 +3,8 @@ import { Text,  View, FlatList, StyleSheet } from 'react-native';
 import * as Utils from '@/constants/utils';
 import * as STYLES from '@/constants/styles';
 
+// TODO: botó per descarregar certificat d'anys de cap/infant
+
 export default function CurriculumEscolta({ history }: { history: MODEL.Funcio[] }) {
 return (
     <View style={styles.container}>

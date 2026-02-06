@@ -10,10 +10,17 @@ const CARD_MARGIN = 16;
 const CARD_WIDTH = width - CARD_MARGIN * 2;
 
 export interface UnitatCard {
-  id: string;
-  unitat_nom: string;
-  aeig_nom: string;
+  unitat_id: string;
+  nom: string;
   branca: string;
+  agrupament_id: string;
+  agrupament:{
+    agrupament_id:string;
+    nom:string;
+    adreça: string;
+    num_cens: string;
+    email: string;
+  }
 };
 
 export default function UnitatsActives({ unitats }: { unitats: UnitatCard[] }) {
@@ -52,7 +59,7 @@ export default function UnitatsActives({ unitats }: { unitats: UnitatCard[] }) {
             pagingEnabled
             showsHorizontalScrollIndicator={false}
             data={unitats}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.unitat_id}
             contentContainerStyle={styles.carouselContent}
             snapToInterval={CARD_WIDTH + CARD_MARGIN * 2}
             decelerationRate="fast"
@@ -68,25 +75,28 @@ export default function UnitatsActives({ unitats }: { unitats: UnitatCard[] }) {
               setIndex(i);
             }}
             renderItem={({ item }) => (
+              <View>
               <UnitatCard
-                title={item.unitat_nom}
-                subtitle={item.aeig_nom}
+                title={item.nom}
+                subtitle={STYLES.MAP_LABELS[item.branca]}
                 branca = {item.branca}
                 onPress = { () => {
                   router.push({
                     pathname: "/(app)/(aeig)/(unitat)/unitat",
-                    params: { unitat_id: item.id }});
+                    params: { unitat_id : item.unitat_id }});
                   }}
               />
+          </View>
             )}
           />
+
         </>
       )}
       </View>;
 }
 
-      function UnitatCard({ title, subtitle, disabled, branca, onPress }: 
-        { title: string; subtitle: string; disabled?: boolean; branca?:string, onPress?: () => void; }) {
+function UnitatCard({ title, subtitle, disabled, branca, onPress }: 
+  { title: string; subtitle: string; disabled?: boolean; branca?:string, onPress?: () => void; }) {
   return (
     <TouchableOpacity
       disabled={disabled}
@@ -113,6 +123,35 @@ export default function UnitatsActives({ unitats }: { unitats: UnitatCard[] }) {
   );
 };
 
+function AgrupamentCard({ title, subtitle, disabled, onPress }: 
+  { title: string; subtitle: string; disabled?: boolean; onPress?: () => void; }) {
+  return (
+    <TouchableOpacity
+      disabled={disabled}
+      onPress={onPress}
+      style={[
+        styles.unitatCard,
+        disabled && styles.disabled,
+        {backgroundColor : '#BBB' }
+      ]}
+    >
+      <Ionicons
+        name="business-outline"
+        size={50}
+        style={styles.icon}
+      />
+
+      <View style={{ flex: 1 }}>
+        <Text style={styles.cardTitle}>{title}</Text>
+        {subtitle ? (
+          <Text style={styles.cardSubtitle}>{subtitle}</Text>
+        ) : null}
+      </View>
+    </TouchableOpacity>
+  );
+};
+
+
 const styles = StyleSheet.create({
   carouselContent: {
     flexGrow: 1,
@@ -137,10 +176,11 @@ const styles = StyleSheet.create({
   dotActive: {
     backgroundColor: "#222",
   },
-   unitatCard: {
+  unitatCard: {
     width: CARD_WIDTH,
-    height: 130,
+    height: 100,
     marginHorizontal: CARD_MARGIN,
+    marginBottom: CARD_MARGIN,
     borderRadius: 16,
     padding: 16,
     flexDirection: "row",

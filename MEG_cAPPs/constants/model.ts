@@ -46,10 +46,25 @@ export interface Unitat{
 
 export interface Agrupament{
     agrupament_id: string;
-    demarcacio_id: string;
+    demarcacio_id: string|null;
     email:string;
     adreça: string;
     ultim_update:Timestamp;
     updated_at:Timestamp;
     nom:string;
+    num_cens:string;
+}
+
+export interface Agrupament{
+    agrupament_id: string;
+    demarcacio_id: string|null;
+    demarcacio: Agrupament|null;
+    email:string;
+    adreça: string;
+    ultim_update:Timestamp;
+    updated_at:Timestamp;
+    nom:string;
+    num_cens:string;
+    lon:number|null;
+    lat:number|null;
 }

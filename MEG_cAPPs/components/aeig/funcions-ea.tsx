@@ -18,14 +18,11 @@ interface IDsEA{
 export default function FuncionsEA({ permisos, afiliat_id, ID_EA }: { permisos: Permisos, afiliat_id:string,  ID_EA : IDsEA}){
     return <View style={styles.bottomHalf}>
         <View style={styles.row}>
-          <ActionCard title="Secretaria" enabled={permisos.secre} afiliat_id={afiliat_id} funcio_id={ID_EA.secre}/>
-          <ActionCard title="Tresoreria" enabled={permisos.tresu} afiliat_id={afiliat_id} funcio_id={ID_EA.tresu}/>
-          <ActionCard title="Resp. de Pedagogia" enabled={permisos.rp} afiliat_id={afiliat_id} funcio_id={ID_EA.rp}/>
-          <ActionCard title="Consiliari" enabled={permisos.cons} afiliat_id={afiliat_id} funcio_id={ID_EA.cons}/>
-        </View>
-
-        <View style={styles.row}>
-          <ActionCard title="Cap d'Agrupament" enabled={permisos.cap_agrupament} big afiliat_id={afiliat_id} funcio_id={ID_EA.cap_agrupament}/>
+          {permisos.secre && <ActionCard title="Secretaria" enabled={permisos.secre} afiliat_id={afiliat_id} funcio_id={ID_EA.secre}/>}
+          {permisos.tresu && <ActionCard title="Tresoreria" enabled={permisos.tresu} afiliat_id={afiliat_id} funcio_id={ID_EA.tresu}/>}
+          {permisos.rp && <ActionCard title="Resp. de Pedagogia" enabled={permisos.rp} afiliat_id={afiliat_id} funcio_id={ID_EA.rp}/>}
+          {permisos.cons && <ActionCard title="Consiliari" enabled={permisos.cons} afiliat_id={afiliat_id} funcio_id={ID_EA.cons}/>}
+          {permisos.cap_agrupament && <ActionCard title="Cap d'Agrupament" enabled={permisos.cap_agrupament} big afiliat_id={afiliat_id} funcio_id={ID_EA.cap_agrupament}/>}
         </View>
       </View>
 }

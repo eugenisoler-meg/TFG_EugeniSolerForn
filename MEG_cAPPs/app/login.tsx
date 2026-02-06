@@ -24,6 +24,8 @@ export default function LoginScreen() {
       if(user) {
         setDNI(user.dni);
         setDataNaixement(new Date(user.data_naixement));
+        // TESTING PURPOSES ONLY
+        // router.push('./(app)/dashboard');
       }
     };
     preLoad();

@@ -6,13 +6,15 @@ import FuncionsUnitat, { FuncioUnitat} from '@/components/aeig/infants-unitat';
 import { useEffect, useState } from "react";
 import ErrorScreen from '@/app/error';
 import LoadingScreen from "@/app/loading";
+import ActionContainer from "@/components/aeig/accions-botons";
 
 export default function UnitatIndex() {
     const [loading, setLoading] = useState(true); 
     const [error, setError] = useState<string | null>(null); 
     const [funcions, setFuncions] = useState<FuncioUnitat[]>([]);
     const [user, setUser] = useState<MODEL.User | null>(null);
-    const { unitat_id } = useLocalSearchParams<{unitat_id?:string}>();
+    const { unitat_id, funcio } = useLocalSearchParams<{unitat_id?:string, funcio?:string}>();
+    const parsedFuncio = funcio ? JSON.parse(funcio) as MODEL.Funcio : null;
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -44,5 +46,9 @@ export default function UnitatIndex() {
     if(error || !user) return ErrorScreen(error??'Error desconegut.');
     if(loading) return LoadingScreen();
     
-    return  <FuncionsUnitat funcions={funcions}></FuncionsUnitat>;
+    const page = { title: "Cap de branca", key: "cap_grups", selectable: false, data: [funcions.filter(f => f.afiliat_id === user.afiliat_id)]};
+    return  <>
+    <FuncionsUnitat funcions={funcions}></FuncionsUnitat>
+      <ActionContainer page={page} selected={parsedFuncio} />
+    </>
 }

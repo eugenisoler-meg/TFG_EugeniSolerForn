@@ -79,9 +79,10 @@ export interface FuncioUnitat {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        padding: 16,
+//        flex: 1,
+        padding: 12,
         marginTop:20,
+        height: "85%",
     },
     row: {
         flexDirection: "row",

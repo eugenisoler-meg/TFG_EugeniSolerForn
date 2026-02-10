@@ -145,28 +145,37 @@ export const funcioActiva = (f : MODEL.Funcio): boolean => {
 };
 
 
-export const generateCertificate = async (type : 'funcio', solicitant_id:string, params : { [key: string]: string }) => {
+type CERTIFICATS = {
+    funcio: "Certificat de funció",
+    equip_agrupament: "Certificat d'equip d'agrupament",
+}
+export const generateCertificate = async (type : keyof CERTIFICATS, solicitant_id:string, params : { [key: string]: string }) => {
   const timestamp:string = String(new Date().getTime());
+  let params_string:string = "";
   switch(type){
     case 'funcio':
-        try {
-            const file = new File(Paths.cache, "certificat_"+timestamp+".pdf");
-            const funcio_id = params['funcio_id'];
-
-            const res = await fetch(`${API}/certificat/funcio?solicitant_id=${solicitant_id}&funcio_id=${funcio_id}`, {
-                method: "GET",
-                headers: { "Content-Type": "application/json" },
-
-            });
-
-            file.write(await res.bytes());
-            
-            await Sharing.shareAsync(file.uri);
-        } catch (err) {
-            console.log(err);
-        }
+        if(!params.funcio_id) throw new Error("Paràmetres no vàlids per a generar el certificat de la funció");
+        params_string = `funcio_id=${params.funcio_id}`;
+        break;
+    case 'equip_agrupament':
+        if(!params.agrupament_id) throw new Error("Paràmetres no vàlids per a generar el certificat de l'equip d'agrupament");
+        params_string = `agrupament_id=${params.agrupament_id}`;
         break;
     default:
         throw new Error("Tipus de certificat no vàlid");
-    }   
+    }
+    
+    
+    try {
+        const file = new File(Paths.cache, "certificat_"+timestamp+".pdf");
+        const res = await fetch(`${API}/certificat/${type}?solicitant_id=${solicitant_id}&${params_string}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+
+        });
+        file.write(await res.bytes());
+        await Sharing.shareAsync(file.uri);
+    } catch (err) {
+        console.log(err);
+    }
 };

@@ -6,6 +6,7 @@ import * as Utils from '@/constants/utils';
 import * as STYLES from '@/constants/styles';
 import ErrorScreen from "@/app/error";
 import LoadingScreen from "@/app/loading";
+import ActionContainer from "@/components/aeig/accions-botons";
 
 // TODO: pensar botons d'accions per cada rol (funcions d'EA i caps de branca) i enllaçar caps de branca amb la unitat.
 
@@ -92,10 +93,7 @@ export default function AgrupamentDetailsScreen() {
       </View>
 
       {/* ========= BOTTOM 1/4 ========= */}
-      <ActionBar
-        page={pages[pageIndex]}
-        selected={selected}
-      />
+      <ActionContainer page={pages[pageIndex]} selected={selected} />
 
     </View>
   );
@@ -110,7 +108,7 @@ function CategoryPage({ page, selected, onSelect }: any) {
   if (!page.data.length) {
     return (
       <View style={[styles.page, styles.center]}>
-        <Text>No funcions found</Text>
+        <Text>No s'han trobat funcions per aquest nivell</Text>
       </View>
     );
   }
@@ -126,7 +124,7 @@ function CategoryPage({ page, selected, onSelect }: any) {
             item={item}
             selectable={page.selectable}
             selected={selected?.funcio_id === item.funcio_id}
-            onPress={() => page.selectable && onSelect(item)}
+            onPress={() => page.selectable && onSelect(selected?.funcio_id === item.funcio_id ? null : item)}
           />
         ))}
       </View>
@@ -153,43 +151,6 @@ function FunctionCard({ item, selectable, selected, onPress }: any) {
       <Text style={styles.role}>{STYLES.MAP_LABELS[item.rol]}</Text>
       <Text>{STYLES.MAP_LABELS[item.grup]}</Text>
       <Text>Des de {Utils.formatDate(item.data_inici)}</Text>
-    </TouchableOpacity>
-  );
-}
-
-// TODO: moure a components
-/* ========================================================= */
-/* ================= ACTION BAR ============================= */
-/* ========================================================= */
-
-function ActionBar({ page, selected }: any) {
-  return (
-    <View style={styles.actions}>
-      {page?.selectable && !selected && (
-        <Text style={{ color: "#666" }}>Selecciona una funció per veure les funcionalitats</Text>
-      )}
-
-      {page?.selectable && selected && (
-        <>
-          <ActionButton title="Gestió" unitat_id={selected.unitat_id??null}/>
-          <ActionButton title="Certificat" />
-        </>
-      )}
-
-      {!page?.selectable && (
-        <ActionButton title="Info general" />
-      )}
-    </View>
-  );
-}
-
-function ActionButton({ title, unitat_id }: { title: string, unitat_id?: string }) {
-  return (
-    <TouchableOpacity style={styles.actionBtn} onPress={() => {
-            console.log(unitat_id);
-            unitat_id && router.push({ pathname: "/(app)/(aeig)/(unitat)/unitat", params: { unitat_id: unitat_id }}); }
-        }>
-      <Text style={{ color: "white" }}>{title}</Text>
     </TouchableOpacity>
   );
 }
@@ -239,8 +200,8 @@ const styles = StyleSheet.create({
 
   selectedCard: {
     borderWidth: 2,
-    borderColor: "#007AFF",
-    backgroundColor: "#dfefff",
+    borderColor: "#4f46e5",
+    backgroundColor: "#4f46e511",
   },
 
   disabledCard: {
@@ -264,7 +225,7 @@ const styles = StyleSheet.create({
   },
 
   actionBtn: {
-    backgroundColor: "#007AFF",
+    //backgroundColor: "#4f46e5",
     paddingHorizontal: 40,
     paddingVertical: 12,
     borderRadius: 10,

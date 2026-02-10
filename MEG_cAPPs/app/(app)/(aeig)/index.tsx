@@ -1,4 +1,3 @@
-import ToDoScreen from "@/app/todo";
 import { useEffect, useState } from "react";
 import * as MODEL from '@/constants/model';
 import * as DATABASE from '@/constants/database';
@@ -8,6 +7,7 @@ import LoadingScreen from "@/app/loading";
 import ErrorScreen from "@/app/error";
 import {View, StyleSheet, FlatList } from 'react-native';
 import AgrupamentCard, {AgrupamentDetails} from '@/components/aeig/agrupament-details'
+import { ThemedText } from "@/components/themed-text";
 
 export default function AgrupamentDashboardScreen(){
     const [error, setError] = useState<string | null>(null); 
@@ -53,6 +53,7 @@ export default function AgrupamentDashboardScreen(){
     
   return (
     <View style={styles.container}>
+      <ThemedText type="title">Agrupaments dels quals formes part:</ThemedText>
       <FlatList
         data={aeigs}
         keyExtractor={(item) => item.agrupament_id}

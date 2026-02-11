@@ -2,7 +2,7 @@ import { useLocalSearchParams, router } from "expo-router";
 import * as DATABASE from "@/constants/database";
 import * as MODEL from "@/constants/model";
 import * as Utils from "@/constants/utils";
-import FuncionsUnitat, { FuncioUnitat} from '@/components/aeig/infants-unitat';
+import FuncionsUnitat, { FuncioUnitat} from '@/components/aeig/unitat/unitat-infants';
 import { useEffect, useState } from "react";
 import ErrorScreen from '@/app/error';
 import LoadingScreen from "@/app/loading";
@@ -46,9 +46,8 @@ export default function UnitatIndex() {
     if(error || !user) return ErrorScreen(error??'Error desconegut.');
     if(loading) return LoadingScreen();
     
-    const page = { title: "Cap de branca", key: "cap_grups", selectable: false, data: [funcions.filter(f => f.afiliat_id === user.afiliat_id)]};
+    const page = { title: "Cap de branca", key: "cap_grups", selectable: true, data: [funcions.filter(f => f.afiliat_id === user.afiliat_id)]};
     return  <>
     <FuncionsUnitat funcions={funcions}></FuncionsUnitat>
-      <ActionContainer page={page} selected={parsedFuncio} />
     </>
 }

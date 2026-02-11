@@ -1,5 +1,5 @@
 import {View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
-import { ThemedText } from "../themed-text";
+import { ThemedText } from "../../themed-text";
 import { router } from 'expo-router';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 

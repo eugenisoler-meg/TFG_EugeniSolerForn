@@ -51,7 +51,7 @@ export default function DashboardScreen() {
   }, []);
 
 
-  const Button = ({
+  const NivellButton = ({
     title,
     enabled,
     route,
@@ -88,9 +88,9 @@ export default function DashboardScreen() {
     <View style={styles.container}>
       {/* MAIN BUTTON AREA */}
       <View style={styles.content}>
-        <Button title="Agrupament" enabled={permisos.AEiG} route="./(aeig)/" />
-        <Button title="Demarcació" enabled={permisos.DEM} route="/todo" />
-        <Button title="MEG" enabled={permisos.MEG} route="/todo" />
+        <NivellButton title="Agrupament" enabled={permisos.AEiG} route="./(aeig)/" />
+        <NivellButton title="Demarcació" enabled={permisos.DEM} route="/todo" />
+        <NivellButton title="MEG" enabled={permisos.MEG} route="/todo" />
       </View>
     </View>
   );

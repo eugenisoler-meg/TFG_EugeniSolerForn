@@ -4,6 +4,7 @@ import * as STYLES from "@/constants/styles";
 import { ThemedText } from "../themed-text";
 import {router} from 'expo-router';
 const { width, height } = Dimensions.get("window");
+
 export default function ActionContainer({ page, selected }: { page: any, selected: MODEL.Funcio|null }) {
   let Action = <></>;
   if(selected){
@@ -20,11 +21,12 @@ export default function ActionContainer({ page, selected }: { page: any, selecte
         <Text style={{ color: "#666" }}>Selecciona una funció per veure les funcionalitats</Text>
       )}
 
-      {page?.selectable && selected && Action}
+      {  page?.selectable && selected && Action}
       { !page?.selectable && <ThemedText type="link">No hi ha accions disponibles per a aquesta funció</ThemedText> }
     </View>
   );
 }
+
 export function ActionButton({onPress, title, style}: { onPress: () => void, title: string , style?: any}) {
   return (
     <TouchableOpacity style={style} onPress={onPress}>
@@ -34,11 +36,18 @@ export function ActionButton({onPress, title, style}: { onPress: () => void, tit
 }
 
 export function ActionButtonCapBranca({funcio}: { funcio: MODEL.Funcio}) {
-  return <ActionButton onPress={() => router.push({ pathname: "/(app)/(aeig)/(unitat)/unitat", params: { unitat_id: funcio.unitat_id??'' , funcio: JSON.stringify(funcio) }})} 
+  return <>
+          <ActionButton onPress={() => router.push({ pathname: "/(app)/(aeig)/(unitat)/sortides", params: { unitat_id: funcio.unitat_id }})} 
+            title={funcio.unitat_id ? "Sortides d'unitat" : "Funció sense unitat al CRM"}
+            style={[styles.actionBtn,
+              {backgroundColor: STYLES.BRANCA_COLORS[funcio.grup?.replace("cap_grups", "infant")??'']??'#4f46e5' }
+            ]}/>
+          <ActionButton onPress={() => router.push({ pathname: "/(app)/(aeig)/(unitat)/unitat", params: { unitat_id: funcio.unitat_id??'' , funcio: JSON.stringify(funcio) }})} 
             title={funcio.unitat_id ? "La meva unitat" : "Funció sense unitat al CRM"}
             style={[styles.actionBtn,
-                {backgroundColor: STYLES.BRANCA_COLORS[funcio.grup?.replace("cap_grups", "infant")??'']??'#4f46e5' }
-            ]}/>;
+              {backgroundColor: STYLES.BRANCA_COLORS[funcio.grup?.replace("cap_grups", "infant")??'']??'#4f46e5' }
+            ]}/>
+        </>
 }
 
 export function ActionButtonCapAgrupament({funcio}: { funcio: MODEL.Funcio}) {

@@ -18,31 +18,31 @@ export default function AgrupamentDashboardScreen(){
     useEffect(() => {
         const fetchUserData = async () => {
             setError(null);
-        try {
-            const user = await Utils.getUser();
-            if (!user) {
-                setError("La sessió no s'ha iniciat correctament.");
-                router.replace("../login");
-                return ;
-            }
-            setUser(user as MODEL.User);
-            
-            const AGRUPAMENTS_ID = await Utils.getAEiGs_ID();
-            const AGRUPAMENTS:AgrupamentDetails[] = [];
-            for(let i = 0; i<AGRUPAMENTS_ID.length; i++){
-                const aeig = JSON.parse(await DATABASE.getAgrupamentByID(user.afiliat_id, AGRUPAMENTS_ID[i], true)) as AgrupamentDetails;
-                AGRUPAMENTS.push(aeig);
-            }
-            setAEiGs(AGRUPAMENTS);
+          try {
+              const user = await Utils.getUser();
+              if (!user) {
+                  setError("La sessió no s'ha iniciat correctament.");
+                  router.replace("../login");
+                  return ;
+              }
+              setUser(user as MODEL.User);
+              
+              const AGRUPAMENTS_ID = await Utils.getAEiGs_ID();
+              const AGRUPAMENTS:AgrupamentDetails[] = [];
+              for(let i = 0; i<AGRUPAMENTS_ID.length; i++){
+                  const aeig = JSON.parse(await DATABASE.getAgrupamentByID(user.afiliat_id, AGRUPAMENTS_ID[i], true)) as AgrupamentDetails;
+                  AGRUPAMENTS.push(aeig);
+              }
+              setAEiGs(AGRUPAMENTS);
 
-        } catch (e) {
-            console.log(e);
-            if (e instanceof Error)
-            setError(e.message);
-            else setError("S'ha produït un error desconegut.");
-        } finally {
-            setLoading(false);
-        }
+          } catch (e) {
+              console.log(e);
+              if (e instanceof Error)
+              setError(e.message);
+              else setError("S'ha produït un error desconegut.");
+          } finally {
+              setLoading(false);
+          }
         };
 
         fetchUserData();

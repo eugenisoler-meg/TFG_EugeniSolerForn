@@ -48,10 +48,11 @@ export default function AgrupamentCard({ agrupament, onPress }: Props) {
         {/* INFO */}
         <View style={styles.info}>
           <Text style={styles.title}>{agrupament.nom}</Text>
-          <Text style={styles.subtitle}>{agrupament.email}</Text>
-
           {expanded && (
-            <Text style={styles.address}>{agrupament.adreça}</Text>
+            <>
+              <Text style={styles.subtitle}>{agrupament.email}</Text>
+              <Text style={styles.address}>{agrupament.adreça}</Text>
+            </>
           )}
         </View>
 

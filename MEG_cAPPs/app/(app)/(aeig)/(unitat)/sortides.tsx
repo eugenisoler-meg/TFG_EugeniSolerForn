@@ -1,17 +1,16 @@
 import ErrorScreen from "@/app/error";
 import LoadingScreen from "@/app/loading";
 import { Sortida } from "@/components/aeig/unitat/unitat-sortides";
-import { getSortidesByUnitatID } from "@/constants/database";
-import * as Utils from "@/constants/utils";
-import { User } from "@/constants/model";
-import { useEffect, useState } from "react";
-import { router, useLocalSearchParams } from "expo-router";
-import { useCallback } from "react";
-import { View, FlatList, TouchableOpacity, Alert, StyleSheet } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { getSortidesByUnitatID } from "@/constants/database";
+import { User } from "@/constants/model";
+import * as Utils from "@/constants/utils";
 import { formatDate } from "@/constants/utils";
+import { Ionicons } from "@expo/vector-icons";
+import { router, useLocalSearchParams } from "expo-router";
+import { useCallback, useEffect, useState } from "react";
+import { Alert, FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
 
 export default function SortidesScreen()  {
     const [loading, setLoading] = useState(true); 
@@ -32,10 +31,8 @@ export default function SortidesScreen()  {
                     return;
                 }
                 setUser(user as User);
-                const s = await getSortidesByUnitatID(user.afiliat_id, unitat_id);
+                const s = JSON.parse(await getSortidesByUnitatID(user.afiliat_id, unitat_id)) as Sortida[];
                 setSortides(s as Sortida[]);
-                console.log(s);
-                
             } catch (e) {
                 setError(e instanceof Error ? e.message : "Error desconegut.");
             }
@@ -94,7 +91,7 @@ export default function SortidesScreen()  {
   ---------------------------- */
   const renderEmpty = () => (
     <ThemedView style={styles.empty}>
-      <ThemedText>No hi ha sortides</ThemedText>
+      <ThemedText type="subtitle">Encara no has planejat cap sortida</ThemedText>
     </ThemedView>
   );
 
@@ -103,21 +100,24 @@ export default function SortidesScreen()  {
   ---------------------------- */
     if (loading) return LoadingScreen();
     if (error) return ErrorScreen(error??'Error desconegut.');
-    const valid_id = sortides && sortides.length > 0 ? sortides.reduce((acc, s) => acc + (s.sortida_id?.length ?? 0), 0) : 0;
+
     return (
     <ThemedView style={styles.container}>
-      {(valid_id) && <FlatList
+      {(sortides.length > 0) && <FlatList
         data={sortides}
         keyExtractor={(item) => item.sortida_id}
         renderItem={renderItem}
         contentContainerStyle={{ paddingBottom: 120 }}
       />}
-      {!valid_id && renderEmpty()}
+      {(sortides.length === 0) && renderEmpty()}
       
       {/* Floating bottom button */}
       <TouchableOpacity
         style={styles.fab}
-        onPress={() => router.push("/(app)/(aeig)/(unitat)/sortida-form")}
+        onPress={() => router.push({
+                    pathname:"./sortida-form",
+                    params: { unitat_id }})
+                  }
       >
         <Ionicons name="add" size={28} color="white" />
       </TouchableOpacity>

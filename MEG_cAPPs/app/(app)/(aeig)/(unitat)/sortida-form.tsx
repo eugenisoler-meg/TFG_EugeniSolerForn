@@ -1,26 +1,93 @@
-import { useState } from "react";
-import { TextInput, StyleSheet, TouchableOpacity, Alert, } from "react-native";
-import { router } from "expo-router";
+import LoadingScreen from "@/app/loading";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { saveSortida } from "@/constants/database";
+import { formatDate } from "@/constants/utils";
+import DateTimePicker, { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
+import { router, useLocalSearchParams } from "expo-router";
+import { useState } from "react";
+import { Alert, Platform, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { Timestamp } from "react-native-reanimated/lib/typescript/commonTypes";
 
 export default function SortidaForm() {
   const [ubicacio, setUbicacio] = useState("");
-  const [desc, setDesc] = useState("");
+  const [descripcio, setDesc] = useState("");
+  const [data_inici, setInici] = useState<Timestamp|null>(null);
+  const [data_fi, setFi] = useState<Timestamp|null>(null);
+  const [loading, setLoading] = useState(false);
+  const [showInitiPicker, setShowInitiPicker] = useState(false);
+  const [showFiPicker, setShowFiPicker] = useState(false);
+  const [error, setError] = useState<string|null>(null);
+  const { unitat_id } = useLocalSearchParams<{unitat_id?:string}>();
 
-  const save = () => {
-    if (!ubicacio) return Alert.alert("Falta ubicació");
+  const save = async () => {
+    if (!ubicacio|| !data_inici || !data_fi || !descripcio) return Alert.alert("Omple tots els camps");
+    if (!unitat_id) return Alert.alert("Error", "Unitat no trobada");
+    if (data_inici >= data_fi) return Alert.alert("Error", "La data d'inici ha de ser anterior a la de fi");
 
-    // TODO: call API
-    Alert.alert("Guardat");
-
-    router.back();
+    try {
+      setLoading(true);
+      const response = await saveSortida({ unitat_id, ubicacio, descripcio, data_inici, data_fi, });
+      router.replace({ pathname:"/(app)/(aeig)/(unitat)/sortides", params: {unitat_id}});
+    } catch (error) {
+      setError( error instanceof Error ? error.message : "Error al guardar la sortida");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  return (
+  const handleInitiChange = (event: any, selectedDate?: Date) => {
+    if (!selectedDate) return;
+
+  if (Platform.OS === "android") {
+    DateTimePickerAndroid.open({
+      value: selectedDate,
+      mode: "time",
+      is24Hour: true,
+      onChange: (e, selectedTime) => {
+        if (selectedTime) {
+          const iniciDate = new Date(selectedDate);
+          iniciDate.setHours(selectedTime.getHours());
+          iniciDate.setMinutes(selectedTime.getMinutes());
+          setInici(iniciDate.getTime() as Timestamp);
+        }
+      },
+    });
+  } else {
+    setInici(selectedDate.getTime() as Timestamp);
+  }
+    setShowInitiPicker(false);
+  };
+
+  const handleFiChange = (event: any, selectedDate?: Date) => {
+  if (!selectedDate) return;
+  if (Platform.OS === "android") {
+    DateTimePickerAndroid.open({
+      value: selectedDate,
+      mode: "time",
+      is24Hour: true,
+      onChange: (e, selectedTime) => {
+        if (selectedTime) {
+          const finalDate = new Date(selectedDate);
+          finalDate.setHours(selectedTime.getHours());
+          finalDate.setMinutes(selectedTime.getMinutes());
+          setFi(finalDate.getTime() as Timestamp);
+        }
+      },
+    });
+  } else {
+    setFi(selectedDate.getTime() as Timestamp);
+  }
+  setShowFiPicker(false);
+};
+
+if(error) Alert.alert(error);
+if(loading) return LoadingScreen();
+return (
     <ThemedView style={styles.container}>
       <ThemedText type="title">Nova Sortida</ThemedText>
 
+      <ThemedText style={styles.label}>Ubicació</ThemedText>
       <TextInput
         placeholder="Ubicació"
         style={styles.input}
@@ -28,15 +95,60 @@ export default function SortidaForm() {
         onChangeText={setUbicacio}
       />
 
+      <ThemedText style={styles.label}>Descripció</ThemedText>
       <TextInput
         placeholder="Descripció"
         style={styles.input}
-        value={desc}
+        value={descripcio}
         onChangeText={setDesc}
+        multiline
+        numberOfLines={3}
       />
 
-      <TouchableOpacity style={styles.btn} onPress={save}>
-        <ThemedText style={{ color: "white" }}>Guardar</ThemedText>
+      <ThemedText style={styles.label}>Data i hora d'inici</ThemedText>
+      <TouchableOpacity style={styles.dateInput} onPress={() => setShowInitiPicker(true)}>
+        <ThemedText style={{fontSize: 14, fontWeight: "400"}}>
+          {data_inici && `${formatDate(new Date(data_inici))} ${new Date(data_inici).toLocaleTimeString("ca-ES", {hour: "2-digit", minute: "2-digit"})}`
+          || "Selecciona data i hora d'inici"}
+          </ThemedText>
+      </TouchableOpacity>
+      {showInitiPicker && (
+        <DateTimePicker
+          value={data_inici ? new Date(data_inici) : new Date()}
+          mode={Platform.OS === "ios" ? "datetime" : "date"}
+          display="default"
+          onChange={(event, selectedDate) => {
+            if (Platform.OS === "android") {
+              setShowInitiPicker(false);
+            }
+            handleInitiChange(event, selectedDate);
+          }}
+        />
+      )}
+
+      <ThemedText style={styles.label}>Data i hora de fi</ThemedText>
+      <TouchableOpacity style={styles.dateInput} onPress={() => setShowFiPicker(true)}>
+        <ThemedText style={{fontSize: 14, fontWeight: "400"}}>
+          {data_fi && `${formatDate(new Date(data_fi))} ${new Date(data_fi).toLocaleTimeString("ca-ES", {hour: "2-digit", minute: "2-digit"})}`
+          || "Selecciona data i hora de fi"}
+          </ThemedText>
+      </TouchableOpacity>
+      {showFiPicker && (
+        <DateTimePicker
+          value={data_fi ? new Date(data_fi) : new Date()}
+          mode={Platform.OS === "ios" ? "datetime" : "date"}
+          display="default"
+          onChange={(event, selectedDate) => {
+            if (Platform.OS === "android") {
+              setShowFiPicker(false);
+            }
+            handleFiChange(event, selectedDate);
+          }}
+        />
+      )}
+
+      <TouchableOpacity style={styles.btn} onPress={save} disabled={loading}>
+        <ThemedText style={{ color: "white" }}>{loading ? "Guardant..." : "Guardar"}</ThemedText>
       </TouchableOpacity>
     </ThemedView>
   );
@@ -48,11 +160,27 @@ const styles = StyleSheet.create({
     padding: 20,
   },
 
+  label: {
+    marginTop: 16,
+    marginBottom: 8,
+    fontWeight: "800",
+  },
+
   input: {
     borderWidth: 1,
+    borderColor: "#ccc",
     borderRadius: 10,
     padding: 12,
-    marginTop: 16,
+    minHeight: 50,
+  },
+
+  dateInput: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 10,
+    padding: 12,
+    height: 50,
+    justifyContent: "center",
   },
 
   btn: {

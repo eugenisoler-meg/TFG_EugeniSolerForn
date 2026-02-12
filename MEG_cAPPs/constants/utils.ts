@@ -1,10 +1,10 @@
-import { router } from 'expo-router';
-import * as MODEL from './model';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Alert, } from 'react-native';
 import { File, Paths } from 'expo-file-system';
+import { router } from 'expo-router';
 import * as Sharing from "expo-sharing";
 import { fetch } from 'expo/fetch';
+import { Alert, } from 'react-native';
+import * as MODEL from './model';
 
 const API = 'https://testapi.escoltesiguies.cat';
 
@@ -44,12 +44,18 @@ export const fetchQuery = async (query: string, params: Record<string, string>) 
     return await cleanResponse(response);
 };
 
+export const postMutation = async (endpoint: string, data: any) => {
+    const response = await fetch(`${API}/post/${endpoint}`, {
+        method: "POST", headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data)});
+    return await cleanResponse(response);
+};
+
 export const cleanResponse = async (response: Response) => {
     const text = await response.text();
     text.replace("<pre></pre>", "");
-    const json = JSON.parse(text);
+    const json = JSON.parse(text);    
     if(json.error) throw new Error(json.error || 'An error occurred while fetching data');
-
     return json.success;
 };
 

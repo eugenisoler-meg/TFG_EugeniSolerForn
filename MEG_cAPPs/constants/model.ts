@@ -68,3 +68,12 @@ export interface Agrupament{
     lon:number|null;
     lat:number|null;
 }
+
+export interface Sortida {
+    sortida_id: string;
+    unitat_id: string;
+    ubicacio: string;
+    descripcio: string;
+    data_inici: Timestamp;
+    data_fi: Timestamp;
+}

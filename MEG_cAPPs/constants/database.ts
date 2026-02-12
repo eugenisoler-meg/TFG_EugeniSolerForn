@@ -1,4 +1,5 @@
-import { fetchQuery } from '@/constants/utils';
+import { fetchQuery, postMutation } from '@/constants/utils';
+import * as MODEL from './model';
 
 export const getPermisosNivell = async (afiliat_id: string) => fetchQuery('permisosNivell', {'afiliat_id': afiliat_id});
 export const getAfiliatByAfiliatID = async (afiliat_id: string) => fetchQuery('afiliatByID', {'afiliat_id': afiliat_id});
@@ -11,3 +12,5 @@ export const getAgrupamentByID = async (afiliat_id:string, agrupament_id: string
 
 export const getFuncionsByUnitatID = async (afiliat_id:string, unitat_id: string) => fetchQuery('funcionsByUnitatID', {'afiliat_id': afiliat_id, 'unitat_id': unitat_id});
 export const getSortidesByUnitatID = async (afiliat_id:string, unitat_id: string) => fetchQuery('sortidesByUnitatID', {'afiliat_id': afiliat_id, 'unitat_id': unitat_id});
+
+export const saveSortida = async (sortida: Omit<MODEL.Sortida, 'sortida_id'>) => await postMutation('sortida', sortida);

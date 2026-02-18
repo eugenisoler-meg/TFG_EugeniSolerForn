@@ -12,5 +12,9 @@ export const getAgrupamentByID = async (afiliat_id:string, agrupament_id: string
 
 export const getFuncionsByUnitatID = async (afiliat_id:string, unitat_id: string) => fetchQuery('funcionsByUnitatID', {'afiliat_id': afiliat_id, 'unitat_id': unitat_id});
 export const getSortidesByUnitatID = async (afiliat_id:string, unitat_id: string) => fetchQuery('sortidesByUnitatID', {'afiliat_id': afiliat_id, 'unitat_id': unitat_id});
+export const getLlistesByUnitatID = async (afiliat_id:string, unitat_id: string) => fetchQuery('llistesByUnitatID', {'afiliat_id': afiliat_id, 'unitat_id': unitat_id});
 
 export const saveSortida = async (sortida: Omit<MODEL.Sortida, 'sortida_id'>) => await postMutation('sortida', sortida);
+
+export const createLlista = async (llista: Omit<MODEL.Llista, 'llista_id' | 'assistencies_cau'>) => await postMutation('llistaNova', llista);
+export const updateLlista = async (llista: MODEL.Llista) => await postMutation('llistaUpdate', llista);

@@ -45,6 +45,7 @@ export const fetchQuery = async (query: string, params: Record<string, string>) 
 };
 
 export const postMutation = async (endpoint: string, data: any) => {
+    console.log(`Enviant dades a l'endpoint ${endpoint} amb el següent payload:`, data);
     const response = await fetch(`${API}/post/${endpoint}`, {
         method: "POST", headers: {"Content-Type": "application/json"},
         body: JSON.stringify(data)});
@@ -141,7 +142,16 @@ export const confirmLogout = async () => {
       );
   };
 export const DAY_MILLIS = 24*60*60*1000; 
-
+export function properDissabte(): Date {
+  var now = new Date()
+  var dissabte = new Date(
+                 now.getFullYear(),
+                 now.getMonth(),
+                 now.getDate() + (7 + 6 - now.getDay()) % 7,
+                 23, 59, 59, 999);
+  if (dissabte < now) dissabte.setDate(dissabte.getDate() + 7)
+  return dissabte;
+}
 export const logout = async() => {Promise.all([clearAfiliat(), clearFuncions(), clearUnitats_ID(), clearAEiGs_ID(), ])}; // TEST clearUser()]);}
 
 export const funcioActiva = (f : MODEL.Funcio): boolean => {
@@ -155,7 +165,7 @@ type CERTIFICATS = {
     funcio: "Certificat de funció",
     equip_agrupament: "Certificat d'equip d'agrupament",
 }
-export const generateCertificate = async (type : keyof CERTIFICATS, solicitant_id:string, params : { [key: string]: string }) => {
+export const generateCertificate = async (type : keyof CERTIFICATS, solicitant_id:string, params : { [key: string]: string|null }) => {
   const timestamp:string = String(new Date().getTime());
   let params_string:string = "";
   switch(type){
@@ -165,19 +175,17 @@ export const generateCertificate = async (type : keyof CERTIFICATS, solicitant_i
         break;
     case 'equip_agrupament':
         if(!params.agrupament_id) throw new Error("Paràmetres no vàlids per a generar el certificat de l'equip d'agrupament");
-        params_string = `agrupament_id=${params.agrupament_id}`;
+        params_string = `funcio_id=${params.funcio_id}`;
         break;
     default:
         throw new Error("Tipus de certificat no vàlid");
     }
-    
     
     try {
         const file = new File(Paths.cache, "certificat_"+timestamp+".pdf");
         const res = await fetch(`${API}/certificat/${type}?solicitant_id=${solicitant_id}&${params_string}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
-
         });
         file.write(await res.bytes());
         await Sharing.shareAsync(file.uri);

@@ -1,3 +1,4 @@
+import ErrorScreen from "@/app/error";
 import LoadingScreen from "@/app/loading";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -81,7 +82,7 @@ export default function SortidaForm() {
   setShowFiPicker(false);
 };
 
-if(error) Alert.alert(error);
+if(error) return ErrorScreen(error);
 if(loading) return LoadingScreen();
 return (
     <ThemedView style={styles.container}>

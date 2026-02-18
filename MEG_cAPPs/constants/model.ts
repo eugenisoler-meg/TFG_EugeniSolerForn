@@ -8,7 +8,12 @@ export interface User {
     data_naixement: Date;
     afiliat_id: string;
 }
-
+export type AfiliatTipusType = typeof AfiliatTipus[keyof typeof AfiliatTipus];
+export const AfiliatTipus = {
+    'cap_suport': 'Cap/Equip de Suport',
+    'infant_jove': 'Infant/Jove',
+    'familiar_tutor': 'Familiar/Tutor',
+} as const;
 export interface Afiliat {
     afiliat_id: string;
     nom:string;
@@ -19,14 +24,19 @@ export interface Afiliat {
     data_naixement: Date| null;
     num_moni: null| null;
     num_dire: null| null;
-    tipus : 'cap_suport'| 'infant_jove' | 'familiar_tutor' |null;
+    tipus : AfiliatTipusType|null;
 }
-
+export type NivellType = typeof Nivell[keyof typeof Nivell];
+export const Nivell = {
+    agrupament: 'Agrupament',
+    demarcacio: 'Demarcació',
+    meg: 'MEG',
+} as const;
 export interface Funcio {
     funcio_id : string;
     afiliat_id: string;
     agrupament_id: string | null;
-    nivell: 'agrupament' | 'demarcacio' | 'meg';
+    nivell: NivellType;
     rol: string;
     grup: string|null;
     unitat_id: string | null;
@@ -34,12 +44,20 @@ export interface Funcio {
     data_fi: Date | null;
 }
 
+export type BrancaType = typeof Branca[keyof typeof Branca];
+export const Branca = {
+    'castors_lludrigues': 'Castors i Lludrigues',
+    'llops_daines': 'Llops i Daines',
+    'rangers_noies_guia': 'Rangers, Noies i Guies',
+    'pioners_caraveles': 'Pioners i Caraveles',
+    'trucs': 'Trucs',
+} as const;
 export interface Unitat{
     unitat_id: string;
     agrupament_id : string;
     ultim_update:Timestamp;
     nom: string;
-    branca: 'castors_lludrigues'|'llops_daines'|'rangers_noies_guia'|'pioners_caraveles'|'trucs';
+    branca: BrancaType;
     created_at:Timestamp;
     updated_at:Timestamp;
 }
@@ -76,4 +94,29 @@ export interface Sortida {
     descripcio: string;
     data_inici: Timestamp;
     data_fi: Timestamp;
+}
+export type TipusLlistaType = typeof TipusLlista[keyof typeof TipusLlista];
+export const TipusLlista = {
+    cau: 'cau',
+    sortida: 'sortida',
+    campament: 'campament'
+} as const;
+export interface Llista {
+    llista_id: string;
+    unitat_id: string;
+    data_llista: Date;
+    tipus: TipusLlistaType;
+    assistencies_cau: AssistenciaCau[];
+}
+export type ValidacioAssistenciaType = typeof ValidacioAssistencia[keyof typeof ValidacioAssistencia];
+export const ValidacioAssistencia = {
+    A : 'Assistència',
+    J : 'Justificada',
+    NJ : 'No Justificada'
+} as const;
+export interface AssistenciaCau {
+    assistencia_id: number;
+    afiliat_id: string;
+    llista_id: string;
+    validada: ValidacioAssistenciaType|null;
 }

@@ -7,6 +7,7 @@ import * as STYLES from '@/constants/styles';
 import ErrorScreen from "@/app/error";
 import LoadingScreen from "@/app/loading";
 import ActionContainer from "@/components/aeig/accions-botons";
+const __TOP = 0.80; // percentage of screen height for top section (category pages)
 
 // TODO: pensar botons d'accions per cada rol (funcions d'EA i caps de branca) i enllaçar caps de branca amb la unitat.
 
@@ -166,7 +167,7 @@ const styles = StyleSheet.create({
   },
 
   top: {
-    height: height * 0.80,
+    height: height * __TOP,
   },
 
   page: {

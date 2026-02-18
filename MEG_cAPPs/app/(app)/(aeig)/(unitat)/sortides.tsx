@@ -1,8 +1,9 @@
 import ErrorScreen from "@/app/error";
 import LoadingScreen from "@/app/loading";
-import { Sortida } from "@/components/aeig/unitat/unitat-sortides";
+import { Sortida, SortidaCard } from "@/components/aeig/unitat/unitat-sortides";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import AddIcon from "@/components/ui/add-icon";
 import { getSortidesByUnitatID } from "@/constants/database";
 import { User } from "@/constants/model";
 import * as Utils from "@/constants/utils";
@@ -63,28 +64,10 @@ export default function SortidesScreen()  {
   /* ---------------------------
      Render each card
   ---------------------------- */
-  const renderItem = ({ item }: { item: Sortida }) => item.sortida_id ? (
-    <ThemedView style={styles.card}>
-      <View style={{ flex: 1 }}>
-        <ThemedText type="defaultSemiBold">{item.ubicacio}</ThemedText>
-        <ThemedText>
-          {formatDate(item.data_inici??new Date())} → {formatDate(item.data_fi??new Date())}
-        </ThemedText>
-
-        {item.descripcio && (
-          <ThemedText style={styles.desc}>{item.descripcio}</ThemedText>
-        )}
-      </View>
-
-      {/* Icon button */}
-      <TouchableOpacity
-        style={styles.iconBtn}
-        onPress={() => generateText(item)}
-      >
-        <Ionicons name="document-text-outline" size={24} />
-      </TouchableOpacity>
-    </ThemedView>
-  ) : <></>;
+  const renderItem = ({ item }: { item: Sortida }) => {
+  if (!item.sortida_id) return null;
+    return <SortidaCard item={item} generateText={generateText} />;
+  };
 
   /* ---------------------------
      Empty state
@@ -110,17 +93,8 @@ export default function SortidesScreen()  {
         contentContainerStyle={{ paddingBottom: 120 }}
       />}
       {(sortides.length === 0) && renderEmpty()}
-      
-      {/* Floating bottom button */}
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={() => router.push({
-                    pathname:"./sortida-form",
-                    params: { unitat_id }})
-                  }
-      >
-        <Ionicons name="add" size={28} color="white" />
-      </TouchableOpacity>
+
+      <AddIcon onPress={() => router.push({ pathname:"/(app)/(aeig)/(unitat)/sortida-form", params: {unitat_id}})}/> 
     </ThemedView>
   );
 }
@@ -135,43 +109,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
-
-  card: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 16,
-    borderRadius: 14,
-    marginBottom: 12,
-    elevation: 2,
-    borderBottomColor: "#ddd",
-    borderBottomWidth: 1,
-  },
-
-  iconBtn: {
-    padding: 10,
-  },
-
-  desc: {
-    opacity: 0.6,
-    marginTop: 4,
-  },
-
   empty: {
     alignItems: "center",
     marginTop: 40,
-  },
-
-  /* Floating button */
-  fab: {
-    position: "absolute",
-    bottom: 25,
-    right: 25,
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#3b82f6",
-    elevation: 5,
   },
 });

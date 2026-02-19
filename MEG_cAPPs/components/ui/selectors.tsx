@@ -1,17 +1,17 @@
-import { TipusLlistaType } from "@/constants/model";
+import { TipusLlista, TipusLlistaKeys } from "@/constants/model";
 import React from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 
 interface Props {
-  value: TipusLlistaType | null;
-  onChange: (value: TipusLlistaType) => void;
+  value: TipusLlistaKeys | null;
+  onChange: (value: TipusLlistaKeys) => void;
 }
 
 export const TripleSelector: React.FC<Props> = ({
   value,
   onChange,
 }) => {
-  const options: TipusLlistaType[] = ["cau", "sortida", "campament"];
+  const options: TipusLlistaKeys[] = Object.keys(TipusLlista) as TipusLlistaKeys[];
 
   return (
     <View style={styles.container}>

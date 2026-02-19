@@ -1,13 +1,12 @@
 import ErrorScreen from "@/app/error";
 import LoadingScreen from "@/app/loading";
 import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
 import { saveSortida } from "@/constants/database";
 import { formatDate } from "@/constants/utils";
 import DateTimePicker, { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
-import { Alert, Platform, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { View, Alert, Platform, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import { Timestamp } from "react-native-reanimated/lib/typescript/commonTypes";
 
 export default function SortidaForm() {
@@ -31,6 +30,7 @@ export default function SortidaForm() {
       const response = await saveSortida({ unitat_id, ubicacio, descripcio, data_inici, data_fi, });
       router.replace({ pathname:"/(app)/(aeig)/(unitat)/sortides", params: {unitat_id}});
     } catch (error) {
+      
       setError( error instanceof Error ? error.message : "Error al guardar la sortida");
     } finally {
       setLoading(false);
@@ -85,7 +85,7 @@ export default function SortidaForm() {
 if(error) return ErrorScreen(error);
 if(loading) return LoadingScreen();
 return (
-    <ThemedView style={styles.container}>
+    <View style={styles.container}>
       <ThemedText type="title">Nova Sortida</ThemedText>
 
       <ThemedText style={styles.label}>Ubicació</ThemedText>
@@ -151,14 +151,18 @@ return (
       <TouchableOpacity style={styles.btn} onPress={save} disabled={loading}>
         <ThemedText style={{ color: "white" }}>{loading ? "Guardant..." : "Guardar"}</ThemedText>
       </TouchableOpacity>
-    </ThemedView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 20,
+    flex: 1,                 // full height of screen
+    justifyContent: 'center', // vertical centering
+    alignItems: 'center',     // horizontal centering
+    borderStyle: 'solid',
+    borderWidth: 2,
+    borderColor: '#ff0000'
   },
 
   label: {

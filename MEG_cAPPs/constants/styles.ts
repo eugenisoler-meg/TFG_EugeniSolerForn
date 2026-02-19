@@ -1,3 +1,4 @@
+export const LILA = "#4f46e5" as const;
 export const BRANCA_COLORS: { [key: string]: string } = {
     //Funcions d'infant
     "infant_castors_lludrigues": "#f6b26b",
@@ -58,3 +59,4 @@ export const MAP_LABELS: { [key: string]: string } = {
     "responsable_pedagogia_equip_agrupament" : "EA",
     "personal_tecnic" : "Personal Tècnic",
 };
+

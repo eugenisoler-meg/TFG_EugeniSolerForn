@@ -45,7 +45,6 @@ export const fetchQuery = async (query: string, params: Record<string, string>) 
 };
 
 export const postMutation = async (endpoint: string, data: any) => {
-    console.log(`Enviant dades a l'endpoint ${endpoint} amb el següent payload:`, data);
     const response = await fetch(`${API}/post/${endpoint}`, {
         method: "POST", headers: {"Content-Type": "application/json"},
         body: JSON.stringify(data)});

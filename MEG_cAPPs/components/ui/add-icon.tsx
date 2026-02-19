@@ -1,3 +1,4 @@
+import { LILA } from "@/constants/styles";
 import { Ionicons } from "@expo/vector-icons"
 import { TouchableOpacity, StyleSheet } from "react-native"
 
@@ -18,10 +19,10 @@ const styles = StyleSheet.create({
         right: 25,
         width: 60,
         height: 60,
-        borderRadius: 30,
+        borderRadius: 20,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#3b82f6",
+        backgroundColor: LILA,
         elevation: 5,
     },
 });

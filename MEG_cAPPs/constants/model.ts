@@ -43,8 +43,8 @@ export interface Funcio {
     data_inici: Date;
     data_fi: Date | null;
 }
-
-export type BrancaType = typeof Branca[keyof typeof Branca];
+export type BrancaKeys = keyof typeof Branca;
+export type BrancaType = typeof Branca[BrancaKeys];
 export const Branca = {
     'castors_lludrigues': 'Castors i Lludrigues',
     'llops_daines': 'Llops i Daines',
@@ -95,20 +95,21 @@ export interface Sortida {
     data_inici: Timestamp;
     data_fi: Timestamp;
 }
-export type TipusLlistaType = typeof TipusLlista[keyof typeof TipusLlista];
+export type TipusLlistaKeys = keyof typeof TipusLlista;
+export type TipusLlistaType = typeof TipusLlista[TipusLlistaKeys];
 export const TipusLlista = {
-    cau: 'cau',
-    sortida: 'sortida',
-    campament: 'campament'
+    cau: 'Caus',
+    sortida: 'Sortides',
 } as const;
 export interface Llista {
     llista_id: string;
     unitat_id: string;
     data_llista: Date;
-    tipus: TipusLlistaType;
-    assistencies_cau: AssistenciaCau[];
+    tipus: TipusLlistaKeys;
+    assistencies_cau: AssistenciaCau[] | [] ;
 }
-export type ValidacioAssistenciaType = typeof ValidacioAssistencia[keyof typeof ValidacioAssistencia];
+export type ValidacioAssistenciaKeys = keyof typeof ValidacioAssistencia;
+export type ValidacioAssistenciaType = typeof ValidacioAssistencia[ValidacioAssistenciaKeys];
 export const ValidacioAssistencia = {
     A : 'Assistència',
     J : 'Justificada',

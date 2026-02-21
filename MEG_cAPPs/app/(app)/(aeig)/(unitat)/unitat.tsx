@@ -6,7 +6,6 @@ import FuncionsUnitat, { FuncioUnitat} from '@/components/aeig/unitat/unitat-inf
 import { useEffect, useState } from "react";
 import ErrorScreen from '@/app/error';
 import LoadingScreen from "@/app/loading";
-import ActionContainer from "@/components/aeig/accions-botons";
 
 export default function UnitatIndex() {
     const [loading, setLoading] = useState(true); 

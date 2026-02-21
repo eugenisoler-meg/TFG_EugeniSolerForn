@@ -1,11 +1,11 @@
 import { Link } from 'expo-router';
-import { Image, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import React  from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import * as Utils from '@/constants/utils';
-import * as MODEL from '@/constants/model';
+import Logo from '@/components/logo';
 
 export default function ModalScreen() {
   
@@ -42,5 +42,3 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
 });
-
-const Logo = ()=>{return <Image source={require('@/assets/images/MEG_color.png')} style={{ width: 250, height: 200, marginBottom: 20 }} />;}

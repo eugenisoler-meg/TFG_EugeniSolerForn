@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, ScrollView } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import * as MODEL from "@/constants/model";
 import * as STYLES from "@/constants/styles";
 import { ThemedText } from "../themed-text";
@@ -6,7 +6,7 @@ import {router} from 'expo-router';
 import { generateCertificate } from "@/constants/utils";
 
 export default function ActionContainer({ page, selected }: { page: any, selected: MODEL.Funcio|null }) {
-  let Action = <></>;
+  let Action = null;
   if(selected){
     switch(selected.rol){
         case "cap_grups": Action = <ActionButtonCapBranca funcio={selected} />; break;
@@ -28,16 +28,17 @@ export default function ActionContainer({ page, selected }: { page: any, selecte
 }
 
 export function ActionButton({onPress, title, style}: { onPress: () => void, title: string , style?: any}) {
+  const buttonStyle = Array.isArray(style) ? Object.assign({}, ...style) : style || {};
   return (
-    <TouchableOpacity style={style} onPress={onPress}>
-      <Text style={style.actionBtnText}>{title}</Text>
+    <TouchableOpacity style={buttonStyle} onPress={onPress}>
+      <Text style={buttonStyle.actionBtnText ?? styles.actionBtnText}>{title ?? ""}</Text>
     </TouchableOpacity>
   );
 }
 
 export function ActionButtonCapBranca({funcio}: { funcio: MODEL.Funcio}) {
-  if(!funcio.unitat_id || funcio.unitat_id === '') return <Text style={{ color: "#666" }}>Selecciona una funció per veure les funcionalitats</Text>;
-  return <ScrollView horizontal contentContainerStyle={styles.scrollContainer} showsHorizontalScrollIndicator={true}>
+  if(!funcio.unitat_id || funcio.unitat_id === '') return <Text style={{ color: "#666" }}>Selecciona una funció per veure les accions</Text>;
+  return (<ScrollView horizontal contentContainerStyle={styles.scrollContainer} showsHorizontalScrollIndicator={true}>
           <ActionButton onPress={() => router.push({ pathname: "/(app)/(aeig)/(unitat)/unitat", params: { unitat_id: funcio.unitat_id??'' , funcio: JSON.stringify(funcio) }})} 
             title={funcio.unitat_id ? "La meva unitat" : "Funció sense unitat al CRM"}
             style={[styles.actionBtn,
@@ -53,31 +54,39 @@ export function ActionButtonCapBranca({funcio}: { funcio: MODEL.Funcio}) {
             style={[styles.actionBtn,
               {backgroundColor: STYLES.BRANCA_COLORS[funcio.grup?.replace("cap_grups", "infant")??'']??'#4f46e5' }
             ]}/>
-      </ScrollView>;
-}
+      </ScrollView>);
+};
 
 export function ActionButtonCapAgrupament({funcio}: { funcio: MODEL.Funcio}) {
   if (funcio.agrupament_id === null || !funcio.agrupament_id) {
-    return <ActionButton onPress={() => {}} 
-            title={"Funció sense agrupament al CRM"}
-            style={[styles.actionBtn, {backgroundColor:'#4f46e5' } ]}/>;
+    return (<ActionButton onPress={() => {}} 
+        title={"Funció sense agrupament al CRM"}
+            style={[styles.actionBtn, {backgroundColor:'#4f46e5' } ]}/>
+          );
   }
-  return <ActionButton onPress={async () => await generateCertificate("equip_agrupament", funcio.afiliat_id, {funcio_id: funcio.funcio_id, agrupament_id: funcio.agrupament_id})} 
-            title={funcio.grup?.endsWith("equip_agrupament") ? "Certificat Cap d'Agrupament" : "Funció sense grup al CRM"}
-            style={[styles.actionBtn, {backgroundColor:'#4f46e5' } ]}/>;
-}
+  return (<ActionButton onPress={async () => await generateCertificate("equip_agrupament", funcio.afiliat_id, {funcio_id: funcio.funcio_id, agrupament_id: funcio.agrupament_id})} 
+            title={funcio.grup?.endsWith("equip_agrupament") ? "Certificat EA" : "Funció sense grup al CRM"}
+            style={[styles.actionBtn, {backgroundColor:'#4f46e5' } ]}/>
+          );
+};
 
 export function ActionButtonSecretaria({funcio}: { funcio: MODEL.Funcio}) {
-  return <ActionButton onPress={() => {}} 
-            title={funcio.grup?.endsWith("equip_agrupament") ? "Funcionalitat no desenvolupada" : "Funció sense grup al CRM"}
-            style={[styles.actionBtn, {backgroundColor:'#4f46e5' } ]}/>;
-}
+  return (
+  <ScrollView horizontal contentContainerStyle={styles.scrollContainer} showsHorizontalScrollIndicator={true}>
+    <ActionButtonCapAgrupament funcio={funcio} />
+    <ActionButton onPress={() => router.push({ pathname: "/(app)/(aeig)/(ea)/consells", params: { agrupament_id: funcio.agrupament_id??'' }})} 
+            title={funcio.grup === "secretaria_equip_agrupament" ? "Gestiona consells" : "Funció sense grup al CRM"}
+            style={[styles.actionBtn, {backgroundColor:'#4f46e5' } ]}/>
+  </ScrollView>
+  );
+};
 
 export function ActionButtonTresoreria({funcio}: { funcio: MODEL.Funcio}) {
-  return <ActionButton onPress={() => {}} 
+  return (<ActionButton onPress={() => {}} 
             title={funcio.grup?.endsWith("equip_agrupament") ? "Funcionalitat no desenvolupada" : "Funció sense grup al CRM"}
-            style={[styles.actionBtn, {backgroundColor:'#4f46e5' } ]}/>;
-}
+            style={[styles.actionBtn, {backgroundColor:'#4f46e5' } ]}/>
+          );
+};
 
 const styles = StyleSheet.create({
   actions: { height: '100%', borderTopWidth: 1, borderColor: "#ddd", 
@@ -99,13 +108,13 @@ const styles = StyleSheet.create({
   actionBtn: {
     justifyContent: "center",
     alignItems: "center",
-    minHeight: 50,        // use minHeight instead of fixed height
-    minWidth: 150,
-    maxWidth: 200,
+    height: 50,        // use minHeight instead of fixed height
+    width: 150,
     paddingHorizontal: 10,
     paddingVertical: 15,
     borderRadius: 10,
-    boxShadow: "0 4px 0px #222222",
+    boxShadow: `0 4px 0 rgba(35, 35, 35, 0.8)`,
+    elevation: 3,
   },
   actionBtnText: {
     color: "#fff",

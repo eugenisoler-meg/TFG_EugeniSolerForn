@@ -113,6 +113,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#4f46e5",
     justifyContent: "center",
     alignItems: "center",
+    boxShadow: `0 6px 0 rgba(35, 35, 35, 0.8)`,
+    elevation: 5,
   },
 
   disabled: {

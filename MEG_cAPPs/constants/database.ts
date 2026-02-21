@@ -18,3 +18,4 @@ export const saveSortida = async (sortida: Omit<MODEL.Sortida, 'sortida_id'>) =>
 
 export const createLlista = async (llista: Omit<MODEL.Llista, 'llista_id' | 'assistencies_cau'>) => await postMutation('llistaNova', llista);
 export const updateLlista = async (llista: MODEL.Llista) => await postMutation('llistaUpdate', llista);
+export const updateAssistencies = async (assistencies: MODEL.AssistenciaCau[]) => await postMutation('assistenciaUpdate', assistencies);

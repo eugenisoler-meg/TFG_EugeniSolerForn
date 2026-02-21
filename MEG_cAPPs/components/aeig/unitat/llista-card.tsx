@@ -5,11 +5,11 @@ import { Llista, TipusLlista, TipusLlistaKeys } from '@/constants/model';
 import { ThemedText } from '@/components/themed-text';
 import Feather from '@expo/vector-icons/Feather';
 import {router} from "expo-router";
+import { LILA } from '@/constants/styles';
 
 const TipusIcon = {
   cau: 'users',        // example FontAwesome5 icon name
-  sortida: 'map-marker-alt',
-  campament: 'campground'
+  sortida: 'hiking',
 };
 export const filterByTipus = (llistes: Llista[], tipus: TipusLlistaKeys) =>
   llistes
@@ -23,10 +23,10 @@ const isToday = (date: Date, today: Date) =>
 export const filterByDate = (llistes: Llista[], date: Date) => llistes.filter(l => isToday(new Date(l.data_llista), date));
 export const filterByToday = (llistes: Llista[], today: Date) => filterByDate(llistes, today).sort((a, b) => new Date(b.data_llista).getTime() - new Date(a.data_llista).getTime());
 
-interface CardProps { llista: Llista; onValidate: (llista_id: string) => void; };
+interface CardProps { llista: Llista; onValidate: (llista_id: string) => void; section?: keyof typeof TipusLlista };
 const LlistaCard: React.FC<CardProps> = ({ llista, onValidate }) => {
   const total = llista.assistencies_cau?.length ?? 0;
-  const validated = llista.assistencies_cau?.filter(a => a.validada === "Assistència").length ?? 0;
+  const validated = llista.assistencies_cau?.filter(a => a.validada === "A").length ?? 0;
   const percentage = total ? Math.round((validated / total) * 100) : 0;
 
   return (
@@ -70,17 +70,17 @@ const styles = StyleSheet.create({
   button: { paddingHorizontal: 12, paddingVertical: 6, backgroundColor: '#007bff', borderRadius: 6 },
   buttonText: { color: '#fff', fontWeight: '500' },
   percentage: { fontSize: 14, color: '#555', marginLeft: 8 },
-  section: { minHeight: '25%', borderBottomWidth: 1, borderColor: '#ddd' },
+  section: { flex: 1, borderColor: '#ddd', borderRadius: 20, borderWidth: 2 },
   sectionTitle: { fontSize: 18, fontWeight: '600', padding: 8, backgroundColor: '#f0f0f0' }
 });
 
-export default function LlistaList({ llistes, section }: { llistes: Llista[], section?: keyof typeof TipusLlista }) {
+export default function LlistaList({ llistes, highlight }: { llistes: Llista[], highlight?: boolean }) {
   const handleValidate = (llista: Llista) => {
     router.push({ pathname:"/(app)/(aeig)/(unitat)/llista-detail", params: {assistencies_cau: JSON.stringify(llista.assistencies_cau)}});
   };
 
   return (
-    <View style={[styles.section]}>
+    <View style={[styles.section, highlight && { borderColor: LILA }]}>
         <FlatList
             data={llistes}
             keyExtractor={item => item.llista_id}

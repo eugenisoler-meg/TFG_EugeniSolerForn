@@ -7,11 +7,13 @@ import * as STYLES from '@/constants/styles';
 import ErrorScreen from "@/app/error";
 import LoadingScreen from "@/app/loading";
 import ActionContainer from "@/components/aeig/accions-botons";
+import { BANNER_HEIGHT, FOOTER_HEIGHT, PADDING } from "../_layout";
+import { ThemedText } from "@/components/themed-text";
 const __TOP = 0.80; // percentage of screen height for top section (category pages)
 
 // TODO: pensar botons d'accions per cada rol (funcions d'EA i caps de branca) i enllaçar caps de branca amb la unitat.
-
-const { width, height } = Dimensions.get("window");
+const SCREEN_WIDTH = Dimensions.get("window").width - 2 * PADDING;
+const SCREEN_HEIGHT = Dimensions.get("window").height - BANNER_HEIGHT - FOOTER_HEIGHT;
 
 export default function AgrupamentDetailsScreen() {
   const [loading, setLoading] = useState(false); 
@@ -63,117 +65,123 @@ export default function AgrupamentDetailsScreen() {
 
   /* ---------------- PAGE CHANGE ---------------- */
   const onScrollEnd = (e: any) => {
-    const index = Math.round(e.nativeEvent.contentOffset.x / width);
+    const index = Math.round(e.nativeEvent.contentOffset.x / SCREEN_WIDTH);
     setPageIndex(index);
     setSelected(null); // reset selection when changing category
   };
 
   /* ---------------- RENDER ---------------- */
   if(error) return ErrorScreen(error);
-  if(loading) return LoadingScreen();
+  if(loading) return <LoadingScreen/>;
+  console.log("about to return the full section");
+  
   return (
-    <View style={styles.container}>
-
-      {/* ========= TOP 3/4 ========= */}
-      <View style={styles.top}>
-        <FlatList
-          horizontal
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-          data={pages}
-          keyExtractor={(item) => item.key}
-          onMomentumScrollEnd={onScrollEnd}
-          renderItem={({ item }) => (
-            <CategoryPage
+  <View style={styles.container}>
+    {/* ========= TOP 3/4 ========= */}
+    <View style={styles.top}>
+      <ThemedText type="title" >{`Funcions actives`}</ThemedText>
+      <FlatList
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        data={pages}
+        keyExtractor={(item) => item.key}
+        onMomentumScrollEnd={onScrollEnd}
+        renderItem={({ item }) => 
+            item && (
+              <FuncionsPerNivell
               page={item}
               selected={selected}
               onSelect={setSelected}
-            />
-          )}
+              />)
+            }
         />
       </View>
-
       {/* ========= BOTTOM 1/4 ========= */}
-      <ActionContainer page={pages[pageIndex]} selected={selected} />
-
-    </View>
+    <ActionContainer page={pages[pageIndex]} selected={selected} />
+  </View>
   );
-}
+};
 
 
-/* ========================================================= */
-/* ================= CATEGORY PAGE ========================== */
-/* ========================================================= */
-
-function CategoryPage({ page, selected, onSelect }: any) {
+/*  Funcions per nivell  */
+function FuncionsPerNivell({ page, selected, onSelect }: {page:any, selected:MODEL.Funcio|null, onSelect:any}) {
   if (!page.data.length) {
+  console.log("about to return the null page");
     return (
       <View style={[styles.page, styles.center]}>
         <Text>No s'han trobat funcions per aquest nivell</Text>
       </View>
     );
   }
+  console.log("about to return the page card");
 
-  return (
-    <View style={styles.page}>
-      <Text style={styles.title}>{page.title}</Text>
-
-      <View style={styles.cardsContainer}>
-        {page.data.map((item: any) => (
-          <FunctionCard
-            key={item.funcio_id}
-            item={item}
-            selectable={page.selectable}
-            selected={selected?.funcio_id === item.funcio_id}
-            onPress={() => page.selectable && onSelect(selected?.funcio_id === item.funcio_id ? null : item)}
-          />
-        ))}
+    return (
+    <View style={styles.page}>{/* this sets the paging width */}
+      <View style={styles.pageInner}>{/* this adds padding/margin without breaking paging */}
+        <Text style={styles.title}>{page.title}</Text>
+        <View style={styles.cardsContainer}>
+          {page.data.map((item: any) => (
+            <FunctionCard
+              key={item.funcio_id}
+              item={item}
+              selectable={page.selectable}
+              selected={selected?.funcio_id === item.funcio_id}
+              onPress={() => page.selectable && onSelect(selected?.funcio_id === item.funcio_id ? null : item)
+              }
+            />
+          ))}
+        </View>
       </View>
     </View>
   );
-}
+};
 
 
-/* ========================================================= */
-/* ================= FUNCTION CARD ========================== */
-/* ========================================================= */
-
-function FunctionCard({ item, selectable, selected, onPress }: any) {
-  return (
-    <TouchableOpacity
-      disabled={!selectable}
-      onPress={onPress}
-      style={[
-        styles.card,
-        selected && styles.selectedCard,
-        !selectable && styles.disabledCard,
-      ]}
-    >
-      <Text style={styles.role}>{STYLES.MAP_LABELS[item.rol]}</Text>
-      <Text>{STYLES.MAP_LABELS[item.grup]}</Text>
-      <Text>Des de {Utils.formatDate(item.data_inici)}</Text>
+/* Tarjeta de Funció */
+function FunctionCard({ item, selectable, selected, onPress }: {item:MODEL.Funcio, selectable:boolean, selected:boolean, onPress: ()=>void}) {
+  const rolLabel = String(STYLES.MAP_LABELS[item.rol ?? ''] ?? '');
+  const grupLabel = String(STYLES.MAP_LABELS[item.grup ?? ''] ?? '');
+  const dataText = String( item.data_inici ? Utils.formatDate(item.data_inici ?? new Date()) : '');
+  console.log("about to return the function card: ", item);
+    return (
+      <TouchableOpacity
+      disabled={!selectable} onPress={onPress}
+      style={[ styles.card, selected && styles.selectedCard, !selectable && styles.disabledCard, ]}>
+      {rolLabel.length > 0 && <Text style={styles.role}>{rolLabel}</Text>}
+      {grupLabel.length > 0 && <Text>{grupLabel}</Text>}
+      {dataText.length > 0 && <Text>{`Des de ${dataText}`}</Text>}
     </TouchableOpacity>
   );
-}
+};
 
 
-/* ========================================================= */
+
+
 /* ================= STYLES ================================= */
-/* ========================================================= */
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
 
   top: {
-    height: height * __TOP,
+    height: (SCREEN_HEIGHT) * __TOP,
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   page: {
-    width,
+    width: SCREEN_WIDTH, // paging width for FlatList
     justifyContent: "center",
     alignItems: "center",
+  },
+  pageInner: {
+    paddingHorizontal: PADDING, // your inner padding
+    width: "100%",           // fill parent width
+  },
+  cardsContainer: {
+    width: "100%",           // use full inner width
+    gap: 12,
   },
 
   center: {
@@ -187,12 +195,8 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
 
-  cardsContainer: {
-    width: "85%",
-    gap: 12,
-  },
-
   card: {
+    borderWidth: 2,
     backgroundColor: "#eee",
     borderColor: '#222',
     padding: 18,
@@ -205,24 +209,18 @@ const styles = StyleSheet.create({
     backgroundColor: "#4f46e511",
   },
 
-  disabledCard: {
-    opacity: 0.5,
-  },
+  disabledCard: { opacity: 0.5, },
 
-  role: {
-    fontWeight: "bold",
-  },
+  role: { fontWeight: "bold", fontSize: 16, marginBottom: 6 },
 
   actions: {
-    height: height * 0.20,
-    borderTopWidth: 1,
-    borderColor: "#ddd",
-    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "#00f",
+    justifyContent: "space-evenly",
     alignItems: "center",
     gap: 10,
     flex:1,
     flexDirection: 'row',
-    paddingBottom: height*.05,
   },
 
   actionBtn: {

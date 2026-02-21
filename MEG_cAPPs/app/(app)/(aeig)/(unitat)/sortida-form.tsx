@@ -1,13 +1,15 @@
 import ErrorScreen from "@/app/error";
 import LoadingScreen from "@/app/loading";
 import { ThemedText } from "@/components/themed-text";
+import { SaveIcon } from "@/components/ui/add-icon";
 import { saveSortida } from "@/constants/database";
 import { formatDate } from "@/constants/utils";
 import DateTimePicker, { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import { router, useLocalSearchParams } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Alert, Platform, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import { Timestamp } from "react-native-reanimated/lib/typescript/commonTypes";
+import * as MODEL from "@/constants/model";
 
 export default function SortidaForm() {
   const [ubicacio, setUbicacio] = useState("");
@@ -18,13 +20,22 @@ export default function SortidaForm() {
   const [showInitiPicker, setShowInitiPicker] = useState(false);
   const [showFiPicker, setShowFiPicker] = useState(false);
   const [error, setError] = useState<string|null>(null);
-  const { unitat_id } = useLocalSearchParams<{unitat_id?:string}>();
+  const { unitat_id, sortida } = useLocalSearchParams<{unitat_id?:string, sortida?:string}>();
 
+  useEffect(() => {
+    if (sortida) {
+      const s = JSON.parse(sortida) as MODEL.Sortida;
+      setUbicacio(s.ubicacio);
+      setDesc(s.descripcio);
+      setInici(s.data_inici);
+      setFi(s.data_fi);
+    }
+  }, [sortida]);
   const save = async () => {
     if (!ubicacio|| !data_inici || !data_fi || !descripcio) return Alert.alert("Omple tots els camps");
     if (!unitat_id) return Alert.alert("Error", "Unitat no trobada");
     if (data_inici >= data_fi) return Alert.alert("Error", "La data d'inici ha de ser anterior a la de fi");
-
+    setError(null);
     try {
       setLoading(true);
       const response = await saveSortida({ unitat_id, ubicacio, descripcio, data_inici, data_fi, });
@@ -86,7 +97,7 @@ if(error) return ErrorScreen(error);
 if(loading) return LoadingScreen();
 return (
     <View style={styles.container}>
-      <ThemedText type="title">Nova Sortida</ThemedText>
+      <ThemedText type="title">Nova sortida</ThemedText>
 
       <ThemedText style={styles.label}>Ubicació</ThemedText>
       <TextInput
@@ -99,7 +110,7 @@ return (
       <ThemedText style={styles.label}>Descripció</ThemedText>
       <TextInput
         placeholder="Descripció"
-        style={styles.input}
+        style={styles.input_multiline}
         value={descripcio}
         onChangeText={setDesc}
         multiline
@@ -148,21 +159,14 @@ return (
         />
       )}
 
-      <TouchableOpacity style={styles.btn} onPress={save} disabled={loading}>
-        <ThemedText style={{ color: "white" }}>{loading ? "Guardant..." : "Guardar"}</ThemedText>
-      </TouchableOpacity>
+      <SaveIcon onPress={save} loading={loading}/>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,                 // full height of screen
-    justifyContent: 'center', // vertical centering
-    alignItems: 'center',     // horizontal centering
-    borderStyle: 'solid',
-    borderWidth: 2,
-    borderColor: '#ff0000'
+    flex: 1,
   },
 
   label: {
@@ -177,6 +181,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 12,
     minHeight: 50,
+  },
+  input_multiline: {  
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 10,
+    padding: 12,
+    minHeight: 100,
+    textAlignVertical: "top", // align text to top for multiline
   },
 
   dateInput: {

@@ -1,7 +1,7 @@
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { formatDate } from "@/constants/utils";
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity, View, StyleSheet } from "react-native";
 
 export interface Sortida {
@@ -17,7 +17,7 @@ export function SortidaCard({ item, generateText }: { item: Sortida, generateTex
   return (
     <ThemedView style={styles.card}>
       <View style={{ flex: 1 }}>
-        <ThemedText type="defaultSemiBold">{item.ubicacio}</ThemedText>
+        <ThemedText type="defaultSemiBold">Sortida a {item.ubicacio}</ThemedText>
         <ThemedText>
           {formatDate(item.data_inici??new Date())} → {formatDate(item.data_fi??new Date())}
         </ThemedText>
@@ -27,13 +27,16 @@ export function SortidaCard({ item, generateText }: { item: Sortida, generateTex
         )}
       </View>
 
-      {/* Icon button */}
-      <TouchableOpacity
-        style={styles.iconBtn}
-        onPress={() => generateText(item)}
-      >
-        <Ionicons name="document-text-outline" size={24} />
-      </TouchableOpacity>
+      <View style={{ paddingLeft: 12, width: 80, flexDirection: "column", alignItems: "center" }}>  
+        {/* Generate Text */}
+        <TouchableOpacity style={styles.iconBtn} onPress={() => generateText(item)}>
+          <FontAwesome5 name="copy" size={28} />
+        </TouchableOpacity>
+        {/* Edit */}
+        <TouchableOpacity style={styles.iconBtn} onPress={() => generateText(item)}>
+          <FontAwesome5 name="pencil-alt" size={24} />
+        </TouchableOpacity>
+      </View>
     </ThemedView>)
     };
 

@@ -1,103 +1,138 @@
-import ToDoScreen from "@/app/todo";
 import { useEffect, useState } from "react";
 import * as MODEL from "@/constants/model";
 import * as Utils from "@/constants/utils";
 import * as DATABASE from "@/constants/database";
-import { useLocalSearchParams, router } from "expo-router";
+import { useLocalSearchParams, router, useNavigation  } from "expo-router";
 import LoadingScreen from "@/app/loading";
 import ErrorScreen from "@/app/error";
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import { View, Text, FlatList, StyleSheet, Alert } from "react-native";
 import { ThemedText } from "@/components/themed-text";
-import { AssistenciaCau, ValidacioAssistenciaType } from "@/constants/model";
-import { renderRadioButtons, getColorAssistencia } from "@/components/ui/radio-buttons";
+import { AssistenciaCau, ValidacioAssistenciaKeys } from "@/constants/model";
+import { renderRadioButtons, ColorsAssistencia } from "@/components/ui/radio-buttons";
+import { SaveIcon } from "@/components/ui/add-icon";
+import { showUnsavedChangesAlert, Success } from "@/components/ui/alerts";
 
-export default function LlistaDetailScreen()  {
-    const [loading, setLoading] = useState(true); 
-    const [error, setError] = useState<string | null>(null); 
-    const [user, setUser] = useState<MODEL.User|null>(null);
-    const assistencies_cau = JSON.parse(useLocalSearchParams<{assistencies_cau?:string}>().assistencies_cau ?? "[]") as MODEL.AssistenciaCau[];
-    const [data, setData] = useState<MODEL.AssistenciaCau[]>(assistencies_cau);
-    const [modified, setModified] = useState(false);
-useEffect(() => {
-        const fetchUserData = async () => {
-        setError(null);
-        try {
-            const user = await Utils.getUser();
-            if (!user) {
-                setError("La sessió no s'ha iniciat correctament.");
-                router.replace("../login");
-                return;
-            }
-            setUser(user as MODEL.User);
-            if(!assistencies_cau || !Array.isArray(assistencies_cau)) setError("No s'han passat les assistències correctament.");
-        } catch (e) {
-            console.log(e);
-            if (e instanceof Error) setError(e.message);
-            else setError("S'ha produït un error desconegut.");
-        } finally {
-            setLoading(false);
+export default function LlistaDetailScreen() {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [user, setUser] = useState<MODEL.User | null>(null);
+  const assistencies_cau_string = useLocalSearchParams<{ assistencies_cau?: string }>().assistencies_cau;
+  const [data, setData] = useState<MODEL.AssistenciaCau[]>([]);
+  const [modified, setModified] = useState(false);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      setError(null);
+      try {
+        const user = await Utils.getUser();
+        if (!user) {
+          setError("La sessió no s'ha iniciat correctament.");
+          router.replace("../login");
+          return;
         }
+        setUser(user as MODEL.User);
+        if (!assistencies_cau_string) setError("No s'han passat les assistències correctament.");
+        else {
+          const assistencies_cau = JSON.parse(assistencies_cau_string) as MODEL.AssistenciaCau[];
+          setData(assistencies_cau);
+        }
+      } catch (e) {
+        console.log(e);
+        if (e instanceof Error) setError(e.message);
+        else setError("S'ha produït un error desconegut.");
+      } finally {
+        setLoading(false);
+      }
     };
-   
-    fetchUserData();
-    }, [assistencies_cau]);
 
-    const changeState = (id: number, newState: ValidacioAssistenciaType) => {
-        setData(prev => prev.map(a => (a.assistencia_id === id ? { ...a, validada: newState } : a)));
-        setModified(true);
-    };
-    const renderItem = ({ item }: { item: AssistenciaCau }) => (
-        <View style={styles.row}>
-            <Text style={[styles.name, { color: getColorAssistencia(item.validada) }]}>{item.afiliat_id}</Text>
-            <View style={styles.radioGroup}>
-            {renderRadioButtons(item, changeState)}
-            </View>
-        </View>
-    );
-    const save = async () => {
+    fetchUserData();
+  }, [assistencies_cau_string]);
+
+  const navigation = useNavigation();
+  useEffect(() => {
+    if (!modified) return;
+
+    const unsubscribe = navigation.addListener("beforeRemove", (e) => {
+      e.preventDefault(); // stop navigation
+      showUnsavedChangesAlert(navigation, e);
+    });
+
+    return unsubscribe;
+  }, [navigation, modified]);
+
+
+  const changeState = (id: number, newState: ValidacioAssistenciaKeys) => {
+    setData(prev => prev.map(a => (a.assistencia_id === id ? { ...a, validada: a.validada === newState ? null : newState } : a)));
+    setModified(true);
+  };
+  const renderItem = ({ item }: { item: AssistenciaCau }) => (
+    <View style={styles.row}>
+      <Text style={[styles.name, { color: item.validada ? ColorsAssistencia[item.validada] : 'black' }]}>{item.afiliat?.nom} {item.afiliat?.cognoms}</Text>
+      <View style={styles.radioGroup}>
+        {renderRadioButtons(item, changeState)}
+      </View>
+    </View>
+  );
+  const save = async () => {
     try {
-      Alert.alert("TODO", "Guardar les assistències a la BBDD amb l'API i DBPostController...");
-      // Here you would typically send `data` to your backend or database
-      console.log("Data to save:", data);
+      await DATABASE.updateAssistencies(data);
       setModified(false);
-      
-      Alert.alert('Saved successfully');
+      Success('Assistències actualitzades', router);
     } catch (err) {
-      Alert.alert('Error saving data', String(err));
+      Alert.alert('Error actulaitzant l\'assistència', String(err));
     }
   };
 
-    
+  if (error || !user) return ErrorScreen(error ?? 'Error desconegut.');
+  if (loading) return LoadingScreen();
 
-    if(error || !user) return ErrorScreen(error??'Error desconegut.');
-    if(loading) return LoadingScreen();
-
-return (
+  return (
     <View style={styles.container}>
-      <Text style={styles.title}>Assistencies</Text>
+      <ThemedText type="title">Passa llista</ThemedText>
       <FlatList
         data={data}
         keyExtractor={item => String(item.assistencia_id)}
-        renderItem={renderItem}
-        contentContainerStyle={{ paddingBottom: 100 }}
-      />
-      <TouchableOpacity style={styles.saveButton} onPress={save}>
-        <Text style={styles.saveText}>Save</Text>
-      </TouchableOpacity>
+        renderItem={renderItem} 
+        ListHeaderComponent={header(data)}
+        />
+      <SaveIcon onPress={save} />
     </View>
-  );}
+  );
+};
 
+const header = (assistencies?: MODEL.AssistenciaCau[]) => (
+      <View style={{ borderColor: '#eee', borderBottomWidth: 1 }}>
+        <View style={[styles.header,]}>
+            <View />
+            <View style={styles.radioGroup}>
+              <ThemedText type="subtitle"> A </ThemedText>
+              <ThemedText type="subtitle"> J </ThemedText>
+              <ThemedText type="subtitle"> N </ThemedText>
+            </View>
+        </View>
+        <View style={[styles.header]}>
+          <View />
+          <View style={styles.radioGroup}>
+            <ThemedText type="subtitle"> {assistencies && assistencies.length > 0 ? String(assistencies.reduce((acc, curr) => acc + (curr.validada === "A" ? 1 : 0), 0)) : 0} </ThemedText>
+            <ThemedText type="subtitle"> {assistencies && assistencies.length > 0 ? String(assistencies.reduce((acc, curr) => acc + (curr.validada === "J" ? 1 : 0), 0)) : 0} </ThemedText>
+            <ThemedText type="subtitle"> {assistencies && assistencies.length > 0 ? String(assistencies.reduce((acc, curr) => acc + (curr.validada === "NJ" ? 1 : 0), 0)) : 0} </ThemedText>
+          </View>
+        </View>
+      </View>
+      );
 
 const styles = StyleSheet.create({
+  border: { borderColor: '#ff0000', borderWidth: 2, margin: 5 },
   container: { flex: 1, padding: 12 },
-  title: { fontSize: 24, fontWeight: '600', marginBottom: 12 },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 6,
+    marginVertical: 2,
+    paddingVertical: 4,
     justifyContent: 'space-between'
   },
-  name: { flex: 1, fontSize: 16 },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', },
+  name: { flex: 1, fontSize: 16, borderBottomWidth: 1, borderColor: '#eee', marginRight: 10, padding: 2 },
   radioGroup: { flexDirection: 'row', width: 100, justifyContent: 'space-between' },
   radio: {
     width: 24,
@@ -105,16 +140,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     borderColor: '#555'
-  },
-  saveButton: {
-    position: 'absolute',
-    bottom: 24,
-    right: 24,
-    backgroundColor: '#007bff',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 50,
-    elevation: 4
   },
   saveText: { color: '#fff', fontWeight: '600', fontSize: 16 }
 });

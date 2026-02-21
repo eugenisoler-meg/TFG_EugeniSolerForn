@@ -57,9 +57,9 @@ export default function AgrupamentCard({ agrupament, onPress }: Props) {
         </View>
 
         {/* MAP */}
-        <TouchableOpacity style={styles.map} onPress={openMaps}>
+        <TouchableOpacity style={styles.mapCard} onPress={openMaps}>
           <MapView
-            style={{ height: expanded ? 120 : 80, width: 80, margin:5, pointerEvents:'none' }}
+            style={styles.map}
             initialRegion={{
               latitude: 41.458,
               longitude: 2.065,
@@ -91,20 +91,23 @@ export default function AgrupamentCard({ agrupament, onPress }: Props) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: '#eee',
     borderRadius: 14,
     padding: 14,
     marginBottom: 14,
+    boxShadow: `0 6px 0 rgba(35, 35, 35, 0.8)`,
     elevation: 3,
   },
 
   row: {
     flexDirection: 'row',
     alignItems: 'center',
+    flex:1,
   },
 
   info: {
-    flex: 3,
+    flex: 1,
+    paddingHorizontal: 8,
   },
 
   title: {
@@ -124,13 +127,15 @@ const styles = StyleSheet.create({
     color: '#444',
   },
 
-  map: {
-    margin: 5,
+  mapCard: {
+    paddingHorizontal: 10,
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
     height: '100%',
+    minHeight: 100,
+    justifyContent: 'space-around',
   },
+  map:{ height: '100%', width: '100%', pointerEvents:'none' },
 
   mapText: {
     fontSize: 11,

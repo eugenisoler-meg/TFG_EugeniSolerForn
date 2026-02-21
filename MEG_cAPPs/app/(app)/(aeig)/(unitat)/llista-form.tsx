@@ -9,6 +9,8 @@ import { ThemedText } from "@/components/themed-text";
 import { parseDate, formatDate, properDissabte } from "@/constants/utils";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { TripleSelector } from "@/components/ui/selectors";
+import { Success } from "@/components/ui/alerts";
+import { SaveIcon } from "@/components/ui/add-icon";
 
 export default function LlistaFormScreen()  {
 
@@ -28,7 +30,7 @@ export default function LlistaFormScreen()  {
             const data_parsed = new Date(parseDate(data_llista));
             const response = await createLlista({ unitat_id, data_llista: data_parsed, tipus });
             if(response.error) throw new Error(response.error || "Error al crear la llista");
-            Alert.alert("Llista creada correctament");
+            Success('Llista creada correctament', router);
             router.replace({ pathname:"/(app)/(aeig)/(unitat)/llistes", params: {unitat_id}});
         } catch (error) {
             setError(error instanceof Error ? error.message : "Error al guardar la llista");
@@ -67,9 +69,8 @@ export default function LlistaFormScreen()  {
             onChange={setTipus}
         />
 
-        <TouchableOpacity style={styles.btn} onPress={save}>
-            <ThemedText style={{color: "white", fontWeight: "700"}}>Guardar</ThemedText>
-        </TouchableOpacity>
+        <SaveIcon onPress={save} />
+        
     </>;
 }
 

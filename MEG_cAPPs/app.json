@@ -8,6 +8,9 @@
     "scheme": "megcapps",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "extra": {
+      "OPENAI_API_KEY": "sk-xxxxxxxxxxxxxxxxxxxx"
+    },
     "ios": {
       "supportsTablet": true
     },

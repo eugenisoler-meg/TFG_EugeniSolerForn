@@ -7,13 +7,12 @@ import AddIcon from "@/components/ui/add-icon";
 import { getSortidesByUnitatID } from "@/constants/database";
 import { User } from "@/constants/model";
 import * as Utils from "@/constants/utils";
-import { formatDate } from "@/constants/utils";
-import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
-import { Alert, FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, StyleSheet, } from "react-native";
+//import { openaiApiKey } from "@/constants/ai";
 
-export default function SortidesScreen()  {
+export default function SortidesScreen()  {    
     const [loading, setLoading] = useState(true); 
     const [error, setError] = useState<string | null>(null); 
     const [sortides, setSortides] = useState<Sortida[]>([]);
@@ -86,6 +85,7 @@ export default function SortidesScreen()  {
 
     return (
     <ThemedView style={styles.container}>
+      <ThemedText type="title">Sortides de la unitat</ThemedText>
       {(sortides.length > 0) && <FlatList
         data={sortides}
         keyExtractor={(item) => item.sortida_id}
@@ -107,8 +107,7 @@ export default function SortidesScreen()  {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-  },
+    },
   empty: {
     alignItems: "center",
     marginTop: 40,

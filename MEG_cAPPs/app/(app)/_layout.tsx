@@ -3,11 +3,22 @@ import { View, Pressable, StyleSheet } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { ThemedText } from "@/components/themed-text";
 import * as Utils from "@/constants/utils";
+import { Icon } from "@/components/logo";
+
+export const BANNER_HEIGHT = 70 as const;
+export const FOOTER_HEIGHT = 70 as const;
+export const PADDING = 12 as const;
+export const MARGIN_TOP = 25 as const;
 
 export default function AppLayout() {
   const onProfile = (usePathname() === "/profile");
   return (
       <View style={styles.container}>
+        <View style={styles.banner}>
+          {Icon(60)}
+          <ThemedText type="subtitle">MEG cAPP's</ThemedText>
+        </View>
+
         {/* All pages render here */}
         <View style={styles.content}>
           <Stack screenOptions={{ headerShown: false }} />
@@ -36,15 +47,27 @@ const styles = StyleSheet.create({
 
   content: {
     flex: 1,
+    padding: PADDING,
   },
 
   footer: {
-    height: 70,
-    borderTopWidth: 1,
+    height: FOOTER_HEIGHT,
+    borderTopWidth: 2,
     borderColor: "#ddd",
     backgroundColor: "white",
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
   },
+  banner:{
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    height: BANNER_HEIGHT,
+    backgroundColor: "#eee",
+    borderBottomWidth: 2,
+    borderColor: "#ddd",
+    marginTop: MARGIN_TOP,
+    paddingHorizontal: PADDING,
+   },
 });

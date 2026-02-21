@@ -7,6 +7,7 @@ export interface User {
     login: Timestamp;
     data_naixement: Date;
     afiliat_id: string;
+    afiliat?: Afiliat;
 }
 export type AfiliatTipusType = typeof AfiliatTipus[keyof typeof AfiliatTipus];
 export const AfiliatTipus = {
@@ -38,10 +39,13 @@ export interface Funcio {
     agrupament_id: string | null;
     nivell: NivellType;
     rol: string;
-    grup: string|null;
+    grup: string | null;
     unitat_id: string | null;
     data_inici: Date;
     data_fi: Date | null;
+    agrupament?: Agrupament;
+    unitat?: Unitat;
+    afiliat?: Afiliat;
 }
 export type BrancaKeys = keyof typeof Branca;
 export type BrancaType = typeof Branca[BrancaKeys];
@@ -60,31 +64,21 @@ export interface Unitat{
     branca: BrancaType;
     created_at:Timestamp;
     updated_at:Timestamp;
+    agrupament?: Agrupament;
 }
 
 export interface Agrupament{
     agrupament_id: string;
-    demarcacio_id: string|null;
+    demarcacio_id: string | null;
     email:string;
     adreça: string;
     ultim_update:Timestamp;
     updated_at:Timestamp;
     nom:string;
-    num_cens:string;
-}
-
-export interface Agrupament{
-    agrupament_id: string;
-    demarcacio_id: string|null;
-    demarcacio: Agrupament|null;
-    email:string;
-    adreça: string;
-    ultim_update:Timestamp;
-    updated_at:Timestamp;
-    nom:string;
-    num_cens:string;
-    lon:number|null;
-    lat:number|null;
+    num_cens?:string;
+    lon?:number;
+    lat?:number;
+    demarcacio?: Agrupament;
 }
 
 export interface Sortida {
@@ -94,6 +88,7 @@ export interface Sortida {
     descripcio: string;
     data_inici: Timestamp;
     data_fi: Timestamp;
+    unitat?: Unitat;
 }
 export type TipusLlistaKeys = keyof typeof TipusLlista;
 export type TipusLlistaType = typeof TipusLlista[TipusLlistaKeys];
@@ -107,6 +102,7 @@ export interface Llista {
     data_llista: Date;
     tipus: TipusLlistaKeys;
     assistencies_cau: AssistenciaCau[] | [] ;
+    unitat?: Unitat;
 }
 export type ValidacioAssistenciaKeys = keyof typeof ValidacioAssistencia;
 export type ValidacioAssistenciaType = typeof ValidacioAssistencia[ValidacioAssistenciaKeys];
@@ -119,5 +115,6 @@ export interface AssistenciaCau {
     assistencia_id: number;
     afiliat_id: string;
     llista_id: string;
-    validada: ValidacioAssistenciaType|null;
+    validada: ValidacioAssistenciaKeys | null;
+    afiliat?: Afiliat;
 }

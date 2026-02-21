@@ -74,9 +74,6 @@ export default function AgrupamentDashboardScreen(){
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: 20,
-    width: '100%',
     justifyContent: "space-evenly",
-
   },
 });

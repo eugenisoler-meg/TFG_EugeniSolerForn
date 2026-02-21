@@ -12,7 +12,7 @@ export const BRANCA_COLORS: { [key: string]: string } = {
     "rangers_noies_guia": "#6d9eeb", 
     "pioners_caraveles": "#e06666", 
     "trucs": "#93c47d",
-};
+} as const;
 
 export const MAP_LABELS: { [key: string]: string } = {
     // Unitats
@@ -58,5 +58,7 @@ export const MAP_LABELS: { [key: string]: string } = {
     "responsable_pedagogia" : "Responsable de Pedagogia",
     "responsable_pedagogia_equip_agrupament" : "EA",
     "personal_tecnic" : "Personal Tècnic",
-};
+
+    '': 'NO_LABEL'
+} as const;
 

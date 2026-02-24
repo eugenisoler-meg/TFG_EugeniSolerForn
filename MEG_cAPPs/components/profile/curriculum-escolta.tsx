@@ -63,10 +63,9 @@ return (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
   },
   table: {
-    marginTop: 10,
+    marginVertical: 5,
   },
 
   rowItem: {
@@ -85,11 +84,5 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 12,
   },
-  disabled: {
-    opacity: 0.35,
-    backgroundColor: "#999",
-    color: "#444",
-  },
-
   
 });

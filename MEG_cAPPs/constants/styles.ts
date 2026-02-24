@@ -1,3 +1,8 @@
+export const BANNER_HEIGHT = 70 as const;
+export const FOOTER_HEIGHT = 70 as const;
+export const PADDING = 12 as const;
+export const MARGIN_TOP = 25 as const;
+
 export const LILA = "#4f46e5" as const;
 export const BRANCA_COLORS: { [key: string]: string } = {
     //Funcions d'infant

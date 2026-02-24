@@ -52,7 +52,7 @@ export default function LlistaScreen()  {
     );
 
     if(error || !user) return ErrorScreen(error??'Error desconegut.');
-    if(loading) return LoadingScreen();
+    if(loading) return LoadingScreen() ;
 
     const todayList = filterByToday(llistes, new Date());
     const cauList = filterByTipus(llistes, 'cau');

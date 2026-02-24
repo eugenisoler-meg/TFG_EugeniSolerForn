@@ -3,7 +3,7 @@ import { File, Paths } from 'expo-file-system';
 import { router } from 'expo-router';
 import * as Sharing from "expo-sharing";
 import { fetch } from 'expo/fetch';
-import { Alert, } from 'react-native';
+import { Alert, Linking } from 'react-native';
 import * as MODEL from './model';
 
 const API = 'https://testapi.escoltesiguies.cat';
@@ -192,3 +192,13 @@ export const generateCertificate = async (type : keyof CERTIFICATS, solicitant_i
         console.log(err);
     }
 };
+
+export async function openExternalURL(url:string): Promise<void> {
+    // Check if the URL can be opened
+    const supported = await Linking.canOpenURL(url);
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      Alert.alert(`No s'ha pogut obrir l'enllaç: ${url}`);
+    }
+}

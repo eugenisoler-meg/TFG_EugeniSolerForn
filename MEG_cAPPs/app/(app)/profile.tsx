@@ -112,10 +112,7 @@ export default function ProfileLayout() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-    marginTop: 20,
   },
-
   profileCard: {
     backgroundColor: "white",
     padding: 20,
@@ -123,7 +120,6 @@ const styles = StyleSheet.create({
     elevation: 3,
     marginBottom: 12,
   },
-
   name: {
     fontSize: 20,
     fontWeight: "bold",
@@ -149,13 +145,14 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: "center",
   },
+  
   AnysCard: {
     flex: 1,
     backgroundColor: "gray",
-    height: 60,
-    padding: 10,
-    borderRadius: 5,
+    height: 50,
+    borderRadius: 8,
     alignItems: "center",
+    justifyContent: "center",
   },
   smallCardText: {
     color: "white",
@@ -186,25 +183,5 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     textAlign: "center",
     marginBottom: 10,
-  },
-
-  table: {
-    marginTop: 10,
-  },
-
-  rowItem: {
-    flexDirection: "row",
-    borderBottomWidth: 1,
-    borderColor: "#eee",
-    paddingVertical: 8,
-  },
-
-  header: {
-    backgroundColor: "#f3f4f6",
-  },
-
-  cell: {
-    flex: 1,
-    fontSize: 12,
   },
 });

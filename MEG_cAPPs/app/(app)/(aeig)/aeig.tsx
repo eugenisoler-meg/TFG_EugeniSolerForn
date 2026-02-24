@@ -73,7 +73,6 @@ export default function AgrupamentDetailsScreen() {
   /* ---------------- RENDER ---------------- */
   if(error) return ErrorScreen(error);
   if(loading) return <LoadingScreen/>;
-  console.log("about to return the full section");
   
   return (
   <View style={styles.container}>
@@ -107,14 +106,12 @@ export default function AgrupamentDetailsScreen() {
 /*  Funcions per nivell  */
 function FuncionsPerNivell({ page, selected, onSelect }: {page:any, selected:MODEL.Funcio|null, onSelect:any}) {
   if (!page.data.length) {
-  console.log("about to return the null page");
     return (
       <View style={[styles.page, styles.center]}>
         <Text>No s'han trobat funcions per aquest nivell</Text>
       </View>
     );
   }
-  console.log("about to return the page card");
 
     return (
     <View style={styles.page}>{/* this sets the paging width */}
@@ -143,8 +140,7 @@ function FunctionCard({ item, selectable, selected, onPress }: {item:MODEL.Funci
   const rolLabel = String(STYLES.MAP_LABELS[item.rol ?? ''] ?? '');
   const grupLabel = String(STYLES.MAP_LABELS[item.grup ?? ''] ?? '');
   const dataText = String( item.data_inici ? Utils.formatDate(item.data_inici ?? new Date()) : '');
-  console.log("about to return the function card: ", item);
-    return (
+  return (
       <TouchableOpacity
       disabled={!selectable} onPress={onPress}
       style={[ styles.card, selected && styles.selectedCard, !selectable && styles.disabledCard, ]}>

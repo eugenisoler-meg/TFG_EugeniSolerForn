@@ -1,12 +1,14 @@
 import ErrorScreen from "@/app/error";
 import LoadingScreen from "@/app/loading";
-import { Sortida, SortidaCard } from "@/components/aeig/unitat/unitat-sortides";
+import { SortidaCard } from "@/components/aeig/unitat/unitat-sortides";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import AddIcon from "@/components/ui/add-icon";
 import { getSortidesByUnitatID } from "@/constants/database";
 import { User } from "@/constants/model";
 import * as Utils from "@/constants/utils";
+import {Sortida } from "@/constants/model";
+import * as AI from "@/constants/ai";
 import { router, useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { Alert, FlatList, StyleSheet, } from "react-native";
@@ -48,6 +50,7 @@ export default function SortidesScreen()  {
     /* ---------------------------
      Generate text action
   ---------------------------- */
+  /*
   const generateText = useCallback((item: Sortida) => {
     const text = `
         Sortida
@@ -59,13 +62,13 @@ export default function SortidesScreen()  {
 
         Alert.alert("Text generat", text);
     }, []);
-
+        */
   /* ---------------------------
      Render each card
   ---------------------------- */
   const renderItem = ({ item }: { item: Sortida }) => {
   if (!item.sortida_id) return null;
-    return <SortidaCard item={item} generateText={generateText} />;
+    return <SortidaCard item={item} generateText={AI.generateSortidaText} />;
   };
 
   /* ---------------------------

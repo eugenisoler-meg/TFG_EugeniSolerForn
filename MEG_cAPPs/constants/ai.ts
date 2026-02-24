@@ -1,32 +1,36 @@
 import { Sortida } from '@/constants/model';
-import OpenAI from 'openai';
-import Constants from 'expo-constants';
+import { cleanResponse } from './utils';
+import { Alert } from 'react-native';
 
-export const openaiApiKey = Constants.expoConfig?.extra?.OPENAI_API_KEY;
-// Create the client
-const openai = new OpenAI({
-  apiKey: openaiApiKey, // make sure this is set in your environment
-});
 
-export const generateSortidaText = async (sortida: Sortida) => {
-  const prompt = `
-    Generate a friendly message in catalan for a whatsapp group of parents about a scouts grup (unitat) trip.
-    Include the following information:
-    - Unitat name: ${sortida.unitat?.nom}
-    - Unitat branca (age group): ${sortida.unitat?.branca}
-    - Location: ${sortida.ubicacio}
-    - Start: ${new Date(sortida.data_inici).toLocaleString()}
-    - End: ${new Date(sortida.data_fi).toLocaleString()}
-    - Short description (complement a little bit): ${sortida.descripcio}
 
-    Use emojis to highlight important info. Make it concise, engaging and easy to read.
-  `;
+const API_AIendpoint = 'https://testapi.escoltesiguies.cat/testAI';
+const AI_MODEL = 'gpt-5-mini';
 
-  const response = await openai.chat.completions.create({
-    model: 'gpt-4o-mini', // or 'gpt-4', depending on your API access
-    messages: [{ role: 'user', content: prompt }],
-    max_tokens: 200,
-  });
+export const generateSortidaText = async (item: Sortida) => {
+  const prompt = `Genera un missatge preparat per copiar i enganxar en un grup de whatsapp de famílies sobre una unitat d'infants d'un agrupament escolta i guia de catalunya que se'n va d'excursió.
+Cal incloure la següent informació:
+- Unitat name: ${item.unitat?.nom}
+- Unitat i branca (defineix el grup d'edat): ${item.unitat?.nom} ${item.unitat?.branca}
+- Lloc: ${item.ubicacio}
+- Data i hora d'inici: ${new Date(item.data_inici).toLocaleString()}
+- Data i hora de fi: ${new Date(item.data_fi).toLocaleString()}
+- Breu descripció de les activitats a realitzar (complementa una mica però no inventis res): ${item.descripcio}
+Fes servir emoticones i destaca informació important. Fes-ho curt, entenedor, un punt emotiu i fàcil de llegir. Acaba amb el lema de la branca`;
 
-  return response.choices?.[0].message?.content ?? '';
+  try{
+    
+    console.log(`${API_AIendpoint}?prompt=${encodeURI(prompt)}`);
+    const response = await fetch(`${API_AIendpoint}?model=${AI_MODEL}&prompt=${encodeURI(prompt)}`, 
+      {method: "GET", headers: {"Content-Type": "application/json"},});
+
+    const text = await cleanResponse(response);
+    console.log(text);
+    Alert.alert("Text generat", text);
+  }
+  catch(e){
+    console.log(e);
+  }
+
+
 };

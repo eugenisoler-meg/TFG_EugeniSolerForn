@@ -3,17 +3,9 @@ import { ThemedView } from "@/components/themed-view";
 import { formatDate } from "@/constants/utils";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity, View, StyleSheet } from "react-native";
+import { Sortida } from "@/constants/model";
 
-export interface Sortida {
-    sortida_id: string;
-    unitat_id: string;
-    ubicacio: string;
-    data_inici: Date;
-    data_fi: Date;
-    descripcio: string;
-}
-
-export function SortidaCard({ item, generateText }: { item: Sortida, generateText: (item: Sortida) => void }) {
+export function SortidaCard({ item, generateText }: { item: Sortida, generateText: (item: Sortida) => Promise<any> }) {
   return (
     <ThemedView style={styles.card}>
       <View style={{ flex: 1 }}>

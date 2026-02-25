@@ -1,17 +1,23 @@
 import { Stack, router, usePathname  } from "expo-router";
-import { View, Pressable, StyleSheet, TouchableWithoutFeedback, Text } from "react-native";
-import Entypo from '@expo/vector-icons/Entypo';import Ionicons from "@expo/vector-icons/Ionicons";
+import { View, Pressable, StyleSheet } from "react-native";
+import Entypo from '@expo/vector-icons/Entypo';
+import Ionicons from "@expo/vector-icons/Ionicons";
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { ThemedText } from "@/components/themed-text";
 import * as Utils from "@/constants/utils";
 import {BANNER_HEIGHT, FOOTER_HEIGHT, PADDING, MARGIN_TOP} from '@/constants/styles';
 import { Icon } from "@/components/logo";
 import { useState } from "react";
-import Directories from "@/components/ui/directories";
+import {Directories, EntityOptions } from "@/components/ui/floating-menus";
 
 export default function AppLayout() {
-  const [menuVisible, setMenuVisible] = useState(true);
-  const showDirectories = () => {setMenuVisible(prev => !prev);};
-  const closeMenu = () => {console.log("menu closed");setMenuVisible(false);};
+  const [directoriesVisible, setDirectoriesVisible] = useState(false);
+  const [entityOptionsVisible, setEntityOptionsVisible] = useState(false);
+  const showDirectories = () => {setDirectoriesVisible(prev => !prev);};
+  const closeDirectories = () => {setDirectoriesVisible(false);};
+
+  const showEntityOptions = () => {setEntityOptionsVisible(prev => !prev);};
+  const closeEntityOptions = () => {setEntityOptionsVisible(false);};
 
   const pathname = usePathname();
   const onProfile = pathname === "/profile";
@@ -30,9 +36,14 @@ export default function AppLayout() {
 
         {/* Persistent bottom bar */}
         <View style={styles.footer}>
-          <Pressable onPress={() => showDirectories() } style={styles.footerOption}>
+          <Pressable onPress={showDirectories} style={styles.footerOption}>
             <Entypo name="link" size={35} />
             <ThemedText type="defaultSemiBold">Directoris</ThemedText>
+          </Pressable>
+          
+          <Pressable onPress={showEntityOptions} style={styles.footerOption}>
+            <MaterialCommunityIcons name="fleur-de-lis" size={35} />
+            <ThemedText type="defaultSemiBold">L'entitat</ThemedText>
           </Pressable>
 
           <Pressable onPress={() => router.push("/profile") } style={styles.footerOption}>
@@ -42,11 +53,12 @@ export default function AppLayout() {
 
           <Pressable onPress={Utils.confirmLogout} style={styles.footerOption}>
             <Ionicons name="log-out-outline" size={35} />
-            <ThemedText type="defaultSemiBold">Tanca sessió</ThemedText>
+            <ThemedText type="defaultSemiBold">Surt</ThemedText>
           </Pressable>
         </View>
 
-        {menuVisible && <Directories closeMenu={closeMenu}/>}
+        {directoriesVisible && <Directories closeMenu={closeDirectories}/>}
+        {entityOptionsVisible && <EntityOptions closeMenu={closeEntityOptions}/>}
       </View>
   );
 }

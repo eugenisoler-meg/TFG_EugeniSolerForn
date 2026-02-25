@@ -6,6 +6,7 @@ import React  from 'react';
 import { useEffect } from 'react';
 import * as Utils from '@/constants/utils';
 import Logo from '@/components/logo';
+import { PADDING } from '@/constants/styles';
 
 export default function ModalScreen() {
   
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
+    padding: PADDING,
   },
   link: {
     marginTop: 15,

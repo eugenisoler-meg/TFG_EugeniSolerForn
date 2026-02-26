@@ -90,7 +90,7 @@ export default function DashboardScreen() {
       <View style={styles.content}>
         <NivellButton title="Agrupament" enabled={permisos.AEiG} route="./(aeig)/" />
         <NivellButton title="Demarcació" enabled={permisos.DEM} route="/todo" />
-        <NivellButton title="MEG" enabled={permisos.MEG} route="/todo" />
+        <NivellButton title="Generals" enabled={permisos.MEG} route="/todo" />
       </View>
     </View>
   );

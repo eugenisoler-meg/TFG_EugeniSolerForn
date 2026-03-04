@@ -3,11 +3,10 @@ import {router, useLocalSearchParams} from 'expo-router';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Dimensions, } from "react-native";
 import * as MODEL from '@/constants/model';
 import * as Utils from '@/constants/utils';
-import * as STYLES from '@/constants/styles';
+import { MAP_LABELS, BANNER_HEIGHT, FOOTER_HEIGHT, PADDING, LILA } from '@/constants/styles';
 import ErrorScreen from "@/app/error";
 import LoadingScreen from "@/app/loading";
 import ActionContainer from "@/components/aeig/accions-botons";
-import { BANNER_HEIGHT, FOOTER_HEIGHT, PADDING } from "../_layout";
 import { ThemedText } from "@/components/themed-text";
 const __TOP = 0.80; // percentage of screen height for top section (category pages)
 
@@ -137,8 +136,8 @@ function FuncionsPerNivell({ page, selected, onSelect }: {page:any, selected:MOD
 
 /* Tarjeta de Funció */
 function FunctionCard({ item, selectable, selected, onPress }: {item:MODEL.Funcio, selectable:boolean, selected:boolean, onPress: ()=>void}) {
-  const rolLabel = String(STYLES.MAP_LABELS[item.rol ?? ''] ?? '');
-  const grupLabel = String(STYLES.MAP_LABELS[item.grup ?? ''] ?? '');
+  const rolLabel = String(MAP_LABELS[item.rol ?? ''] ?? '');
+  const grupLabel = String(MAP_LABELS[item.grup ?? ''] ?? '');
   const dataText = String( item.data_inici ? Utils.formatDate(item.data_inici ?? new Date()) : '');
   return (
       <TouchableOpacity
@@ -156,41 +155,14 @@ function FunctionCard({ item, selectable, selected, onPress }: {item:MODEL.Funci
 
 /* ================= STYLES ================================= */
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: { flex: 1, },
 
-  top: {
-    height: (SCREEN_HEIGHT) * __TOP,
-    justifyContent: "center",
-    alignItems: "center",
-  },
+  top: { height: (SCREEN_HEIGHT) * __TOP, justifyContent: "center", alignItems: "center", },
 
-  page: {
-    width: SCREEN_WIDTH, // paging width for FlatList
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  pageInner: {
-    paddingHorizontal: PADDING, // your inner padding
-    width: "100%",           // fill parent width
-  },
-  cardsContainer: {
-    width: "100%",           // use full inner width
-    gap: 12,
-  },
-
-  center: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  title: {
-    fontWeight: "bold",
-    fontSize: 18,
-    marginBottom: 15,
-  },
-
+  page: { width: SCREEN_WIDTH, justifyContent: "center", alignItems: "center", },
+  pageInner: { paddingHorizontal: PADDING, width: "100%", },
+  
+  cardsContainer: { width: "100%", gap: 12, },
   card: {
     borderWidth: 2,
     backgroundColor: "#eee",
@@ -198,27 +170,23 @@ const styles = StyleSheet.create({
     padding: 18,
     borderRadius: 12,
   },
-
-  selectedCard: {
-    borderWidth: 2,
-    borderColor: "#4f46e5",
-    backgroundColor: "#4f46e511",
-  },
-
+  
+  selectedCard: { borderWidth: 2, borderColor: LILA, backgroundColor: "#4f46e511", },
   disabledCard: { opacity: 0.5, },
+  
+  center: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  
+  title: {
+    fontWeight: "bold",
+    fontSize: 18,
+    marginBottom: 15,
+  },
 
   role: { fontWeight: "bold", fontSize: 16, marginBottom: 6 },
-
-  actions: {
-    borderWidth: 1,
-    borderColor: "#00f",
-    justifyContent: "space-evenly",
-    alignItems: "center",
-    gap: 10,
-    flex:1,
-    flexDirection: 'row',
-  },
-
+  
   actionBtn: {
     //backgroundColor: "#4f46e5",
     paddingHorizontal: 40,

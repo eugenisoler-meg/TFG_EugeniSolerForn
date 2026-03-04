@@ -14,9 +14,7 @@ function FloatingMenu({data, menuStyle, closeMenu} : {data: readonly any[], menu
                   <Pressable
                   key={item.label}
                   style={styles.menuItem}
-                  onPress={ () => { 
-                    closeMenu();
-                    item.externalLink ? Utils.openExternalURL(item.route) : router.push(item.route);} }
+                  onPress={ () => { closeMenu(); Utils.openExternalURL(item.route);} }
                   >
                     <View style={styles.iconContainer}>
                     {item.icon}  
@@ -32,10 +30,10 @@ function FloatingMenu({data, menuStyle, closeMenu} : {data: readonly any[], menu
 
 
 export const DIRECTORIES = [
-  { label: "ComptaCAU", icon: <FontAwesome5 name={'money-bill-wave'} size={24} color="black" />, externalLink:true,route: "https://comptacau.escoltesiguies.cat/" },
-  { label: "Espai del Cap", icon: <FontAwesome5 name={'user-alt'} size={24} color="black" />, externalLink:true, route: "https://www.escoltesiguies.cat/espai-del-cap" },
-  { label: "Xarxameg", icon: <FontAwesome5 name={'mixer'} size={24} color="black" />, externalLink:true, route: "https://fundacioescoltesiguies.cat/espai-de-trobada/" },
-  { label: "Dossier", icon: <FontAwesome5 name={'file-alt'} size={24} color="black" />, externalLink:true, route: "https://dossier.escoltesiguies.cat/" },
+  { label: "ComptaCAU", icon: <FontAwesome5 name={'money-bill-wave'} size={24} color="black" />, route: "https://comptacau.escoltesiguies.cat/" },
+  { label: "Espai del Cap", icon: <FontAwesome5 name={'user-alt'} size={24} color="black" />, route: "https://www.escoltesiguies.cat/espai-del-cap" },
+  { label: "Xarxameg", icon: <FontAwesome5 name={'mixer'} size={24} color="black" />, route: "https://fundacioescoltesiguies.cat/espai-de-trobada/" },
+  { label: "Dossier", icon: <FontAwesome5 name={'file-alt'} size={24} color="black" />, route: "https://dossier.escoltesiguies.cat/" },
 ] as const;
 
 export function Directories({closeMenu} : {closeMenu : ()=>void}){
@@ -43,9 +41,9 @@ export function Directories({closeMenu} : {closeMenu : ()=>void}){
 }
 
 export const ENTITY_OPTIONS = [
-  { label: "Mapa d'agrupaments", icon: <Entypo name={'map'} size={24} color="black" />, externalLink:false, route:"/todo" },
-  { label: "L'entitat en xifres", icon: <Entypo name={'bar-graph'} size={24} color="black" />, externalLink:false, route:"/(app)/data" },
-  { label: "Contacta amb altres AEiG", icon: <MaterialCommunityIcons name="message-fast-outline" size={24} color="black" />, externalLink:false, route:'/todo' },
+  { label: "Mapa d'agrupaments", icon: <Entypo name={'map'} size={24} color="black" />, route: "https://www.instamaps.cat/instavisor/b30f5fe7515fc80979201677a66388c9/Mapa_d_AEiGs_-_MEG.html" },
+  { label: "L'entitat en xifres", icon: <Entypo name={'bar-graph'} size={24} color="black" />, route: "https://www.escoltesiguies.cat/espai-del-cap" },
+  { label: "Contacta amb altres AEiG", icon: <MaterialCommunityIcons name="message-fast-outline" size={24} color="black" />, route: "https://dossier.escoltesiguies.cat/" },
 ] as const;
 
 export function EntityOptions({closeMenu}: {closeMenu : ()=>void}){

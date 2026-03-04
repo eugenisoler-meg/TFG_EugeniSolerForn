@@ -102,14 +102,6 @@ export default function LlistaDetailScreen() {
 
 const header = (assistencies?: MODEL.AssistenciaCau[]) => (
       <View style={{ borderColor: '#eee', borderBottomWidth: 1 }}>
-        <View style={[styles.header,]}>
-            <View />
-            <View style={styles.radioGroup}>
-              <ThemedText type="subtitle"> A </ThemedText>
-              <ThemedText type="subtitle"> J </ThemedText>
-              <ThemedText type="subtitle"> N </ThemedText>
-            </View>
-        </View>
         <View style={[styles.header]}>
           <View />
           <View style={styles.radioGroup}>

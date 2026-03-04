@@ -15,7 +15,6 @@ const API_AIendpoint = 'https://testapi.escoltesiguies.cat/testAI';
 const AI_MODEL = 'gpt-5-mini';
 
 export const generateSortidaText = async (item: Sortida) => {
-  console.log(item.unitat);
   const prompt = `Genera un missatge preparat per copiar i enganxar en un grup de whatsapp de famílies sobre una unitat d'infants d'un agrupament escolta i guia de catalunya que se'n va d'excursió.
 Cal incloure la següent informació:
 - Unitat name: ${item.unitat?.nom}

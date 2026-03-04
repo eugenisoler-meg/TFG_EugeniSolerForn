@@ -1,0 +1,80 @@
+import { useState, useRef } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Animated,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+
+type Props = {
+  title: string;
+  icon: keyof typeof Ionicons.glyphMap;
+  content: React.ReactNode;
+};
+
+export default function DataCard({ title, icon, content }: Props) {
+  const [open, setOpen] = useState(false);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  const toggle = () => {
+    const toValue = open ? 0 : 1;
+
+    Animated.timing(fadeAnim, {
+      toValue,
+      duration: 250,
+      useNativeDriver: true,
+    }).start();
+
+    setOpen(!open);
+  };
+
+  return (
+    <Pressable onPress={toggle} style={styles.card}>
+      {/* Header */}
+      <View style={styles.header}>
+        <View style={styles.iconBox}>
+            <Ionicons name={icon} size={22} />
+        </View>
+        <View style={{flex:1}}>
+            <Text style={styles.title}>{title}</Text>
+        </View>
+        <View style={styles.chevronBox}>
+            <Ionicons name={open ? "chevron-up" : "chevron-down"} size={18} style={{ marginLeft: "auto" }}/>
+        </View>
+      </View>
+
+      {/* Animated Content */}
+      <Animated.View
+        style={[
+          styles.content,
+          {
+            opacity: fadeAnim,
+            transform: [
+              {
+                translateY: fadeAnim.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [-5, 0],
+                }),
+              },
+            ],
+          },
+        ]}
+      >
+        {content}
+        </Animated.View>
+    </Pressable>
+  );
+}
+
+const styles = StyleSheet.create({
+  card: { flex:1, backgroundColor: "#fff", borderRadius: 12, padding: 12,marginBottom: 16, elevation: 3, },
+  header: { flex:1, flexDirection: "row", alignItems: "center", gap: 4, },
+  title: { fontSize: 15, fontWeight: "600", },
+  content: { alignItems: 'center', marginTop: 10, },
+  value: { fontSize: 28, fontWeight: "bold", },
+  chevronBox:{width:20, alignItems:'center'},
+  iconBox:{width:25,  alignItems:'center'},
+
+});

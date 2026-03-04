@@ -1,5 +1,5 @@
 import { Stack, router, usePathname  } from "expo-router";
-import { View, Pressable, StyleSheet } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import Entypo from '@expo/vector-icons/Entypo';
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
@@ -36,25 +36,30 @@ export default function AppLayout() {
 
         {/* Persistent bottom bar */}
         <View style={styles.footer}>
-          <Pressable onPress={showDirectories} style={styles.footerOption}>
+          <TouchableOpacity onPress={showDirectories} style={styles.footerOption}>
             <Entypo name="link" size={35} />
-            <ThemedText type="defaultSemiBold">Directoris</ThemedText>
-          </Pressable>
+            <ThemedText type="defaultSemiBold">Enllaços</ThemedText>
+          </TouchableOpacity>
           
-          <Pressable onPress={showEntityOptions} style={styles.footerOption}>
+          <TouchableOpacity onPress={showEntityOptions} style={styles.footerOption}>
             <MaterialCommunityIcons name="fleur-de-lis" size={35} />
             <ThemedText type="defaultSemiBold">L'entitat</ThemedText>
-          </Pressable>
+          </TouchableOpacity>
 
-          <Pressable onPress={() => router.push("/profile") } style={styles.footerOption}>
+          <TouchableOpacity onPress={() => router.replace("/dashboard")} style={styles.footerOption}>
+            <Entypo name="home" size={35} />
+            <ThemedText type="defaultSemiBold">Inici</ThemedText>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => router.push("/profile") } style={styles.footerOption}>
             <Ionicons name="person-circle-outline" size={35} />
             <ThemedText type="defaultSemiBold">Perfil</ThemedText>
-          </Pressable>
+          </TouchableOpacity>
 
-          <Pressable onPress={Utils.confirmLogout} style={styles.footerOption}>
+          <TouchableOpacity onPress={Utils.confirmLogout} style={styles.footerOption}>
             <Ionicons name="log-out-outline" size={35} />
             <ThemedText type="defaultSemiBold">Surt</ThemedText>
-          </Pressable>
+          </TouchableOpacity>
         </View>
 
         {directoriesVisible && <Directories closeMenu={closeDirectories}/>}

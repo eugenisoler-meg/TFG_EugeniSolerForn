@@ -53,8 +53,8 @@ export const postMutation = async (endpoint: string, data: any) => {
 
 export const cleanResponse = async (response: Response) => {
     const text = await response.text();
-    text.replace("<pre></pre>", "");
-    const json = JSON.parse(text);    
+    const cleanedText = text.replace("<pre></pre>", "");
+    const json = JSON.parse(cleanedText);    
     if(json.error) throw new Error(json.error || 'An error occurred while fetching data');
     return json.success;
 };

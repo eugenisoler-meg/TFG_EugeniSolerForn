@@ -3,8 +3,7 @@ import * as Utils from '@/constants/utils';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Entypo from '@expo/vector-icons/Entypo';
-import { FOOTER_HEIGHT, PADDING } from "@/constants/styles";
-import { router } from "expo-router";
+import { FOOTER_HEIGHT } from "@/constants/styles";
 
 function FloatingMenu({data, menuStyle, closeMenu} : {data: readonly any[], menuStyle: any, closeMenu: ()=>void}){
   return (<TouchableWithoutFeedback onPress={closeMenu}>

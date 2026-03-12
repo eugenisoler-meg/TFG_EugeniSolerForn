@@ -1,5 +1,5 @@
-import { useEffect, useState, useCallback } from "react";
-import {  ScrollView, RefreshControl, StyleSheet } from "react-native";
+import { useEffect, useState, useCallback,  } from "react";
+import {  ScrollView, RefreshControl, StyleSheet, Text } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import DataCard from "@/components/data/DataCard";
 import DataGrid from "@/components/data/DataGrid";
@@ -7,6 +7,7 @@ import InfantsBar from "@/components/data/BarGraph";
 import LoadingScreen from "../loading";
 import ErrorScreen from "../error";
 import { fetchQuery, getUser } from "@/constants/utils";
+import { BRANCA_COLORS, MAP_LABELS } from "@/constants/styles";
 
 type DataQuery = {
   totalInfants?: number;
@@ -45,7 +46,10 @@ export default function DataScreen() {
     setRefreshing(true);
     fetchData();
   }, []);
-  const BranquesTotals = data?.grupCounts?.filter( item => item.grup.startsWith("infant_")).map(d => ({grup: d.grup, total : Number(d.total)}));
+  const BranquesTotals = data?.grupCounts?.filter(count => count.grup.startsWith("infant_"))
+    .map((item, i) => ({ value: item.total, label: MAP_LABELS[item.grup], frontColor: BRANCA_COLORS[item.grup],
+                    topLabelComponent: () => (<Text style={{color: 'darkGray', fontSize: 12, marginBottom: 4}}>{item.total}</Text>)
+    }));
   const InfantsComponent = <ThemedText type="subtitle">{data?.totalInfants || 'test'}</ThemedText>;
   const VoluntarisComponent = <ThemedText type="subtitle">{data?.totalVoluntaris || 'test'}</ThemedText>;
   
@@ -62,7 +66,7 @@ export default function DataScreen() {
 
       <DataGrid>
         <DataCard icon='person' title="Infants" content={InfantsComponent}/>
-        <InfantsBar DATA={Array.from(BranquesTotals??[{grup: "NO", total:0}], (_, i) => ({grup: _.grup, total:_.total}))} />        
+        <InfantsBar DATA={[...(BranquesTotals ?? [{ label: "NO DATA", value: 0, frontColor: "black" }])]} />        
         <DataCard icon='person' title="Voluntaris" content={VoluntarisComponent}/>
       </DataGrid>
     </ScrollView>

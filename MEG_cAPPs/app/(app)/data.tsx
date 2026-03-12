@@ -1,3 +1,4 @@
+import { VictoryBar, VictoryChart, VictoryTheme } from "victory-native";
 import { useEffect, useState, useCallback } from "react";
 import {  ScrollView, RefreshControl, StyleSheet } from "react-native";
 import { ThemedText } from "@/components/themed-text";
@@ -11,6 +12,7 @@ type DataQuery = {
   totalInfants?: number;
   totalVoluntaris?: number;
   totalAgrupaments?: number;
+  countGrups: [ {grup: string, total: number} ];
 };
 
 export default function DataScreen() {
@@ -26,6 +28,7 @@ export default function DataScreen() {
         const afiliat_id = user.afiliat_id;
         const dataQuery = await fetchQuery('data_vis', { afiliat_id }) as DataQuery;
         setData(dataQuery);
+        console.log(dataQuery.countGrups);
     } catch (err) {
         if(err instanceof Error) setError(err.message);
         else setError("Error desconegut");
@@ -34,7 +37,20 @@ export default function DataScreen() {
       setRefreshing(false);
     }
   };
-
+  const infantsDataRaw = data ? data.countGrups.filter( item => item.grup.startsWith("intant_")) : [{grup: "NO DATA", total: 0}];
+  const InfantsData = {
+    labels: infantsDataRaw.map(item => item.grup),
+    datasets: [{ data: infantsDataRaw.map(item => item.total) }]
+  };
+  // Animate bars on mount
+  const [animatedInfantsData, setAnimatedData] = useState(
+    infantsDataRaw.map(item => ({ ...item, total: 0 }))
+  ); 
+  useEffect(() => {
+    setTimeout(() => {
+      setAnimatedData(InfantsData);
+    }, 300);
+  }, []);
   useEffect(() => {
     fetchData();
   }, []);
@@ -46,7 +62,8 @@ export default function DataScreen() {
 
   const InfantsComponent = <ThemedText type="subtitle">{data?.totalInfants || 'test'}</ThemedText>;
   const VoluntarisComponent = <ThemedText type="subtitle">{data?.totalVoluntaris || 'test'}</ThemedText>;
-
+  
+  console.log(InfantsData);
   if (loading) return LoadingScreen();
   else if (error) return ErrorScreen(error);
   else return (
@@ -60,7 +77,20 @@ export default function DataScreen() {
 
       <DataGrid>
         <DataCard icon='person' title="Infants" content={InfantsComponent}/>
-        <DataCard icon='person' title="Voluntaris" content={VoluntarisComponent}/>
+        <BarChart
+          data={InfantsData}
+          width={100}
+          height={220}
+          yAxisLabel=""
+          yAxisSuffix=" infants"
+          chartConfig={{
+            backgroundGradientFrom: "#fff",
+            backgroundGradientTo: "#fff",
+            decimalPlaces: 0
+          }}
+          verticalLabelRotation={0}
+        />        
+<DataCard icon='person' title="Voluntaris" content={VoluntarisComponent}/>
       </DataGrid>
     </ScrollView>
   );

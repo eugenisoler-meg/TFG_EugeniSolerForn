@@ -40,6 +40,7 @@ export const fetchQuery = async (query: string, params: Record<string, string>) 
     const url = new URL(`${API}/fetch`);
     url.searchParams.append("q", query);
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+    console.log(url);
     const response = await fetch(url.toString(), {method: "GET", headers: {"Content-Type": "application/json"},});
     return await cleanResponse(response);
 };

@@ -50,8 +50,8 @@ export default function LoginScreen() {
       }
       const res = await Utils.tryLogin(dni, data_naixement);
       const data = await Utils.cleanResponse(res);
-
       setData(data);
+      
       const USER = JSON.parse(data.user) as MODEL.User;
       const AEiGs = JSON.parse(data.agrupaments) as string[];
       const Unitats = JSON.parse(data.unitats) as string[];

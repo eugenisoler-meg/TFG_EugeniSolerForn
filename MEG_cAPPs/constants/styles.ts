@@ -64,6 +64,8 @@ export const MAP_LABELS: { [key: string]: string } = {
     "responsable_pedagogia_equip_agrupament" : "EA",
     "personal_tecnic" : "Personal Tècnic",
 
+    'formador' : "Formació",
+
     '': 'NO_LABEL'
 } as const;
 

@@ -1,17 +1,18 @@
+import Logo from '@/components/logo';
+import { ThemedText } from '@/components/themed-text';
+import { LILA, PADDING } from '@/constants/styles';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import * as Linking from 'expo-linking';
+import { router } from "expo-router";
 import { useEffect, useState } from 'react';
-import { Alert, StyleSheet, Platform, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import * as Utils from '../constants/utils';
+import { Alert, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import * as DATABASE from '../constants/database';
 import * as MODEL from '../constants/model';
-import LoadingScreen from './loading';
-import { router } from "expo-router";
+import * as Utils from '../constants/utils';
 import ErrorScreen from './error';
-import { ThemedText } from '@/components/themed-text';
-import Logo from '@/components/logo';
-import { LILA, PADDING } from '@/constants/styles';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import AntDesign from '@expo/vector-icons/AntDesign';
+import LoadingScreen from './loading';
 
 const INPUT_HEIGHT = 65;
 const INPUT_PADDING = 20;
@@ -148,7 +149,7 @@ export default function LoginScreen() {
         </View>
 
         {/* Incidències */}
-        <TouchableOpacity style={styles.link}>
+        <TouchableOpacity style={styles.link} onPress={() => Linking.openURL('https://escoltesiguies.sinergiacrm.org/index.php?entryPoint=stic_AWF_renderForm&id=00000f97-dc5f-8d9f-ea9c-69fc4ff8f538')}>
           <ThemedText type='link'>Notificar incidència de l'aplicació</ThemedText>
         </TouchableOpacity>
       </View>

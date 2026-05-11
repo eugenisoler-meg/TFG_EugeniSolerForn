@@ -5,6 +5,7 @@ import * as Sharing from "expo-sharing";
 import { fetch } from 'expo/fetch';
 import { Alert, Linking } from 'react-native';
 import * as MODEL from './model';
+import { Timestamp } from 'react-native-reanimated/lib/typescript/commonTypes';
 
 const API = 'https://testapi.escoltesiguies.cat';
 
@@ -27,8 +28,8 @@ export const parseDate = (d:Date|string|null):string => {
     if (isNaN(date.getTime())) throw new Error("Invalid date");
     return date.toISOString().split('T')[0];
 };
-export function formatDate(date: Date|string) {
-  const d = typeof date === 'string' ? new Date(date): date;
+export function formatDate(date: Date|string|Timestamp): string {
+  const d = new Date(date);
   return d.toLocaleDateString("ca-ES"); // or your locale
 }
 

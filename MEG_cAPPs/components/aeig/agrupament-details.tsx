@@ -1,12 +1,13 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Linking,
-} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { useState } from 'react';
+import {
+  Linking,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import MapView from 'react-native-maps';
 import { Timestamp } from 'react-native-reanimated/lib/typescript/commonTypes';
 
@@ -33,6 +34,7 @@ interface Props {
 // TODO: importar lat/lon al CRM i afegir-ho al model i SQL
 export default function AgrupamentCard({ agrupament, onPress }: Props) {
   const [expanded, setExpanded] = useState(false);
+  const router = useRouter();
 
   const openMaps = () => {
     if (!agrupament.lat || !agrupament.lon) return;
@@ -77,14 +79,24 @@ export default function AgrupamentCard({ agrupament, onPress }: Props) {
       </View>
 
       {/* SHOW MORE */}
-      <TouchableOpacity
-        style={styles.showMore}
-        onPress={() => setExpanded((v) => !v)}
-      >
-        <Text style={styles.showMoreText}>
-          {expanded ? 'Amaga detalls' : 'Mostra detalls'}
-        </Text>
-      </TouchableOpacity>
+      <View style={styles.buttonRow}>
+        <TouchableOpacity
+          style={styles.showMore}
+          onPress={() => setExpanded((v) => !v)}
+        >
+          <Text style={styles.showMoreText}>
+            {expanded ? 'Amaga detalls' : 'Mostra detalls'}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.showMore}
+          onPress={() => router.push('/(app)/(aeig)/consell')}
+        >
+          <Text style={styles.showMoreText}>
+            Consell
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -147,6 +159,13 @@ const styles = StyleSheet.create({
   },
 
   showMore: {
+    flex: 1,
+    alignItems: 'center',
+  },
+
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     marginTop: 10,
   },
 

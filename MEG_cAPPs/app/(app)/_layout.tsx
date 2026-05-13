@@ -1,7 +1,7 @@
 import { Icon } from "@/components/logo";
 import { ThemedText } from "@/components/themed-text";
 import { Directories, EntityOptions } from "@/components/ui/floating-menus";
-import { BANNER_HEIGHT, FOOTER_HEIGHT, MARGIN_TOP, PADDING } from '@/constants/styles';
+import { BANNER_HEIGHT, FOOTER_HEIGHT, PADDING } from '@/constants/styles';
 import * as Utils from "@/constants/utils";
 import Entypo from '@expo/vector-icons/Entypo';
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -9,6 +9,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Stack, router, usePathname } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function AppLayout() {
   const [directoriesVisible, setDirectoriesVisible] = useState(false);
@@ -23,7 +24,7 @@ export default function AppLayout() {
   const onProfile = pathname === "/profile";
 
   return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
         <View style={styles.banner}>
           {Icon(60)}
           <ThemedText type="subtitle">MEG cAPP's</ThemedText>
@@ -64,14 +65,13 @@ export default function AppLayout() {
 
         {directoriesVisible && <Directories closeMenu={closeDirectories}/>}
         {entityOptionsVisible && <EntityOptions closeMenu={closeEntityOptions}/>}
-      </View>
+      </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#000",
-    color:"#fff",
     flex: 1,
   },
   content: {
@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    paddingBottom: 10,
   },
   footerOption:{
     flex:1,
@@ -99,7 +100,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
     borderBottomWidth: 2,
     borderColor: "#333",
-    marginTop: MARGIN_TOP,
     paddingHorizontal: PADDING,
    },
 });

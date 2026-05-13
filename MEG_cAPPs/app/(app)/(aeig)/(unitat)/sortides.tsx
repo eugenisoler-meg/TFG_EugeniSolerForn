@@ -12,7 +12,6 @@ import * as AI from "@/constants/ai";
 import { router, useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { Alert, FlatList, StyleSheet, } from "react-native";
-//import { openaiApiKey } from "@/constants/ai";
 
 export default function SortidesScreen()  {    
     const [loading, setLoading] = useState(true); 
@@ -44,31 +43,13 @@ export default function SortidesScreen()  {
         }
         fetchData();
         }, [unitat_id]);
-
-    
-
-    /* ---------------------------
-     Generate text action
-  ---------------------------- */
-  /*
-  const generateText = useCallback((item: Sortida) => {
-    const text = `
-        Sortida
-        Ubicació: ${item.ubicacio}
-        Inici: ${Utils.formatDate(item.data_inici)}
-        Fi: ${Utils.formatDate(item.data_fi)}
-        Descripció: ${item.descripcio ?? "-"}
-        `;
-
-        Alert.alert("Text generat", text);
-    }, []);
-        */
+  
   /* ---------------------------
      Render each card
   ---------------------------- */
   const renderItem = ({ item }: { item: Sortida }) => {
   if (!item.sortida_id) return null;
-    return <SortidaCard item={item} generateText={AI.generateSortidaText} />;
+    return <SortidaCard item={item} generateText={AI.generateSortidaText} onEdit={(sortida) => router.push({ pathname: "./sortida-form", params: { unitat_id: sortida.unitat_id, sortida: JSON.stringify(sortida) } })} />;
   };
 
   /* ---------------------------

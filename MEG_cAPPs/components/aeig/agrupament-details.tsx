@@ -2,11 +2,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
-  Linking,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    Linking,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 import MapView from 'react-native-maps';
 import { Timestamp } from 'react-native-reanimated/lib/typescript/commonTypes';
@@ -90,10 +90,10 @@ export default function AgrupamentCard({ agrupament, onPress }: Props) {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.showMore}
-          onPress={() => router.push('/(app)/(aeig)/consell')}
+          onPress={() => router.push({pathname: './consell', params:{ agrupament_id: agrupament.agrupament_id}})}
         >
           <Text style={styles.showMoreText}>
-            Consell
+            Veure el consell
           </Text>
         </TouchableOpacity>
       </View>

@@ -1,11 +1,10 @@
-import React from 'react';
-import { Alert, View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
-import { FontAwesome5 } from '@expo/vector-icons';
 import { Llista, TipusLlista, TipusLlistaKeys } from '@/constants/model';
-import { ThemedText } from '@/components/themed-text';
-import Feather from '@expo/vector-icons/Feather';
-import {router} from "expo-router";
 import { LILA } from '@/constants/styles';
+import { FontAwesome5 } from '@expo/vector-icons';
+import Feather from '@expo/vector-icons/Feather';
+import { router } from "expo-router";
+import React from 'react';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const TipusIcon = {
   cau: 'users',        // example FontAwesome5 icon name
@@ -41,7 +40,7 @@ const LlistaCard: React.FC<CardProps> = ({ llista, onValidate }) => {
         <TouchableOpacity style={[styles.button, {flexDirection: 'row', alignItems: 'center'}]}
           onPress={() => onValidate(llista.llista_id)} >
           <Text style={styles.buttonText}>Passa llista</Text>
-          <Feather style={{marginHorizontal: 4}} name="check-square" size={16} color="black" />
+          <Feather style={{marginHorizontal: 4}} name="check-square" size={16} />
         </TouchableOpacity>
       </View>
       <View style={styles.row}>

@@ -11,6 +11,13 @@ export const BRANCA_COLORS: { [key: string]: string } = {
     "infant_rangers_noies_guia": "#6d9eeb", 
     "infant_pioners_caraveles": "#e06666", 
     "infant_truc": "#93c47d",
+    //Funcions d'infant
+    "cap_grups_castors_lludrigues": "#f6b26b",
+    "cap_grups_llops_daines": "#ffd966", 
+    "cap_grups_rangers_noies_guia": "#6d9eeb", 
+    "cap_grups_pioners_caraveles": "#e06666", 
+    "cap_grups_truc": "#93c47d",
+    "cap_grups_suport": "#aaa",
     //Unitats
     "castors_lludrigues": "#f6b26b",
     "llops_daines": "#ffd966", 

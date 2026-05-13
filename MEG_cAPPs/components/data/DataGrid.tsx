@@ -1,4 +1,4 @@
-import { View, StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 export default function DataGrid({ children }: { children: React.ReactNode }) {
   return <View style={styles.grid}>{children}</View>;
@@ -7,7 +7,7 @@ export default function DataGrid({ children }: { children: React.ReactNode }) {
 const styles = StyleSheet.create({
   grid: {
     gap: 10,
-    flexDirection: "row",
+    flexDirection: "column",
     flexWrap: "wrap",
     justifyContent: "space-between",
     marginTop: 10,

@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
-import {router, useLocalSearchParams} from 'expo-router';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Dimensions, } from "react-native";
-import * as MODEL from '@/constants/model';
-import * as Utils from '@/constants/utils';
-import { MAP_LABELS, BANNER_HEIGHT, FOOTER_HEIGHT, PADDING, LILA } from '@/constants/styles';
 import ErrorScreen from "@/app/error";
 import LoadingScreen from "@/app/loading";
 import ActionContainer from "@/components/aeig/accions-botons";
 import { ThemedText } from "@/components/themed-text";
+import * as MODEL from '@/constants/model';
+import { BANNER_HEIGHT, FOOTER_HEIGHT, LILA, MAP_LABELS, PADDING } from '@/constants/styles';
+import * as Utils from '@/constants/utils';
+import { router, useLocalSearchParams } from 'expo-router';
+import { useEffect, useState } from "react";
+import { Dimensions, FlatList, StyleSheet, Text, TouchableOpacity, View, } from "react-native";
 const __TOP = 0.80; // percentage of screen height for top section (category pages)
 
 // TODO: pensar botons d'accions per cada rol (funcions d'EA i caps de branca) i enllaçar caps de branca amb la unitat.
@@ -143,9 +143,9 @@ function FunctionCard({ item, selectable, selected, onPress }: {item:MODEL.Funci
       <TouchableOpacity
       disabled={!selectable} onPress={onPress}
       style={[ styles.card, selected && styles.selectedCard, !selectable && styles.disabledCard, ]}>
-      {rolLabel.length > 0 && <Text style={styles.role}>{rolLabel}</Text>}
-      {grupLabel.length > 0 && <Text>{grupLabel}</Text>}
-      {dataText.length > 0 && <Text>{`Des de ${dataText}`}</Text>}
+      {rolLabel.length > 0 && <Text style={[styles.role, styles.cardText]}>{rolLabel}</Text>}
+      {grupLabel.length > 0 && <Text style={styles.cardText}>{grupLabel}</Text>}
+      {dataText.length > 0 && <Text style={styles.cardText}>{`Des de ${dataText}`}</Text>}
     </TouchableOpacity>
   );
 };
@@ -165,14 +165,15 @@ const styles = StyleSheet.create({
   cardsContainer: { width: "100%", gap: 12, },
   card: {
     borderWidth: 2,
-    backgroundColor: "#eee",
-    borderColor: '#222',
+    backgroundColor: "#111",
+    borderColor: '#444',
     padding: 18,
     borderRadius: 12,
   },
   
   selectedCard: { borderWidth: 2, borderColor: LILA, backgroundColor: "#4f46e511", },
   disabledCard: { opacity: 0.5, },
+  cardText: { color: '#fff' },
   
   center: {
     justifyContent: "center",

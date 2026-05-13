@@ -4,8 +4,8 @@ import { router } from 'expo-router';
 import * as Sharing from "expo-sharing";
 import { fetch } from 'expo/fetch';
 import { Alert, Linking } from 'react-native';
-import * as MODEL from './model';
 import { Timestamp } from 'react-native-reanimated/lib/typescript/commonTypes';
+import * as MODEL from './model';
 
 const API = 'https://testapi.escoltesiguies.cat';
 

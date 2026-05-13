@@ -3,13 +3,13 @@ import LoadingScreen from "@/app/loading";
 import { ThemedText } from "@/components/themed-text";
 import { SaveIcon } from "@/components/ui/add-icon";
 import { saveSortida } from "@/constants/database";
+import * as MODEL from "@/constants/model";
 import { formatDate } from "@/constants/utils";
 import DateTimePicker, { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { View, Alert, Platform, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { Alert, Platform, StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import { Timestamp } from "react-native-reanimated/lib/typescript/commonTypes";
-import * as MODEL from "@/constants/model";
 
 export default function SortidaForm() {
   const [ubicacio, setUbicacio] = useState("");
@@ -176,6 +176,7 @@ const styles = StyleSheet.create({
   },
 
   input: {
+    color: "#ddd",
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 10,
@@ -183,6 +184,7 @@ const styles = StyleSheet.create({
     minHeight: 50,
   },
   input_multiline: {  
+    color: "#ddd",
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 10,

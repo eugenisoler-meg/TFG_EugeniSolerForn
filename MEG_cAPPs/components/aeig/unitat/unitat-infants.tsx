@@ -1,7 +1,7 @@
-import {View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
-import { ThemedText } from "../../themed-text";
-import { router } from 'expo-router';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import { router } from 'expo-router';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ThemedText } from "../../themed-text";
 
 export default function FuncionsUnitat({funcions} : {funcions:FuncioUnitat[]}){
     funcions = funcions.sort((a,b) => {return new Date(a.afiliat.data_naixement).getTime() - new Date(b.afiliat.data_naixement).getTime()}) 
@@ -36,7 +36,7 @@ export default function FuncionsUnitat({funcions} : {funcions:FuncioUnitat[]}){
                             {item.afiliat.nom} {item.afiliat.cognoms} 
                         </Text>
 
-                        <FontAwesome5 name="arrow-alt-circle-right" size={20} color="black" />
+                        <FontAwesome5 name="arrow-alt-circle-right" size={20} color={"#ddd"}/>
                     </View>
                 </TouchableOpacity>
             )}
@@ -91,12 +91,15 @@ const styles = StyleSheet.create({
         borderBottomWidth: .8,
         borderTopWidth: .8,
         borderColor: "#eee",
+        color: "#eee",
     },
     name: {
+        color: "#eee",
         fontWeight: "600",
         fontSize: 16,
     },
     dni: {
+        color: "#eee",
         fontWeight: "300",
         fontSize: 14,
     },

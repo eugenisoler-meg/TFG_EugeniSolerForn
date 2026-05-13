@@ -1,8 +1,7 @@
-import { AssistenciaCau, ValidacioAssistencia, ValidacioAssistenciaKeys, ValidacioAssistenciaType } from '@/constants/model';
-import { TouchableOpacity } from 'react-native';
-import { StyleSheet, Text } from 'react-native';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import { AssistenciaCau, ValidacioAssistencia, ValidacioAssistenciaKeys } from '@/constants/model';
 import { BRANCA_COLORS } from '@/constants/styles';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
 const ColorsAssistenciaFons: Record<ValidacioAssistenciaKeys, string> = {
   NJ: 'rgba(200,0,0, 0.4)',
@@ -22,7 +21,7 @@ const IconsAssistencia: Record<ValidacioAssistenciaKeys, string> = {
 export const ColorsAssistencia: Record<ValidacioAssistenciaKeys, string> = {
   NJ: 'rgba(200,0,0, 0.5)',
   J: 'rgba(180,180,180, 0.5)',
-  A: 'black'
+  A: 'white',
 } as const;
 
 export const renderRadioButtons = (item: AssistenciaCau, changeState: (id: number, state: ValidacioAssistenciaKeys) => void) => {

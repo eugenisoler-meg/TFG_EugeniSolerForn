@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
-import * as MODEL from "@/constants/model";
-import * as Utils from "@/constants/utils";
-import * as DATABASE from "@/constants/database";
-import { useLocalSearchParams, router, useNavigation  } from "expo-router";
-import LoadingScreen from "@/app/loading";
 import ErrorScreen from "@/app/error";
-import { View, Text, FlatList, StyleSheet, Alert } from "react-native";
+import LoadingScreen from "@/app/loading";
 import { ThemedText } from "@/components/themed-text";
-import { AssistenciaCau, ValidacioAssistenciaKeys } from "@/constants/model";
-import { renderRadioButtons, ColorsAssistencia } from "@/components/ui/radio-buttons";
 import { SaveIcon } from "@/components/ui/add-icon";
 import { showUnsavedChangesAlert, Success } from "@/components/ui/alerts";
+import { ColorsAssistencia, renderRadioButtons } from "@/components/ui/radio-buttons";
+import * as DATABASE from "@/constants/database";
+import * as MODEL from "@/constants/model";
+import { AssistenciaCau, ValidacioAssistenciaKeys } from "@/constants/model";
+import * as Utils from "@/constants/utils";
+import { router, useLocalSearchParams, useNavigation } from "expo-router";
+import { useEffect, useState } from "react";
+import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
 
 export default function LlistaDetailScreen() {
   const [loading, setLoading] = useState(true);
@@ -67,7 +67,7 @@ export default function LlistaDetailScreen() {
   };
   const renderItem = ({ item }: { item: AssistenciaCau }) => (
     <View style={styles.row}>
-      <Text style={[styles.name, { color: item.validada ? ColorsAssistencia[item.validada] : 'black' }]}>{item.afiliat?.nom} {item.afiliat?.cognoms}</Text>
+      <Text style={[styles.name, { color: item.validada ? ColorsAssistencia[item.validada] : 'white' }]}>{item.afiliat?.nom} {item.afiliat?.cognoms}</Text>
       <View style={styles.radioGroup}>
         {renderRadioButtons(item, changeState)}
       </View>
@@ -79,7 +79,7 @@ export default function LlistaDetailScreen() {
       setModified(false);
       Success('Assistències actualitzades', router);
     } catch (err) {
-      Alert.alert('Error actulaitzant l\'assistència', String(err));
+      Alert.alert('Error actualitzant l\'assistència', String(err));
     }
   };
 
@@ -114,7 +114,7 @@ const header = (assistencies?: MODEL.AssistenciaCau[]) => (
       );
 
 const styles = StyleSheet.create({
-  border: { borderColor: '#ff0000', borderWidth: 2, margin: 5 },
+  border: { borderColor: '#000000', borderWidth: 2, margin: 5 },
   container: { flex: 1, padding: 12 },
   row: {
     flexDirection: 'row',

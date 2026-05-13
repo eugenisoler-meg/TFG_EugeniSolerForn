@@ -6,7 +6,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { useState } from "react";
 import { ActivityIndicator, StyleSheet, TouchableOpacity, View } from "react-native";
 
-export function SortidaCard({ item, generateText }: { item: Sortida, generateText: (item: Sortida) => Promise<any> }) {
+export function SortidaCard({ item, generateText, onEdit }: { item: Sortida, generateText: (item: Sortida) => Promise<any>, onEdit?: (item: Sortida) => void }) {
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const handleGenerateText = async (item: Sortida) => {
     try {
@@ -30,11 +30,11 @@ export function SortidaCard({ item, generateText }: { item: Sortida, generateTex
       <View style={{ paddingLeft: 12, width: 80, flexDirection: "column", alignItems: "center" }}>  
         {/* Generate Text */}
         <TouchableOpacity style={styles.iconBtn} onPress={() => handleGenerateText(item)} disabled={loadingId === item.sortida_id}>
-        {loadingId === item.sortida_id ? (<ActivityIndicator size={28} />) : (<FontAwesome5 name="copy" size={28} />)}
+        {loadingId === item.sortida_id ? (<ActivityIndicator size={28} color={"#ddd"}/>) : (<FontAwesome5 name="copy" size={28} color={"#ddd"}/>)}
         </TouchableOpacity>
         {/* Edit */}
-        <TouchableOpacity style={styles.iconBtn} onPress={() => generateText(item)}>
-          <FontAwesome5 name="pencil-alt" size={24} />
+        <TouchableOpacity style={styles.iconBtn} onPress={() => onEdit?.(item)}>
+          <FontAwesome5 name="pencil-alt" size={24} color={"#ddd"}/>
         </TouchableOpacity>
       </View>
     </ThemedView>)
@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
   },
 
   iconBtn: {
+    color: "#ddd",
     padding: 10,
   },
 

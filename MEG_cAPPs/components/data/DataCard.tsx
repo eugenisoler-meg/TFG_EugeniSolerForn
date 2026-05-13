@@ -1,12 +1,12 @@
-import { useState, useRef } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-  Animated,
-} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useRef, useState } from "react";
+import {
+    Animated,
+    Pressable,
+    StyleSheet,
+    Text,
+    View,
+} from "react-native";
 
 type Props = {
   title: string;
@@ -35,13 +35,13 @@ export default function DataCard({ title, icon, content }: Props) {
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.iconBox}>
-            <Ionicons name={icon} size={22} />
+            <Ionicons name={icon} size={22} color="#fff" />
         </View>
         <View style={{flex:1}}>
             <Text style={styles.title}>{title}</Text>
         </View>
         <View style={styles.chevronBox}>
-            <Ionicons name={open ? "chevron-up" : "chevron-down"} size={18} style={{ marginLeft: "auto" }}/>
+            <Ionicons name={open ? "chevron-up" : "chevron-down"} size={18} color="#fff" style={{ marginLeft: "auto" }}/>
         </View>
       </View>
 
@@ -50,6 +50,7 @@ export default function DataCard({ title, icon, content }: Props) {
         style={[
           styles.content,
           {
+            height: open ? "100%" : 30,
             opacity: fadeAnim,
             transform: [
               {
@@ -69,11 +70,11 @@ export default function DataCard({ title, icon, content }: Props) {
 }
 
 const styles = StyleSheet.create({
-  card: { flex:1, backgroundColor: "#fff", borderRadius: 12, padding: 12,marginBottom: 16, elevation: 3, },
+  card: { flex:1, backgroundColor: "#111", borderRadius: 12, padding: 12,marginBottom: 16, elevation: 3, },
   header: { flex:1, flexDirection: "row", alignItems: "center", gap: 4, },
-  title: { fontSize: 15, fontWeight: "600", },
-  content: { alignItems: 'center', marginTop: 10, },
-  value: { fontSize: 28, fontWeight: "bold", },
+  title: { fontSize: 15, fontWeight: "600", color: "#fff" },
+  content: { color: "white", alignItems: 'center', marginTop: 10, flexDirection: "column", gap: 10, },
+  value: { color: "white",fontSize: 28, fontWeight: "bold", },
   chevronBox:{width:20, alignItems:'center'},
   iconBox:{width:25,  alignItems:'center'},
 

@@ -1,10 +1,10 @@
-import { TouchableWithoutFeedback, View, Pressable, StyleSheet, Text } from "react-native";
+import { FOOTER_HEIGHT } from "@/constants/styles";
 import * as Utils from '@/constants/utils';
+import Entypo from '@expo/vector-icons/Entypo';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import Entypo from '@expo/vector-icons/Entypo';
-import { FOOTER_HEIGHT } from "@/constants/styles";
 import { router } from "expo-router";
+import { Pressable, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 
 function FloatingMenu({data, menuStyle, closeMenu} : {data: readonly any[], menuStyle: any, closeMenu: ()=>void}){
   return (<TouchableWithoutFeedback onPress={closeMenu}>
@@ -32,10 +32,10 @@ function FloatingMenu({data, menuStyle, closeMenu} : {data: readonly any[], menu
 
 
 export const DIRECTORIES = [
-  { label: "ComptaCAU", icon: <FontAwesome5 name={'money-bill-wave'} size={24} color="black" />, route: "https://comptacau.escoltesiguies.cat/", isExternal: true },
-  { label: "Espai del Cap", icon: <FontAwesome5 name={'user-alt'} size={24} color="black" />, route: "https://www.escoltesiguies.cat/espai-del-cap", isExternal: true },
-  { label: "Xarxameg", icon: <FontAwesome5 name={'mixer'} size={24} color="black" />, route: "https://fundacioescoltesiguies.cat/espai-de-trobada/", isExternal: true },
-  { label: "Dossier", icon: <FontAwesome5 name={'file-alt'} size={24} color="black" />, route: "https://dossier.escoltesiguies.cat/", isExternal: true },
+  { label: "ComptaCAU", icon: <FontAwesome5 name={'money-bill-wave'} size={24}/>, route: "https://comptacau.escoltesiguies.cat/", isExternal: true },
+  { label: "Espai del Cap", icon: <FontAwesome5 name={'user-alt'} size={24}/>, route: "https://www.escoltesiguies.cat/espai-del-cap", isExternal: true },
+  { label: "Xarxameg", icon: <FontAwesome5 name={'mixer'} size={24}/>, route: "https://fundacioescoltesiguies.cat/espai-de-trobada/", isExternal: true },
+  { label: "Dossier", icon: <FontAwesome5 name={'file-alt'} size={24}/>, route: "https://dossier.escoltesiguies.cat/", isExternal: true },
 ] as const;
 
 export function Directories({closeMenu} : {closeMenu : ()=>void}){
@@ -43,9 +43,9 @@ export function Directories({closeMenu} : {closeMenu : ()=>void}){
 }
 
 export const ENTITY_OPTIONS = [
-  { label: "Mapa d'agrupaments", icon: <Entypo name={'map'} size={24} color="black" />, route: "https://www.instamaps.cat/instavisor/b30f5fe7515fc80979201677a66388c9/Mapa_d_AEiGs_-_MEG.html", isExternal: true },
-  { label: "L'entitat en xifres", icon: <Entypo name={'bar-graph'} size={24} color="black" />, route: "/(app)/data", isExternal: false },
-  { label: "Contacta amb altres AEiG", icon: <MaterialCommunityIcons name="message-fast-outline" size={24} color="black" />, route: "https://dossier.escoltesiguies.cat/", isExternal: true },
+  { label: "Mapa d'agrupaments", icon: <Entypo name={'map'} size={24}/>, route: "https://www.instamaps.cat/instavisor/b30f5fe7515fc80979201677a66388c9/Mapa_d_AEiGs_-_MEG.html", isExternal: true },
+  { label: "L'entitat en xifres", icon: <Entypo name={'bar-graph'} size={24}/>, route: "/(app)/data", isExternal: false },
+  { label: "Contacta amb altres AEiG", icon: <MaterialCommunityIcons name="message-fast-outline" size={24}/>, route: "https://dossier.escoltesiguies.cat/", isExternal: true },
 ] as const;
 
 export function EntityOptions({closeMenu}: {closeMenu : ()=>void}){

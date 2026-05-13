@@ -105,7 +105,7 @@ export default function LoginScreen() {
         <ThemedText style={styles.formTitleField} type='subtitle'>USUARI (DNI/NIE)</ThemedText>
         <TouchableOpacity style={styles.formInput}>
           <View style={styles.iconContainer}>
-            <AntDesign name="idcard" size={28} color="black" />
+            <AntDesign name="idcard" size={28}/>
           </View>
 
           <TextInput 
@@ -121,8 +121,8 @@ export default function LoginScreen() {
         <TouchableOpacity style={styles.formInput} onPress={()=> setShowPicker(true)}>
           <View style={styles.iconContainer}>
             {data_naixement ? 
-          <MaterialCommunityIcons name="calendar-check" size={28} color="black" /> : 
-          <MaterialCommunityIcons name="calendar-edit" size={28} color="black" />
+          <MaterialCommunityIcons name="calendar-check" size={28}/> : 
+          <MaterialCommunityIcons name="calendar-edit" size={28}/>
         }
         </View>
           <Text style={[styles.formInputText]}>{data_naixement ? Utils.formatDate(data_naixement) : "Escull data"}</Text>

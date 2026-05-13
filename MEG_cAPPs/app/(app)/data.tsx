@@ -1,19 +1,21 @@
-import { useEffect, useState, useCallback,  } from "react";
-import {  ScrollView, RefreshControl, StyleSheet, Text } from "react-native";
-import { ThemedText } from "@/components/themed-text";
+import InfantsBar from "@/components/data/BarGraph";
 import DataCard from "@/components/data/DataCard";
 import DataGrid from "@/components/data/DataGrid";
-import InfantsBar from "@/components/data/BarGraph";
-import LoadingScreen from "../loading";
-import ErrorScreen from "../error";
-import { fetchQuery, getUser } from "@/constants/utils";
+import { ThemedText } from "@/components/themed-text";
 import { BRANCA_COLORS, MAP_LABELS } from "@/constants/styles";
+import { fetchQuery, getUser } from "@/constants/utils";
+import { useCallback, useEffect, useState, } from "react";
+import { RefreshControl, ScrollView, StyleSheet, Text } from "react-native";
+import ErrorScreen from "../error";
+import LoadingScreen from "../loading";
 
 type DataQuery = {
   totalInfants?: number;
   totalVoluntaris?: number;
   totalAgrupaments?: number;
+  totalCaps?: number;
   grupCounts?: {grup: string; total: number}[] | [];
+  demarcacioCounts?: {demarcacio: string; total: number}[] | [];
 };
 
 export default function DataScreen() {
@@ -46,12 +48,29 @@ export default function DataScreen() {
     setRefreshing(true);
     fetchData();
   }, []);
-  const BranquesTotals = data?.grupCounts?.filter(count => count.grup.startsWith("infant_"))
+
+  const InfantsTotals = data?.grupCounts?.filter(count => count.grup ? count.grup.startsWith("infant_"): false)
     .map((item, i) => ({ value: item.total, label: MAP_LABELS[item.grup], frontColor: BRANCA_COLORS[item.grup],
                     topLabelComponent: () => (<Text style={{color: 'darkGray', fontSize: 12, marginBottom: 4}}>{item.total}</Text>)
     }));
-  const InfantsComponent = <ThemedText type="subtitle">{data?.totalInfants || 'test'}</ThemedText>;
-  const VoluntarisComponent = <ThemedText type="subtitle">{data?.totalVoluntaris || 'test'}</ThemedText>;
+  const DemarcacioTotals = data?.demarcacioCounts?.filter(count => count.demarcacio ? count.demarcacio.startsWith("MEG") : false)
+    .map((item, i) => ({ value: item.total, label: item.demarcacio, frontColor: " #blue",
+                  topLabelComponent: () => (<Text style={{color: 'darkGray', fontSize: 12, marginBottom: 4}}>{item.total}</Text>)
+    }));
+  const CapsTotals = data?.grupCounts?.filter(count => count.grup ? count.grup.startsWith("cap_grups_") : false)
+    .map((item, i) => ({ value: item.total, label: MAP_LABELS[item.grup], frontColor: BRANCA_COLORS[item.grup],
+                    topLabelComponent: () => (<Text style={{color: 'darkGray', fontSize: 12, marginBottom: 4}}>{item.total}</Text>)
+    }));
+  const InfantsComponent = <>
+      <ThemedText type="subtitle">{data?.totalInfants || 'test'}</ThemedText>
+      <InfantsBar DATA={[...(InfantsTotals ?? [{ label: "NO DATA", value: 0, frontColor: "white" }])]} />
+    </>
+  const CapsComponent = <>
+      <ThemedText type="subtitle">{data?.totalCaps || 'test'}</ThemedText>
+      <InfantsBar DATA={[...(CapsTotals ?? [{ label: "NO DATA", value: 0, frontColor: "white" }])]} />
+  </>
+  const AgrupamentsComponent = <ThemedText type="subtitle">{data?.totalAgrupaments || 'test'}</ThemedText>;
+  const DemarcacionsComponent = <InfantsBar DATA={[...(DemarcacioTotals ?? [{ label: "NO DATA", value: 0, frontColor: "white" }])]} />;
   
   if (loading) return LoadingScreen();
   else if (error) return ErrorScreen(error);
@@ -63,11 +82,11 @@ export default function DataScreen() {
       }
     >
       <ThemedText type="title">MEG ja som...</ThemedText>
-
       <DataGrid>
         <DataCard icon='person' title="Infants" content={InfantsComponent}/>
-        <InfantsBar DATA={[...(BranquesTotals ?? [{ label: "NO DATA", value: 0, frontColor: "black" }])]} />        
-        <DataCard icon='person' title="Voluntaris" content={VoluntarisComponent}/>
+        <DataCard icon='person' title="Caps" content={CapsComponent}/>
+        <DataCard icon='home' title="Agrupaments" content={AgrupamentsComponent}/>
+        <DataCard icon='map' title="Per Demarcacions" content={DemarcacionsComponent}/>
       </DataGrid>
     </ScrollView>
   );

@@ -1,7 +1,7 @@
 import * as MODEL from '@/constants/model'; // Replace with the correct path to your MODEL definition
-import { Text,  View, FlatList, StyleSheet } from 'react-native';
-import * as Utils from '@/constants/utils';
 import * as STYLES from '@/constants/styles';
+import * as Utils from '@/constants/utils';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 
 // TODO: botó per descarregar certificat d'anys de cap/infant
 
@@ -38,10 +38,10 @@ return (
             style={styles.table}
             renderItem={({ item }) => (
             <View style={[styles.rowItem, item.rol === "infant" && { backgroundColor: STYLES.BRANCA_COLORS[item.grup??''] }]}>
-                <Text style={styles.cell}>{STYLES.MAP_LABELS[item.rol]}</Text>
-                <Text style={styles.cell}>{STYLES.MAP_LABELS[item.grup??'']}</Text>
-                <Text style={styles.cell}>{Utils.parseDate(item.data_inici)}</Text>{/*{item.data_inici.toDateString()}</Text>*/}
-                <Text style={styles.cell}>{item.data_fi?Utils.parseDate(item.data_fi):''}</Text>{/*{item.data_inici.toDateString()}</Text>*/}
+                <Text style={[styles.cell, styles.white]}>{STYLES.MAP_LABELS[item.rol]}</Text>
+                <Text style={[styles.cell, styles.white]}>{STYLES.MAP_LABELS[item.grup??'']}</Text>
+                <Text style={[styles.cell, styles.white]}>{Utils.parseDate(item.data_inici)}</Text>{/*{item.data_inici.toDateString()}</Text>*/}
+                <Text style={[styles.cell, styles.white]}>{item.data_fi?Utils.parseDate(item.data_fi):''}</Text>{/*{item.data_inici.toDateString()}</Text>*/}
             </View>
             )}
             ListHeaderComponent={() => (
@@ -74,9 +74,10 @@ const styles = StyleSheet.create({
     borderColor: "#eee",
     paddingVertical: 8,
   },
-
+  white: {color: "#eee"},
   header: {
     backgroundColor: "#f3f4f6",
+    color: 'black',
   },
 
   cell: {

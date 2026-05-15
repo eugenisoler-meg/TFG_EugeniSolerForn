@@ -77,7 +77,7 @@ export default function AgrupamentDetailsScreen() {
   <View style={styles.container}>
     {/* ========= TOP 3/4 ========= */}
     <View style={styles.top}>
-      <ThemedText type="title" >{`Funcions actives`}</ThemedText>
+      <ThemedText type="title">{`Funcions actives`}</ThemedText>
       <FlatList
         horizontal
         pagingEnabled

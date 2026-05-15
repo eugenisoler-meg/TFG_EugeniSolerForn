@@ -3,7 +3,7 @@ import * as Clipboard from "expo-clipboard";
 import { Alert } from 'react-native';
 
 const API_AIendpoint = 'https://testapi.escoltesiguies.cat/ai';
-const AI_MODEL = 'gpt-5-mini';
+const AI_MODEL = 'gpt-5.4-mini';
 const formatter = new Intl.DateTimeFormat("ca-ES", {
   weekday: "long",
   day: "numeric",
@@ -35,5 +35,5 @@ export const generateSortidaText = async (item: Sortida) => {
     throw new Error(data.error || `HTTP ${response.status}`);
   }
   await Clipboard.setStringAsync(data.success);
-  Alert.alert("COPIAT ✔️", "TEXT COPIAT AL PORTA-RETALLS:"+data.success);
+  Alert.alert("TEXT COPIAT AL PORTA-RETALLS ✔️", data.success);
 };

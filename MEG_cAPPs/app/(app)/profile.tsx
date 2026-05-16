@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Pressable, TouchableOpacity, FlatList,} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import * as MODEL from "@/constants/model";
 import * as Utils from "@/constants/utils";
 
+import CurriculumEscolta from "@/components/profile/curriculum-escolta";
 import { router } from "expo-router";
 import ErrorScreen from "../error";
 import LoadingScreen from "../loading";
-import CurriculumEscolta from "@/components/profile/curriculum-escolta";
 
 export default function ProfileLayout() {
   const [showHistory, setShowHistory] = useState(false);
@@ -28,18 +28,15 @@ export default function ProfileLayout() {
         }
         setUser(user);
 
-        const AFILIAT = await Utils.getAfiliat() as MODEL.Afiliat;
+        const AFILIAT = (await Utils.getAfiliat()) as MODEL.Afiliat;
         setAfiliat(AFILIAT);
 
-        const FUNCIONS = await Utils.getFuncions() as MODEL.Funcio[];
+        const FUNCIONS = (await Utils.getFuncions()) as MODEL.Funcio[];
         setFuncions(FUNCIONS);
-
       } catch (e) {
         console.log(e);
-        if (e instanceof Error)
-          setError(e.message);
+        if (e instanceof Error) setError(e.message);
         else setError("S'ha produït un error desconegut.");
-  
       } finally {
         setLoading(false);
       }
@@ -52,18 +49,53 @@ export default function ProfileLayout() {
   if (loading) return LoadingScreen();
   if (error) return ErrorScreen(error);
   if (!user || !afiliat) return ErrorScreen("Error carregant dades");
-  
-  const SmallCard = ({title, enabled, titol, color, }: {title: string; enabled: boolean; titol?: string|number|null; color?: string; }) => (
-    <View style={[styles.smallCard, !enabled && styles.disabled, color && { backgroundColor: color } ]}>
-      <Text style={styles.smallCardText}>{title}</Text>
-      {titol && <Text style={styles.smallCardTextSmall}>{titol}</Text>}
+
+  const SmallCard = ({
+    title,
+    enabled,
+    titol,
+    color,
+    fontColor,
+  }: {
+    title: string;
+    enabled: boolean;
+    titol?: string | number | null;
+    color?: string;
+    fontColor?: string;
+  }) => (
+    <View
+      style={[
+        styles.smallCard,
+        !enabled && styles.disabled,
+        color && { backgroundColor: color },
+      ]}
+    >
+      <Text style={[styles.smallCardText, fontColor && { color: fontColor }]}>
+        {title}
+      </Text>
+      {titol && (
+        <Text
+          style={[styles.smallCardTextSmall, fontColor && { color: fontColor }]}
+        >
+          {titol}
+        </Text>
+      )}
     </View>
   );
 
-  const AnysCard = ({title, enabled, titol, }: {title: string; enabled: boolean; titol?: string|number|null; }) => (
+  const AnysCard = ({
+    title,
+    enabled,
+    titol,
+  }: {
+    title: string;
+    enabled: boolean;
+    titol?: string | number | null;
+    fontColor?: string;
+  }) => (
     <View style={[styles.AnysCard, !enabled && styles.disabled]}>
       <Text style={styles.smallCardText}>{title}</Text>
-      {titol && <Text style={styles.smallCardTextSmall}>{titol}</Text>}
+      {titol && <Text style={[styles.smallCardTextSmall]}>{titol}</Text>}
     </View>
   );
 
@@ -71,32 +103,91 @@ export default function ProfileLayout() {
     <View style={styles.container}>
       {/* MAIN PROFILE CARD */}
       <View style={styles.profileCard}>
-        <Text style={styles.name}>{afiliat.nom + ' ' + afiliat.cognoms} ({afiliat.dni})</Text>
-        <Text>{afiliat.email} · {afiliat.tlf}</Text>
+        <Text style={styles.name}>
+          {afiliat.nom + " " + afiliat.cognoms} ({afiliat.dni})
+        </Text>
+        <Text>
+          {afiliat.email} · {afiliat.tlf}
+        </Text>
       </View>
 
       {/* small info text */}
-      <Text style={styles.infoText}> Si alguna informació no és correcta, contacta amb la secretaria del teu agrupament. </Text>
+      <Text style={styles.infoText}>
+        {" "}
+        Si alguna informació no és correcta, contacta amb la secretaria del teu
+        agrupament.{" "}
+      </Text>
 
       {/* row of 2 cards */}
       <View style={styles.row}>
-        <SmallCard title="Monitoratge" enabled={afiliat.num_moni??false} titol={afiliat.num_moni} color="#77DD77"/>
-        <SmallCard title="Direcció" enabled={afiliat.num_dire??false} titol={afiliat.num_dire} color="#FDFD96"/>
+        <SmallCard
+          title="Monitoratge"
+          enabled={afiliat.num_moni ?? false}
+          titol={afiliat.num_moni}
+          color="#77DD77"
+          fontColor="#077807"
+        />
+        <SmallCard
+          title="Direcció"
+          enabled={afiliat.num_dire ?? false}
+          titol={afiliat.num_dire}
+          color="#FDFD96"
+          fontColor="#5F5F00"
+        />
       </View>
 
       {/* history button */}
-      <TouchableOpacity style={styles.funcionalitatBtn} onPress={() => setShowHistory(!showHistory)}>
+      <TouchableOpacity
+        style={styles.funcionalitatBtn}
+        onPress={() => setShowHistory(!showHistory)}
+      >
         <Text style={styles.funcionalitatText}>Currículum Escolta</Text>
         {/* row of 2 cards */}
-        {!showHistory &&<View style={styles.row}>
-          <AnysCard title="Anys d'infant" enabled={funcions.filter((f)=>f.rol === "infant").length > 0} titol={String(Math.round(Utils.anysFuncions(funcions.filter((f)=>f.rol === "infant"))*100)/100)} />
-          <AnysCard title="Anys de cap" enabled={funcions.filter((f)=>f.rol === "cap_grups").length > 0} titol={String(Math.round(Utils.anysFuncions(funcions.filter((f)=>f.rol === "cap_grups"))*100)/100)} />
-          <AnysCard title="Anys de EA" enabled={funcions.filter((f)=>f.grup?.endsWith("equip_agrupament")).length > 0} titol={String(Math.round(Utils.anysFuncions(funcions.filter((f)=>f.grup?.endsWith("equip_agrupament")))*100)/100)} />
-        </View>
-      }
+        {!showHistory && (
+          <View style={styles.row}>
+            <AnysCard
+              title="Anys d'infant"
+              enabled={funcions.filter((f) => f.rol === "infant").length > 0}
+              titol={String(
+                Math.round(
+                  Utils.anysFuncions(
+                    funcions.filter((f) => f.rol === "infant"),
+                  ) * 100,
+                ) / 100,
+              )}
+            />
+            <AnysCard
+              title="Anys de cap"
+              enabled={funcions.filter((f) => f.rol === "cap_grups").length > 0}
+              titol={String(
+                Math.round(
+                  Utils.anysFuncions(
+                    funcions.filter((f) => f.rol === "cap_grups"),
+                  ) * 100,
+                ) / 100,
+              )}
+            />
+            <AnysCard
+              title="Anys de EA"
+              enabled={
+                funcions.filter((f) => f.grup?.endsWith("equip_agrupament"))
+                  .length > 0
+              }
+              titol={String(
+                Math.round(
+                  Utils.anysFuncions(
+                    funcions.filter((f) =>
+                      f.grup?.endsWith("equip_agrupament"),
+                    ),
+                  ) * 100,
+                ) / 100,
+              )}
+            />
+          </View>
+        )}
       </TouchableOpacity>
       {/* history table */}
-      {showHistory && (<CurriculumEscolta history={funcions} />)}
+      {showHistory && <CurriculumEscolta history={funcions} />}
 
       <TouchableOpacity
         style={styles.funcionalitatBtn}
@@ -104,7 +195,6 @@ export default function ProfileLayout() {
       >
         <Text style={styles.funcionalitatText}>Cursos</Text>
       </TouchableOpacity>
-
     </View>
   );
 }
@@ -145,7 +235,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: "center",
   },
-  
+
   AnysCard: {
     flex: 1,
     backgroundColor: "gray",
@@ -170,7 +260,7 @@ const styles = StyleSheet.create({
   },
 
   funcionalitatBtn: {
-    width: '100%',
+    width: "100%",
     alignSelf: "center",
     paddingVertical: 10,
     borderBottomColor: "#4f46e5",

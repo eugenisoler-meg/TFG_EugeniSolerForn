@@ -1,10 +1,16 @@
-import { useEffect, useState } from "react";
-import { View, Text, Pressable, StyleSheet, ActivityIndicator, Alert } from "react-native";
-import { router } from "expo-router";
 import * as Utils from "@/constants/utils";
+import { router } from "expo-router";
+import { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
+import * as Database from "@/constants/database";
 import ErrorScreen from "../error";
-import* as Database from "@/constants/database";
 
 type Permissions = {
   AEiG: boolean;
@@ -22,34 +28,33 @@ export default function DashboardScreen() {
       setError(null);
       setPermisos(null);
 
-      const USER = await Utils.getUser();  
+      const USER = await Utils.getUser();
 
       if (!USER) {
         setLoading(false);
         return ErrorScreen("No hi ha cap usuari amb sessió iniciada vàlida.");
       }
-  
+
       try {
-        const permisos = parseInt(await Database.getPermisosNivell(USER.afiliat_id));
+        const permisos = parseInt(
+          await Database.getPermisosNivell(USER.afiliat_id),
+        );
 
         setPermisos({
           AEiG: (permisos & 1) > 0,
-          DEM:  (permisos & 2) > 0 , // TODO : Properament
-          MEG:  (permisos & 4) > 0 , // TODO : Properament
+          DEM: (permisos & 2) > 0, // TODO : Properament
+          MEG: (permisos & 4) > 0, // TODO : Properament
         });
       } catch (e) {
         console.log(e);
-        if (e instanceof Error)
-          setError(e.message);
+        if (e instanceof Error) setError(e.message);
         else setError("S'ha produït un error desconegut.");
-  
       } finally {
         setLoading(false);
       }
     };
     fetchPermissions();
   }, []);
-
 
   const NivellButton = ({
     title,
@@ -67,7 +72,7 @@ export default function DashboardScreen() {
     >
       <Text style={styles.buttonText}>{title}</Text>
     </Pressable>
-  )
+  );
 
   // 🔵 Loading screen
   if (loading) {
@@ -81,14 +86,17 @@ export default function DashboardScreen() {
   if (error) return ErrorScreen(error);
   if (!permisos) {
     return ErrorScreen("No tens permisos per a fer servir l'aplicació.");
-    
   }
 
   return (
     <View style={styles.container}>
       {/* MAIN BUTTON AREA */}
       <View style={styles.content}>
-        <NivellButton title="Agrupament" enabled={permisos.AEiG} route="./(aeig)/" />
+        <NivellButton
+          title="Agrupament"
+          enabled={permisos.AEiG}
+          route="./(aeig)/"
+        />
         <NivellButton title="Demarcació" enabled={permisos.DEM} route="/todo" />
         <NivellButton title="Generals" enabled={permisos.MEG} route="/todo" />
       </View>

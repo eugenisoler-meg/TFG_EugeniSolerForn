@@ -101,7 +101,7 @@ export default function AgrupamentDetailsScreen() {
   const canScrollRight = pageIndex < pages.length - 1;
 
   /* ---------------- RENDER ---------------- */
-  if (error) return ErrorScreen(error);
+  if (error) return <ErrorScreen message={error} />;
   if (loading) return <LoadingScreen />;
 
   return (

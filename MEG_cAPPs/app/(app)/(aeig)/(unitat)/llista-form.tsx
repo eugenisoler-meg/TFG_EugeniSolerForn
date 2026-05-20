@@ -1,79 +1,88 @@
-import { createLlista } from "@/constants/database";
-import { useLocalSearchParams, router } from "expo-router";
-import React, { useState } from "react";
-import { Alert, Platform, StyleSheet, TouchableOpacity } from "react-native";
-import * as MODEL from "@/constants/model";
 import ErrorScreen from "@/app/error";
 import LoadingScreen from "@/app/loading";
 import { ThemedText } from "@/components/themed-text";
-import { parseDate, formatDate, properDissabte } from "@/constants/utils";
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { TripleSelector } from "@/components/ui/selectors";
-import { Success } from "@/components/ui/alerts";
 import { SaveIcon } from "@/components/ui/add-icon";
+import { Success } from "@/components/ui/alerts";
+import { TripleSelector } from "@/components/ui/selectors";
+import { createLlista } from "@/constants/database";
+import * as MODEL from "@/constants/model";
+import { formatDate, parseDate, properDissabte } from "@/constants/utils";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { router, useLocalSearchParams } from "expo-router";
+import React, { useState } from "react";
+import { Alert, StyleSheet, TouchableOpacity } from "react-native";
 
-export default function LlistaFormScreen()  {
+export default function LlistaFormScreen() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { unitat_id } = useLocalSearchParams<{ unitat_id?: string }>();
+  const [data_llista, setDataLlista] = useState<Date | null>(null);
+  const [tipus, setTipus] = useState<MODEL.TipusLlistaKeys>("cau");
+  const [showPicker, setShowPicker] = useState(false);
 
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string|null>(null);
-    const { unitat_id } = useLocalSearchParams<{unitat_id?:string}>();
-    const [data_llista, setDataLlista] = useState<Date|null>(null);
-    const [tipus, setTipus] = useState<MODEL.TipusLlistaKeys>('cau');
-    const [showPicker, setShowPicker] = useState(false);
+  const save = async () => {
+    if (!data_llista || !tipus) return Alert.alert("Omple tots els camps");
+    if (!unitat_id) return Alert.alert("Error", "Unitat no trobada");
+    setError(null);
+    try {
+      setLoading(true);
+      const data_parsed = new Date(parseDate(data_llista));
+      const response = await createLlista({
+        unitat_id,
+        data_llista: data_parsed,
+        tipus,
+      });
+      if (response.error)
+        throw new Error(response.error || "Error al crear la llista");
+      Success("Llista creada correctament", router);
+      router.replace({
+        pathname: "/(app)/(aeig)/(unitat)/llistes",
+        params: { unitat_id },
+      });
+    } catch (error) {
+      setError(
+        error instanceof Error ? error.message : "Error al guardar la llista",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    const save = async () => {
-        if (!data_llista || !tipus) return Alert.alert("Omple tots els camps");
-        if (!unitat_id) return Alert.alert("Error", "Unitat no trobada");
-        setError(null);
-        try {
-            setLoading(true);
-            const data_parsed = new Date(parseDate(data_llista));
-            const response = await createLlista({ unitat_id, data_llista: data_parsed, tipus });
-            if(response.error) throw new Error(response.error || "Error al crear la llista");
-            Success('Llista creada correctament', router);
-            router.replace({ pathname:"/(app)/(aeig)/(unitat)/llistes", params: {unitat_id}});
-        } catch (error) {
-            setError(error instanceof Error ? error.message : "Error al guardar la llista");
-        } finally {
-            setLoading(false);
-        }
-      };
-    
-    const handleDataLlistaChange = (event: any, selectedDate?: Date) => {
-        if (!selectedDate) return;
-        setDataLlista(selectedDate);
-        setShowPicker(false);
-    };
+  const handleDataLlistaChange = (event: any, selectedDate?: Date) => {
+    if (!selectedDate) return;
+    setDataLlista(selectedDate);
+    setShowPicker(false);
+  };
 
-    if(error) return ErrorScreen(error);
-    if(loading) return LoadingScreen();
-    return <>
-    <ThemedText style={styles.label}>Data:</ThemedText>
-      <TouchableOpacity style={styles.dateInput} onPress={() => setShowPicker(true)}>
-        <ThemedText style={{fontSize: 14, fontWeight: "400"}}>
-          {data_llista && `${formatDate(data_llista)} `
-          || "Selecciona una data"}
-          </ThemedText>
+  if (error) return <ErrorScreen message={error} />;
+  if (loading) return <LoadingScreen />;
+  return (
+    <>
+      <ThemedText style={styles.label}>Data:</ThemedText>
+      <TouchableOpacity
+        style={styles.dateInput}
+        onPress={() => setShowPicker(true)}
+      >
+        <ThemedText style={{ fontSize: 14, fontWeight: "400" }}>
+          {(data_llista && `${formatDate(data_llista)} `) ||
+            "Selecciona una data"}
+        </ThemedText>
       </TouchableOpacity>
       {showPicker && (
         <DateTimePicker
-            value={data_llista ?? properDissabte()}
-            mode="date"
-            display="default"
-            onChange={handleDataLlistaChange}
-          />
-      )}
-        <ThemedText style={styles.label}>Tipus d'activitat:</ThemedText>
-        <TripleSelector
-            value={tipus}
-            onChange={setTipus}
+          value={data_llista ?? properDissabte()}
+          mode="date"
+          display="default"
+          onChange={handleDataLlistaChange}
         />
+      )}
+      <ThemedText style={styles.label}>Tipus d'activitat:</ThemedText>
+      <TripleSelector value={tipus} onChange={setTipus} />
 
-        <SaveIcon onPress={save} />
-        
-    </>;
+      <SaveIcon onPress={save} />
+    </>
+  );
 }
-
 
 const styles = StyleSheet.create({
   container: {

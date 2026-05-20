@@ -94,8 +94,8 @@ export default function LoginScreen() {
     }
   };
 
-  if (loading) return LoadingScreen();
-  if (error) return ErrorScreen(error);
+  if (loading) return <LoadingScreen />;
+  if (error) return <ErrorScreen message={error} />;
   return (
     <View style={styles.container}>
       {/* LOGO */}
@@ -123,7 +123,7 @@ export default function LoginScreen() {
             onChangeText={setDNI}
             autoCapitalize="characters"
             placeholder="Introdueix el teu DNI"
-            style={styles.formInputText}
+            style={[styles.formInputText, { color: "black" }]}
           />
         </TouchableOpacity>
 
@@ -141,7 +141,7 @@ export default function LoginScreen() {
               <MaterialCommunityIcons name="calendar-edit" size={28} />
             )}
           </View>
-          <Text style={[styles.formInputText]}>
+          <Text style={[styles.formInputText, { color: "black" }]}>
             {data_naixement ? Utils.formatDate(data_naixement) : "Escull data"}
           </Text>
         </TouchableOpacity>

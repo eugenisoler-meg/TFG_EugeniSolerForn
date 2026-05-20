@@ -122,8 +122,8 @@ export default function SortidaForm() {
     setShowFiPicker(false);
   };
 
-  if (error) return ErrorScreen(error);
-  if (loading) return LoadingScreen();
+  if (error) return <ErrorScreen message={error} />;
+  if (loading) return <LoadingScreen />;
   return (
     <View style={styles.container}>
       <ThemedText type="title">{title}</ThemedText>

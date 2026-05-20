@@ -1,3 +1,5 @@
+import ErrorScreen from "@/app/error";
+import LoadingScreen from "@/app/loading";
 import { ThemedText } from "@/components/themed-text";
 import { Collapsible } from "@/components/ui/collapsible";
 import { getFuncionsByAgrupamentID } from "@/constants/database";
@@ -6,7 +8,12 @@ import { BRANCA_COLORS, MAP_LABELS } from "@/constants/styles";
 import { getUser } from "@/constants/utils";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View
+} from "react-native";
 
 type FuncioWithRelations = MODEL.Funcio & {
   afiliat?: MODEL.Afiliat;
@@ -143,7 +150,8 @@ export default function ConsellScreen() {
   const equipAgrupamentFunctions = funcions.filter((f) =>
     f.grup?.endsWith("_equip_agrupament"),
   );
-
+  if (loading) return <LoadingScreen />;
+  if (error) return <ErrorScreen message={error} />;
   return (
     <ScrollView style={styles.container}>
       <ThemedText type="title" style={styles.title}>

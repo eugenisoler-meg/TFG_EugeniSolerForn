@@ -46,9 +46,9 @@ export default function ProfileLayout() {
   }, []);
 
   // ✅ conditional rendering only (NO hooks here)
-  if (loading) return LoadingScreen();
-  if (error) return ErrorScreen(error);
-  if (!user || !afiliat) return ErrorScreen("Error carregant dades");
+  if (loading) return <LoadingScreen />;
+  if (error) return <ErrorScreen message={error} />;
+  if (!user || !afiliat) return <ErrorScreen message="Error carregant dades" />;
 
   const SmallCard = ({
     title,

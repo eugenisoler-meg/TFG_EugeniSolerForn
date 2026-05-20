@@ -4,8 +4,6 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { IconSymbol } from "@/components/ui/icon-symbol";
-import { Colors } from "@/constants/theme";
-import { useColorScheme } from "@/hooks/use-color-scheme";
 
 function lightenHexColor(hex: string, amount: number) {
   const normalized = hex.replace("#", "");
@@ -31,7 +29,6 @@ export function Collapsible({
   headerColor,
 }: PropsWithChildren & { title: string; headerColor?: string }) {
   const [isOpen, setIsOpen] = useState(false);
-  const theme = useColorScheme() ?? "light";
   const headingBackground = headerColor
     ? lightenHexColor(headerColor, 0.4)
     : "#eaf4ff";
@@ -50,7 +47,7 @@ export function Collapsible({
           name="chevron.right"
           size={18}
           weight="medium"
-          color={theme === "light" ? Colors.light.icon : Colors.dark.icon}
+          color={"#444"}
           style={{ transform: [{ rotate: isOpen ? "90deg" : "0deg" }] }}
         />
 
@@ -58,13 +55,7 @@ export function Collapsible({
           {title}
         </ThemedText>
       </TouchableOpacity>
-      {isOpen && (
-        <ThemedView
-          style={[styles.content, { backgroundColor: contentBackground }]}
-        >
-          {children}
-        </ThemedView>
-      )}
+      {isOpen && <ThemedView style={styles.content}>{children}</ThemedView>}
     </ThemedView>
   );
 }
@@ -77,14 +68,10 @@ const styles = StyleSheet.create({
   heading: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 6,
     justifyContent: "flex-start",
     paddingVertical: 14,
     paddingHorizontal: 16,
     borderRadius: 12,
   },
-  content: {
-    marginTop: 8,
-    width: "100%",
-  },
+  content: { width: "100%" },
 });

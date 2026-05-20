@@ -32,7 +32,9 @@ export default function DashboardScreen() {
 
       if (!USER) {
         setLoading(false);
-        return ErrorScreen("No hi ha cap usuari amb sessió iniciada vàlida.");
+        return (
+          <ErrorScreen message="No hi ha cap usuari amb sessió iniciada vàlida." />
+        );
       }
 
       try {
@@ -83,9 +85,11 @@ export default function DashboardScreen() {
     );
   }
   // 🔴 Error screen
-  if (error) return ErrorScreen(error);
+  if (error) return <ErrorScreen message={error} />;
   if (!permisos) {
-    return ErrorScreen("No tens permisos per a fer servir l'aplicació.");
+    return (
+      <ErrorScreen message="No tens permisos per a fer servir l'aplicació." />
+    );
   }
 
   return (

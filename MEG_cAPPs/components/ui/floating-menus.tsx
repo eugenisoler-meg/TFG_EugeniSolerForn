@@ -1,4 +1,4 @@
-import { FOOTER_HEIGHT } from "@/constants/styles";
+import { DARK, FOOTER_HEIGHT, LIGHT, LIGHT_GRAY } from "@/constants/styles";
 import * as Utils from '@/constants/utils';
 import Entypo from '@expo/vector-icons/Entypo';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
@@ -45,7 +45,7 @@ export function Directories({closeMenu} : {closeMenu : ()=>void}){
 export const ENTITY_OPTIONS = [
   { label: "Mapa d'agrupaments", icon: <Entypo name={'map'} size={24}/>, route: "https://www.instamaps.cat/instavisor/b30f5fe7515fc80979201677a66388c9/Mapa_d_AEiGs_-_MEG.html", isExternal: true },
   { label: "L'entitat en xifres", icon: <Entypo name={'bar-graph'} size={24}/>, route: "/(app)/data", isExternal: false },
-  { label: "Contacta amb altres AEiG", icon: <MaterialCommunityIcons name="message-fast-outline" size={24}/>, route: "https://dossier.escoltesiguies.cat/", isExternal: true },
+  { label: "Contacta amb altres AEiG", icon: <MaterialCommunityIcons name="message-fast-outline" size={24}/>, route: "/todo", isExternal: false },
 ] as const;
 
 export function EntityOptions({closeMenu}: {closeMenu : ()=>void}){
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     borderBottomWidth:1,
     flexDirection:'row',
     alignItems:'center',
-    borderColor:'#eee',
+    borderColor: LIGHT_GRAY,
     paddingVertical: 12,
     paddingHorizontal: 10,
   },
@@ -79,22 +79,22 @@ const styles = StyleSheet.create({
     bottom: FOOTER_HEIGHT,
     left: 0,
     position: "absolute",
-    backgroundColor: "white",
+    backgroundColor: LIGHT,
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
     elevation: 5,
     width:200,
-    boxShadow: '2px 0 2px #000'
+    boxShadow: '2px 0 2px '+DARK,
   },
   entityOptions:{
     bottom: FOOTER_HEIGHT,
     left: 50,
     position: "absolute",
-    backgroundColor: "white",
+    backgroundColor: LIGHT,
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
     elevation: 5,
     width:250,
-    boxShadow: '2px 0 2px #000'
+    boxShadow: '2px 0 2px '+DARK,
   },
 });

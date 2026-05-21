@@ -189,8 +189,8 @@ export const generateCertificate = async (type : keyof CERTIFICATS, solicitant_i
         });
         file.write(await res.bytes());
         await Sharing.shareAsync(file.uri);
-    } catch (err) {
-        console.log(err);
+    } catch (e) {
+        console.log(e);
     }
 };
 

@@ -4,15 +4,15 @@ import { ThemedText } from "@/components/themed-text";
 import { Collapsible } from "@/components/ui/collapsible";
 import { getFuncionsByAgrupamentID } from "@/constants/database";
 import * as MODEL from "@/constants/model";
-import { BRANCA_COLORS, MAP_LABELS } from "@/constants/styles";
+import { BRANCA_COLORS, DARK, LIGHT, LIGHT_GRAY, MAP_LABELS } from "@/constants/styles";
 import { getUser } from "@/constants/utils";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  View
+    ScrollView,
+    StyleSheet,
+    Text,
+    View
 } from "react-native";
 
 type FuncioWithRelations = MODEL.Funcio & {
@@ -209,10 +209,10 @@ const styles = StyleSheet.create({
   },
   tableContainer: {
     marginBottom: 24,
-    backgroundColor: "#f8f9fa",
+    backgroundColor: LIGHT_GRAY,
     borderRadius: 8,
     padding: 12,
-    shadowColor: "#000",
+    shadowColor: DARK,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -229,12 +229,12 @@ const styles = StyleSheet.create({
     borderColor: "#e1e8ed",
     borderRadius: 6,
     overflow: "hidden",
-    backgroundColor: "#fff",
+    backgroundColor: LIGHT,
   },
   rowItem: {
     flexDirection: "row",
     borderBottomWidth: 1,
-    borderBottomColor: "#f0f0f0",
+    borderBottomColor: LIGHT_GRAY,
     paddingVertical: 12,
     paddingHorizontal: 8,
   },
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
   cell: {
     flex: 1,
     fontSize: 14,
-    color: "#212529",
+    color: DARK,
     textAlign: "left",
     paddingHorizontal: 8,
   },

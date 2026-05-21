@@ -1,6 +1,7 @@
 import { TipusLlista, TipusLlistaKeys } from "@/constants/model";
+import { LIGHT } from "@/constants/styles";
 import React from "react";
-import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface Props {
   value: TipusLlistaKeys | null;
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   selectedText: {
-    color: "#fff",
+    color: LIGHT,
     fontWeight: "700",
   },
 });

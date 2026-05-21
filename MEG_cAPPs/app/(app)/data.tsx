@@ -2,15 +2,15 @@ import GraficBarres from "@/components/data/BarGraph";
 import DataCard from "@/components/data/DataCard";
 import DataGrid from "@/components/data/DataGrid";
 import { ThemedText } from "@/components/themed-text";
-import { BRANCA_COLORS, MAP_LABELS } from "@/constants/styles";
+import { BRANCA_COLORS, LIGHT, MAP_LABELS } from "@/constants/styles";
 import { fetchQuery, getUser } from "@/constants/utils";
 import { useCallback, useEffect, useState } from "react";
 import {
-  RefreshControl,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
+    RefreshControl,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
 } from "react-native";
 import ErrorScreen from "../error";
 import LoadingScreen from "../loading";
@@ -109,7 +109,7 @@ export default function DataScreen() {
       <GraficBarres
         DATA={[
           ...(InfantsTotals ?? [
-            { label: "NO DATA", value: 0, frontColor: "white" },
+            { label: "NO DATA", value: 0, frontColor: LIGHT },
           ]),
         ]}
       />
@@ -123,7 +123,7 @@ export default function DataScreen() {
       <GraficBarres
         DATA={[
           ...(CapsTotals ?? [
-            { label: "NO DATA", value: 0, frontColor: "white" },
+            { label: "NO DATA", value: 0, frontColor: LIGHT },
           ]),
         ]}
       />
@@ -139,7 +139,7 @@ export default function DataScreen() {
       <GraficBarres
         DATA={[
           ...(DemarcacioTotals ?? [
-            { label: "NO DATA", value: 0, frontColor: "white" },
+            { label: "NO DATA", value: 0, frontColor: LIGHT },
           ]),
         ]}
       />

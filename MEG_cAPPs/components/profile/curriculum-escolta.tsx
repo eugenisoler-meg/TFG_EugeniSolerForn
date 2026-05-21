@@ -113,13 +113,13 @@ const styles = StyleSheet.create({
   rowItem: {
     flexDirection: "row",
     borderBottomWidth: 1,
-    borderColor: "#eee",
+    borderColor: STYLES.LIGHT,
     paddingVertical: 8,
   },
-  white: { color: "#eee" },
+  white: { color: STYLES.LIGHT },
   header: {
-    backgroundColor: "#f3f4f6",
-    color: "black",
+    backgroundColor: STYLES.LIGHT_GRAY,
+    color: STYLES.DARK,
   },
 
   cell: {

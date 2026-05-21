@@ -4,11 +4,13 @@ import ActionContainer from "@/components/aeig/accions-botons";
 import { ThemedText } from "@/components/themed-text";
 import * as MODEL from "@/constants/model";
 import {
-  BANNER_HEIGHT,
-  FOOTER_HEIGHT,
-  LILA,
-  MAP_LABELS,
-  PADDING,
+    BANNER_HEIGHT,
+    FOOTER_HEIGHT,
+    LIGHT,
+    LILA,
+    LILA_FOSC,
+    MAP_LABELS,
+    PADDING,
 } from "@/constants/styles";
 import { Colors } from "@/constants/theme";
 import * as Utils from "@/constants/utils";
@@ -16,12 +18,12 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import {
-  Dimensions,
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    Dimensions,
+    FlatList,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
 const __TOP = 0.8; // percentage of screen height for top section (category pages)
 
@@ -56,7 +58,8 @@ export default function AgrupamentDetailsScreen() {
         setUser(user as MODEL.User);
 
         const FUNCIONS = (await Utils.getFuncions()) as MODEL.Funcio[];
-        setFuncions(FUNCIONS.filter((f) => Utils.funcioActiva(f)));
+        setFuncions(FUNCIONS.filter((f) => Utils.funcioActiva(f))
+                            .filter((f) => f.agrupament_id === agrupament_id));
       } catch (e) {
         console.log(e);
         if (e instanceof Error) setError(e.message);
@@ -278,10 +281,10 @@ const styles = StyleSheet.create({
   selectedCard: {
     borderWidth: 2,
     borderColor: LILA,
-    backgroundColor: "#4f46e511",
+    backgroundColor: LILA_FOSC,
   },
   disabledCard: { opacity: 0.5 },
-  cardText: { color: "#fff" },
+  cardText: { color: LIGHT },
 
   center: {
     justifyContent: "center",
@@ -323,7 +326,7 @@ const styles = StyleSheet.create({
   },
   role: { fontWeight: "bold", fontSize: 16, marginBottom: 6 },
   actionBtn: {
-    //backgroundColor: "#4f46e5",
+    //backgroundColor: LILA,
     paddingHorizontal: 40,
     paddingVertical: 12,
     borderRadius: 10,

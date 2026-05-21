@@ -2,14 +2,15 @@ import * as Utils from "@/constants/utils";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
+    ActivityIndicator,
+    Pressable,
+    StyleSheet,
+    Text,
+    View,
 } from "react-native";
 
 import * as Database from "@/constants/database";
+import { GRAY, LIGHT, LIGHT_GRAY, LILA } from "@/constants/styles";
 import ErrorScreen from "../error";
 
 type Permissions = {
@@ -122,7 +123,7 @@ const styles = StyleSheet.create({
   button: {
     height: 120,
     borderRadius: 14,
-    backgroundColor: "#4f46e5",
+    backgroundColor: LILA,
     justifyContent: "center",
     alignItems: "center",
     boxShadow: `0 6px 0 rgba(35, 35, 35, 0.8)`,
@@ -132,11 +133,11 @@ const styles = StyleSheet.create({
   disabled: {
     opacity: 0.35,
     backgroundColor: "#999",
-    borderColor: "#666",
+    borderColor: GRAY,
   },
 
   buttonText: {
-    color: "white",
+    color: LIGHT,
     fontSize: 20,
     fontWeight: "600",
   },
@@ -144,11 +145,11 @@ const styles = StyleSheet.create({
   footer: {
     height: 60,
     borderTopWidth: 1,
-    borderColor: "#ddd",
+    borderColor: LIGHT_GRAY,
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    backgroundColor: "white",
+    backgroundColor: LIGHT,
   },
 
   center: {

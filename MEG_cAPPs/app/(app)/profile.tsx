@@ -5,6 +5,7 @@ import * as MODEL from "@/constants/model";
 import * as Utils from "@/constants/utils";
 
 import CurriculumEscolta from "@/components/profile/curriculum-escolta";
+import { DARK, DIRE, GRAY, LIGHT, LIGHT_GRAY, LILA, LILA_SUAU, MONI } from "@/constants/styles";
 import { router } from "expo-router";
 import ErrorScreen from "../error";
 import LoadingScreen from "../loading";
@@ -124,15 +125,15 @@ export default function ProfileLayout() {
           title="Monitoratge"
           enabled={afiliat.num_moni ?? false}
           titol={afiliat.num_moni}
-          color="#77DD77"
-          fontColor="#077807"
+          color={MONI.color}
+          fontColor={MONI.fontColor}
         />
         <SmallCard
           title="Direcció"
           enabled={afiliat.num_dire ?? false}
           titol={afiliat.num_dire}
-          color="#FDFD96"
-          fontColor="#5F5F00"
+          color={DIRE.color}
+          fontColor={DIRE.fontColor}
         />
       </View>
 
@@ -204,7 +205,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   profileCard: {
-    backgroundColor: "white",
+    backgroundColor: LIGHT,
     padding: 20,
     borderRadius: 14,
     elevation: 3,
@@ -217,20 +218,20 @@ const styles = StyleSheet.create({
 
   infoText: {
     fontSize: 12,
-    color: "#666",
+    color: GRAY,
     marginBottom: 12,
   },
 
   row: {
     flexDirection: "row",
-    color: "#333",
+    color: DARK,
     gap: 10,
     marginBottom: 20,
   },
 
   smallCard: {
     flex: 1,
-    backgroundColor: "#7069EB",
+    backgroundColor: LILA_SUAU,
     padding: 10,
     borderRadius: 12,
     alignItems: "center",
@@ -238,24 +239,24 @@ const styles = StyleSheet.create({
 
   AnysCard: {
     flex: 1,
-    backgroundColor: "gray",
+    backgroundColor: GRAY,
     height: 50,
     borderRadius: 8,
     alignItems: "center",
     justifyContent: "center",
   },
   smallCardText: {
-    color: "white",
+    color: LIGHT,
     fontWeight: "600",
   },
   smallCardTextSmall: {
-    color: "white",
+    color: LIGHT,
     fontWeight: "400",
   },
 
   disabled: {
-    backgroundColor: "gray",
-    color: "#444",
+    backgroundColor: GRAY,
+    color: LIGHT_GRAY,
     opacity: 0.35,
   },
 
@@ -263,13 +264,13 @@ const styles = StyleSheet.create({
     width: "100%",
     alignSelf: "center",
     paddingVertical: 10,
-    borderBottomColor: "#4f46e5",
+    borderBottomColor: LILA,
     borderBottomWidth: 2,
     marginBottom: 20,
   },
 
   funcionalitatText: {
-    color: "#4f46e5",
+    color: LILA,
     fontWeight: "800",
     textAlign: "center",
     marginBottom: 10,

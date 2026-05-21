@@ -1,5 +1,5 @@
 import { Llista, TipusLlista, TipusLlistaKeys } from '@/constants/model';
-import { LILA } from '@/constants/styles';
+import { DARK, GRAY, LIGHT, LIGHT_GRAY, LILA, LINK } from '@/constants/styles';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
 import { router } from "expo-router";
@@ -57,8 +57,8 @@ const styles = StyleSheet.create({
     marginVertical: 6,
     marginHorizontal: 12,
     borderRadius: 8,
-    backgroundColor: '#ddd',
-    shadowColor: '#000',
+    backgroundColor: LIGHT_GRAY,
+    shadowColor: DARK,
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2
@@ -66,11 +66,11 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   icon: { marginHorizontal: 5 },
   name: { flex: 1, fontSize: 16, fontWeight: '500' },
-  button: { paddingHorizontal: 12, paddingVertical: 6, backgroundColor: '#007bff', borderRadius: 6 },
-  buttonText: { color: '#fff', fontWeight: '500' },
-  percentage: { fontSize: 14, color: '#555', marginLeft: 8 },
-  section: { flex: 1, borderColor: '#ddd', borderRadius: 20, borderWidth: 2 },
-  sectionTitle: { fontSize: 18, fontWeight: '600', padding: 8, backgroundColor: '#f0f0f0' }
+  button: { paddingHorizontal: 12, paddingVertical: 6, backgroundColor: LINK, borderRadius: 6 },
+  buttonText: { color: LIGHT, fontWeight: '500' },
+  percentage: { fontSize: 14, color: GRAY, marginLeft: 8 },
+  section: { flex: 1, borderColor: LIGHT_GRAY, borderRadius: 20, borderWidth: 2 },
+  sectionTitle: { fontSize: 18, fontWeight: '600', padding: 8, backgroundColor: LIGHT }
 });
 
 export default function LlistaList({ llistes, highlight }: { llistes: Llista[], highlight?: boolean }) {

@@ -1,6 +1,7 @@
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Sortida } from "@/constants/model";
+import { LIGHT_GRAY } from "@/constants/styles";
 import { formatDate } from "@/constants/utils";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useState } from "react";
@@ -30,11 +31,11 @@ export function SortidaCard({ item, generateText, onEdit }: { item: Sortida, gen
       <View style={{ paddingLeft: 12, width: 80, flexDirection: "column", alignItems: "center" }}>  
         {/* Generate Text */}
         <TouchableOpacity style={styles.iconBtn} onPress={() => handleGenerateText(item)} disabled={loadingId === item.sortida_id}>
-        {loadingId === item.sortida_id ? (<ActivityIndicator size={28} color={"#ddd"}/>) : (<FontAwesome5 name="copy" size={28} color={"#ddd"}/>)}
+        {loadingId === item.sortida_id ? (<ActivityIndicator size={28} color={LIGHT_GRAY}/>) : (<FontAwesome5 name="copy" size={28} color={LIGHT_GRAY}/>)}
         </TouchableOpacity>
         {/* Edit */}
         <TouchableOpacity style={styles.iconBtn} onPress={() => onEdit?.(item)}>
-          <FontAwesome5 name="pencil-alt" size={24} color={"#ddd"}/>
+          <FontAwesome5 name="pencil-alt" size={24} color={LIGHT_GRAY}/>
         </TouchableOpacity>
       </View>
     </ThemedView>)
@@ -49,12 +50,12 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     marginBottom: 12,
     elevation: 2,
-    borderBottomColor: "#ddd",
+    borderBottomColor: LIGHT_GRAY,
     borderBottomWidth: 1,
   },
 
   iconBtn: {
-    color: "#ddd",
+    color: LIGHT_GRAY,
     padding: 10,
   },
 

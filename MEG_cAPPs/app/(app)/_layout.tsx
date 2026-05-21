@@ -1,7 +1,7 @@
 import { Icon } from "@/components/logo";
 import { ThemedText } from "@/components/themed-text";
 import { Directories, EntityOptions } from "@/components/ui/floating-menus";
-import { BANNER_HEIGHT, FOOTER_HEIGHT, PADDING } from "@/constants/styles";
+import { BACKGROUND, BANNER_HEIGHT, DARK, FOOTER_HEIGHT, GRAY, LIGHT, PADDING } from "@/constants/styles";
 import * as Utils from "@/constants/utils";
 import Entypo from "@expo/vector-icons/Entypo";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -53,7 +53,7 @@ export default function AppLayout() {
           }}
         >
           <Icon size={50} />
-          <ThemedText type="defaultSemiBold" style={{ color: "#fff" }}>
+          <ThemedText type="defaultSemiBold" style={{ color: LIGHT }}>
             MEG cAPP's
           </ThemedText>
         </View>
@@ -62,8 +62,8 @@ export default function AppLayout() {
           onPress={() => router.push("/profile")}
           activeOpacity={0.75}
         >
-          <Ionicons name="person-circle-outline" size={20} color="#fff" />
-          <ThemedText type="default" style={{ color: "#fff" }}>
+          <Ionicons name="person-circle-outline" size={20} color={LIGHT} />
+          <ThemedText type="default" style={{ color: LIGHT }}>
             {username ?? "Perfil"}
           </ThemedText>
         </TouchableOpacity>
@@ -77,7 +77,7 @@ export default function AppLayout() {
       {/* Persistent bottom bar */}
       <View style={styles.footer}>
         <TouchableOpacity onPress={showDirectories} style={styles.footerOption}>
-          <Entypo name="link" size={35} color="#fff" />
+          <Entypo name="link" size={35} color={LIGHT} />
           <ThemedText type="defaultSemiBold">Enllaços</ThemedText>
         </TouchableOpacity>
 
@@ -85,7 +85,7 @@ export default function AppLayout() {
           onPress={showEntityOptions}
           style={styles.footerOption}
         >
-          <MaterialCommunityIcons name="fleur-de-lis" size={35} color="#fff" />
+          <MaterialCommunityIcons name="fleur-de-lis" size={35} color={LIGHT} />
           <ThemedText type="defaultSemiBold">L'entitat</ThemedText>
         </TouchableOpacity>
 
@@ -93,7 +93,7 @@ export default function AppLayout() {
           onPress={() => router.replace("/dashboard")}
           style={styles.footerOption}
         >
-          <Entypo name="home" size={35} color="#fff" />
+          <Entypo name="home" size={35} color={LIGHT} />
           <ThemedText type="defaultSemiBold">Inici</ThemedText>
         </TouchableOpacity>
 
@@ -101,7 +101,7 @@ export default function AppLayout() {
           onPress={() => router.push("/profile")}
           style={styles.footerOption}
         >
-          <Ionicons name="person-circle-outline" size={35} color="#fff" />
+          <Ionicons name="person-circle-outline" size={35} color={LIGHT} />
           <ThemedText type="defaultSemiBold">Perfil</ThemedText>
         </TouchableOpacity>
 
@@ -109,7 +109,7 @@ export default function AppLayout() {
           onPress={Utils.confirmLogout}
           style={styles.footerOption}
         >
-          <Ionicons name="log-out-outline" size={35} color="#fff" />
+          <Ionicons name="log-out-outline" size={35} color={LIGHT} />
           <ThemedText type="defaultSemiBold">Surt</ThemedText>
         </TouchableOpacity>
       </View>
@@ -122,7 +122,7 @@ export default function AppLayout() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#000",
+    backgroundColor: BACKGROUND,
     flex: 1,
   },
   content: {
@@ -131,9 +131,9 @@ const styles = StyleSheet.create({
   },
   footer: {
     height: FOOTER_HEIGHT,
-    backgroundColor: "#111",
+    backgroundColor: DARK,
     borderTopWidth: 2,
-    borderColor: "#333",
+    borderColor: GRAY,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -148,9 +148,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     height: BANNER_HEIGHT,
-    backgroundColor: "#000",
+    backgroundColor: DARK,
     borderBottomWidth: 2,
-    borderColor: "#333",
+    borderColor: GRAY,
     paddingHorizontal: PADDING,
   },
 });

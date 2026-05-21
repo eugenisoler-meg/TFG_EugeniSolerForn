@@ -1,3 +1,4 @@
+import { LIGHT } from "@/constants/styles";
 import React from "react";
 import { BarChart } from "react-native-gifted-charts";
 
@@ -28,10 +29,10 @@ export default function GraficBarres({
       noOfSections={max > 3000 ? 7 : 5}
       stepValue={max > 1250 ? 500 : max > 750 ? 200 : max > 500 ? 150 : 100}
       xAxisThickness={1}
-      xAxisLabelTextStyle={{ color: "white" }}
+      xAxisLabelTextStyle={{ color: LIGHT }}
       yAxisThickness={1}
-      yAxisTextStyle={{ color: "white" }}
-      topLabelTextStyle={{ color: "white" }}
+      yAxisTextStyle={{ color: LIGHT }}
+      topLabelTextStyle={{ color: LIGHT }}
       showValuesAsTopLabel={true}
     />
   );

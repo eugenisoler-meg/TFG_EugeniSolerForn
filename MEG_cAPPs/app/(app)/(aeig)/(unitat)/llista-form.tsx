@@ -6,6 +6,7 @@ import { Success } from "@/components/ui/alerts";
 import { TripleSelector } from "@/components/ui/selectors";
 import { createLlista } from "@/constants/database";
 import * as MODEL from "@/constants/model";
+import { LIGHT_GRAY, LINK } from "@/constants/styles";
 import { formatDate, parseDate, properDissabte } from "@/constants/utils";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { router, useLocalSearchParams } from "expo-router";
@@ -98,7 +99,7 @@ const styles = StyleSheet.create({
 
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: LIGHT_GRAY,
     borderRadius: 10,
     padding: 12,
     minHeight: 50,
@@ -106,7 +107,7 @@ const styles = StyleSheet.create({
 
   dateInput: {
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: LIGHT_GRAY,
     borderRadius: 10,
     padding: 12,
     height: 50,
@@ -115,7 +116,7 @@ const styles = StyleSheet.create({
 
   btn: {
     marginTop: 30,
-    backgroundColor: "#3b82f6",
+    backgroundColor: LINK,
     padding: 16,
     borderRadius: 12,
     alignItems: "center",

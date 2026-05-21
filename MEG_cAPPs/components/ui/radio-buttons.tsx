@@ -1,17 +1,17 @@
 import { AssistenciaCau, ValidacioAssistencia, ValidacioAssistenciaKeys } from '@/constants/model';
-import { BRANCA_COLORS } from '@/constants/styles';
+import { BRANCA_COLORS, GRAY, LIGHT, RED } from '@/constants/styles';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 const ColorsAssistenciaFons: Record<ValidacioAssistenciaKeys, string> = {
-  NJ: 'rgba(200,0,0, 0.4)',
-  J: 'rgba(180,180,180, 0.4)',
-  A: BRANCA_COLORS['trucs'],
+  NJ: RED+'60',
+  J: GRAY+'60',
+  A: BRANCA_COLORS['trucs']+'60',
 } as const;
 const ColorsAssistenciaIcons: Record<ValidacioAssistenciaKeys, string> = {
-  NJ: 'rgba(200,0,0)',
-  J: 'darkgray',
-  A: 'white',
+  NJ: RED,
+  J: GRAY,
+  A: LIGHT,
 } as const;
 const IconsAssistencia: Record<ValidacioAssistenciaKeys, string> = {
   NJ: 'xmark',
@@ -19,9 +19,9 @@ const IconsAssistencia: Record<ValidacioAssistenciaKeys, string> = {
   A: 'check'
 };
 export const ColorsAssistencia: Record<ValidacioAssistenciaKeys, string> = {
-  NJ: 'rgba(200,0,0, 0.5)',
-  J: 'rgba(180,180,180, 0.5)',
-  A: 'white',
+  NJ: RED+'90',
+  J: GRAY+'90',
+  A: LIGHT+'90',
 } as const;
 
 export const renderRadioButtons = (item: AssistenciaCau, changeState: (id: number, state: ValidacioAssistenciaKeys) => void) => {
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     height: 25,
     borderRadius: 5,
     borderWidth: 1,
-    borderColor: '#555',
+    borderColor: GRAY,
     alignContent: 'center',
     justifyContent: 'center',
     paddingHorizontal: 5,

@@ -1,3 +1,4 @@
+import { LIGHT } from "@/constants/styles";
 import { Ionicons } from "@expo/vector-icons";
 import { useRef, useState } from "react";
 import { Animated, Pressable, StyleSheet, Text, View } from "react-native";
@@ -30,7 +31,7 @@ export default function DataCard({ title, icon, content }: Props) {
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.iconBox}>
-            <Ionicons name={icon} size={22} color="#fff" />
+            <Ionicons name={icon} size={22} color={LIGHT} />
           </View>
           <View style={{ flex: 1 }}>
             <Text style={styles.title}>{title}</Text>
@@ -39,7 +40,7 @@ export default function DataCard({ title, icon, content }: Props) {
             <Ionicons
               name={open ? "chevron-up" : "chevron-down"}
               size={18}
-              color="#fff"
+              color={LIGHT}
               style={{ marginLeft: "auto" }}
             />
           </View>
@@ -80,15 +81,15 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   header: { flex: 1, flexDirection: "row", alignItems: "center", gap: 4 },
-  title: { fontSize: 15, fontWeight: "600", color: "#fff" },
+  title: { fontSize: 15, fontWeight: "600", color: LIGHT },
   content: {
-    color: "white",
+    color: LIGHT,
     alignItems: "center",
     marginTop: 10,
     flexDirection: "column",
     gap: 10,
   },
-  value: { color: "white", fontSize: 28, fontWeight: "bold" },
+  value: { color: LIGHT, fontSize: 28, fontWeight: "bold" },
   chevronBox: { width: 20, alignItems: "center" },
   iconBox: { width: 25, alignItems: "center" },
 });

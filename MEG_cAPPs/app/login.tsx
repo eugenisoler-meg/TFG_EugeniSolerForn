@@ -1,6 +1,7 @@
 import Logo from "@/components/logo";
 import { ThemedText } from "@/components/themed-text";
-import { LILA, PADDING } from "@/constants/styles";
+import { LIGHT_GRAY, LILA, PADDING } from "@/constants/styles";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -8,13 +9,13 @@ import * as Linking from "expo-linking";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import {
-  Alert,
-  Platform,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    Alert,
+    Platform,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from "react-native";
 import * as DATABASE from "../constants/database";
 import * as MODEL from "../constants/model";
@@ -34,6 +35,8 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const colorScheme = useColorScheme();
 
   useEffect(() => {
     const preLoad = async () => {
@@ -123,7 +126,8 @@ export default function LoginScreen() {
             onChangeText={setDNI}
             autoCapitalize="characters"
             placeholder="Introdueix el teu DNI"
-            style={[styles.formInputText, { color: "black" }]}
+            placeholderTextColor={LIGHT_GRAY}
+            style={[styles.formInputText]}
           />
         </TouchableOpacity>
 
@@ -141,7 +145,7 @@ export default function LoginScreen() {
               <MaterialCommunityIcons name="calendar-edit" size={28} />
             )}
           </View>
-          <Text style={[styles.formInputText, { color: "black" }]}>
+          <Text style={[styles.formInputText]}> 
             {data_naixement ? Utils.formatDate(data_naixement) : "Escull data"}
           </Text>
         </TouchableOpacity>
@@ -191,11 +195,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logoContainer: { alignItems: "center", justifyContent: "center" },
-  formContainer: { padding: PADDING, boxShadow: "0px 0px 5px 1px #ddd" },
+  formContainer: { padding: PADDING, boxShadow: "0px 0px 5px 1px "+LIGHT_GRAY },
   formTitleField: { marginTop: 10 },
   formTitle: { textAlign: "center" },
   formInput: {
-    backgroundColor: "#ddd",
+    backgroundColor: LIGHT_GRAY,
     height: INPUT_HEIGHT,
     padding: INPUT_PADDING,
     borderRadius: INPUT_RADIUS,
@@ -209,7 +213,7 @@ const styles = StyleSheet.create({
     minHeight: 45,
     marginLeft: 15,
     fontSize: 15,
-    fontWeight: 500,
+    fontWeight: "500",
   },
   formSubmit: {
     marginTop: 30,

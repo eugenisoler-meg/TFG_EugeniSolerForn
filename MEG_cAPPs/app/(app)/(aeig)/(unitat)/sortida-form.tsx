@@ -4,19 +4,20 @@ import { ThemedText } from "@/components/themed-text";
 import { SaveIcon } from "@/components/ui/add-icon";
 import { saveSortida } from "@/constants/database";
 import * as MODEL from "@/constants/model";
+import { LIGHT, LIGHT_GRAY, LINK } from "@/constants/styles";
 import { formatDate } from "@/constants/utils";
 import DateTimePicker, {
-  DateTimePickerAndroid,
+    DateTimePickerAndroid,
 } from "@react-native-community/datetimepicker";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import {
-  Alert,
-  Platform,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
+    Alert,
+    Platform,
+    StyleSheet,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from "react-native";
 import { Timestamp } from "react-native-reanimated/lib/typescript/commonTypes";
 
@@ -213,17 +214,17 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    color: "#ddd",
+    color: LIGHT,
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: LIGHT_GRAY,
     borderRadius: 10,
     padding: 12,
     minHeight: 50,
   },
   input_multiline: {
-    color: "#ddd",
+    color: LIGHT,
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: LIGHT_GRAY,
     borderRadius: 10,
     padding: 12,
     minHeight: 100,
@@ -232,7 +233,7 @@ const styles = StyleSheet.create({
 
   dateInput: {
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: LIGHT_GRAY,
     borderRadius: 10,
     padding: 12,
     height: 50,
@@ -241,7 +242,7 @@ const styles = StyleSheet.create({
 
   btn: {
     marginTop: 30,
-    backgroundColor: "#3b82f6",
+    backgroundColor: LINK,
     padding: 16,
     borderRadius: 12,
     alignItems: "center",

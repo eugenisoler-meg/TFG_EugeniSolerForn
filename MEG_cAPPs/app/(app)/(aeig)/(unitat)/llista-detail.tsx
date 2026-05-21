@@ -4,12 +4,13 @@ import { ThemedText } from "@/components/themed-text";
 import { SaveIcon } from "@/components/ui/add-icon";
 import { showUnsavedChangesAlert, Success } from "@/components/ui/alerts";
 import {
-  ColorsAssistencia,
-  renderRadioButtons,
+    ColorsAssistencia,
+    renderRadioButtons,
 } from "@/components/ui/radio-buttons";
 import * as DATABASE from "@/constants/database";
 import * as MODEL from "@/constants/model";
 import { AssistenciaCau, ValidacioAssistenciaKeys } from "@/constants/model";
+import { DARK, GRAY, LIGHT, LIGHT_GRAY } from "@/constants/styles";
 import * as Utils from "@/constants/utils";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
@@ -83,7 +84,7 @@ export default function LlistaDetailScreen() {
       <Text
         style={[
           styles.name,
-          { color: item.validada ? ColorsAssistencia[item.validada] : "white" },
+          { color: item.validada ? ColorsAssistencia[item.validada] : LIGHT },
         ]}
       >
         {item.afiliat?.nom} {item.afiliat?.cognoms}
@@ -165,7 +166,7 @@ const header = (assistencies?: MODEL.AssistenciaCau[]) => (
 );
 
 const styles = StyleSheet.create({
-  border: { borderColor: "#000000", borderWidth: 2, margin: 5 },
+  border: { borderColor: DARK, borderWidth: 2, margin: 5 },
   container: { flex: 1, padding: 12 },
   row: {
     flexDirection: "row",
@@ -183,7 +184,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     borderBottomWidth: 1,
-    borderColor: "#eee",
+    borderColor: LIGHT_GRAY,
     marginRight: 10,
     padding: 2,
   },
@@ -197,7 +198,7 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#555",
+    borderColor: GRAY,
   },
-  saveText: { color: "#fff", fontWeight: "600", fontSize: 16 },
+  saveText: { color: LIGHT, fontWeight: "600", fontSize: 16 },
 });

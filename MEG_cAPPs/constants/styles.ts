@@ -5,6 +5,16 @@ export const MARGIN_TOP = 25 as const;
 export const DIRE = { color: "#FDFD96", fontColor: "#5F5F00" };
 export const MONI = { color: "#77DD77", fontColor: "#077807" };
 export const LILA = "#4f46e5" as const;
+export const LILA_SUAU = "#7069EB" as const;
+export const LILA_FOSC = "#4f46e511" as const;
+export const LINK = "#3b82f6";
+export const RED = "#c80000";
+export const LIGHT = "#fff";
+export const LIGHT_GRAY = "#d1d5db";
+export const GRAY = "#666";
+export const DARK = "#222";
+export const BACKGROUND = "#050505";
+
 export const BRANCA_COLORS: { [key: string]: string } = {
   //Funcions d'infant
   infant_castors_lludrigues: "#f6b26b",

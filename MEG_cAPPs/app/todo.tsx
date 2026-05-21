@@ -1,5 +1,6 @@
 import Logo from "@/components/logo";
 import { ThemedText } from "@/components/themed-text";
+import { BACKGROUND, DARK, GRAY, LIGHT, LIGHT_GRAY } from "@/constants/styles";
 import { router } from "expo-router";
 import { Pressable, StyleSheet, View } from "react-native";
 
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
-    backgroundColor: "#050505",
+    backgroundColor: BACKGROUND,
   },
   card: {
     width: "100%",
@@ -41,10 +42,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 24,
     borderRadius: 22,
-    backgroundColor: "rgba(255,255,255,0.06)",
+    backgroundColor: DARK,
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.12)",
-    shadowColor: "#000",
+    borderColor: GRAY,
+    shadowColor: LIGHT_GRAY,
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.16,
     shadowRadius: 20,
@@ -54,12 +55,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
     marginBottom: 18,
-    color: "#fff",
+    color: LIGHT,
   },
   description: {
     textAlign: "center",
     lineHeight: 22,
-    color: "#d1d5db",
+    color: LIGHT_GRAY,
   },
   link: {
     marginTop: 25,

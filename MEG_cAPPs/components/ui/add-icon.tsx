@@ -1,13 +1,13 @@
-import { LILA } from "@/constants/styles";
-import { FontAwesome5, Ionicons } from "@expo/vector-icons"
-import { TouchableOpacity, StyleSheet } from "react-native"
+import { LIGHT, LILA } from "@/constants/styles";
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { StyleSheet, TouchableOpacity } from "react-native";
 
 export default function AddIcon({ onPress }: { onPress: () => void }) {
     return <TouchableOpacity
             style={styles.fab}
             onPress={onPress}
           >
-            <Ionicons style={styles.iconCentered} name="add" size={32} color="white" />
+            <Ionicons style={styles.iconCentered} name="add" size={32} color={LIGHT} />
           </TouchableOpacity>
 }
 export function EditIcon({ onPress }: { onPress: () => void }) {
@@ -15,7 +15,7 @@ export function EditIcon({ onPress }: { onPress: () => void }) {
             style={styles.fab}
             onPress={onPress}
           >
-            <Ionicons style={styles.iconCentered} name="save-outline" size={32} color="white" />
+            <Ionicons style={styles.iconCentered} name="save-outline" size={32} color={LIGHT} />
           </TouchableOpacity>
 }
 export function SaveIcon({ onPress, loading }: { onPress: () => void, loading?: boolean }) {
@@ -23,7 +23,7 @@ export function SaveIcon({ onPress, loading }: { onPress: () => void, loading?: 
             style={styles.fab}
             onPress={onPress}
           >
-            <FontAwesome5 style={styles.iconCentered} name={loading ? "spinner" : "save"} size={28} color="white" />
+            <FontAwesome5 style={styles.iconCentered} name={loading ? "spinner" : "save"} size={28} color={LIGHT} />
         </TouchableOpacity>
 }
 const styles = StyleSheet.create({  

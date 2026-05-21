@@ -1,4 +1,4 @@
-import { DIRE, MONI } from "@/constants/styles";
+import { DIRE, LIGHT_GRAY, MONI } from "@/constants/styles";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { router } from "expo-router";
 import {
@@ -89,7 +89,7 @@ export default function FuncionsUnitat({
               <FontAwesome5
                 name="arrow-alt-circle-right"
                 size={20}
-                color={"#ddd"}
+                color={LIGHT_GRAY}
               />
             </View>
           </TouchableOpacity>

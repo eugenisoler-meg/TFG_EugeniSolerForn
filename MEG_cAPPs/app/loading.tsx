@@ -13,7 +13,7 @@ export default function LoadingScreen() {
         justifyContent: "center",
         alignItems: "center",
         padding: 20,
-        backgroundColor: "#050505",
+        backgroundColor: STYLES.BACKGROUND,
       }}
     >
       <View
@@ -23,10 +23,10 @@ export default function LoadingScreen() {
           alignItems: "center",
           padding: 24,
           borderRadius: 22,
-          backgroundColor: "rgba(255,255,255,0.06)",
+          backgroundColor: STYLES.DARK,
           borderWidth: 1,
-          borderColor: "rgba(255,255,255,0.12)",
-          shadowColor: "#000",
+          borderColor: STYLES.GRAY,
+          shadowColor: STYLES.LIGHT_GRAY,
           shadowOffset: { width: 0, height: 10 },
           shadowOpacity: 0.16,
           shadowRadius: 20,
@@ -40,7 +40,7 @@ export default function LoadingScreen() {
             fontSize: 20,
             textAlign: "center",
             marginBottom: 18,
-            color: "#fff",
+            color: STYLES.LIGHT,
           }}
         >
           {puntLlei}

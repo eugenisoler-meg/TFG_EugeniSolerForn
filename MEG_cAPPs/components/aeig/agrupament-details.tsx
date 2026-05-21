@@ -1,3 +1,4 @@
+import { GRAY, LIGHT_GRAY, LINK } from '@/constants/styles';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
@@ -103,7 +104,7 @@ export default function AgrupamentCard({ agrupament, onPress }: Props) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#eee',
+    backgroundColor: LIGHT_GRAY,
     borderRadius: 14,
     padding: 14,
     marginBottom: 14,
@@ -129,14 +130,14 @@ const styles = StyleSheet.create({
 
   subtitle: {
     fontSize: 13,
-    color: '#666',
+    color: GRAY,
     marginTop: 2,
   },
 
   address: {
     fontSize: 12,
     marginTop: 6,
-    color: '#444',
+    color: GRAY,
   },
 
   mapCard: {
@@ -171,6 +172,6 @@ const styles = StyleSheet.create({
 
   showMoreText: {
     fontSize: 12,
-    color: '#3b82f6',
+    color: LINK,
   },
 });

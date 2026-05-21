@@ -1,9 +1,8 @@
-import {View, Text, TouchableOpacity, StyleSheet, Dimensions} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { Animated } from "react-native";
-import { useRef, useState } from "react";
 import * as STYLES from '@/constants/styles';
-import {router} from 'expo-router';
+import { Ionicons } from "@expo/vector-icons";
+import { router } from 'expo-router';
+import { useRef, useState } from "react";
+import { Animated, Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const { width  } = Dimensions.get("window");
 const CARD_MARGIN = 16;
@@ -168,8 +167,8 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    borderColor: '#222',
-    backgroundColor: '#fff',
+    borderColor: STYLES.DARK,
+    backgroundColor: STYLES.LIGHT,
     marginHorizontal: 4,
   },
 

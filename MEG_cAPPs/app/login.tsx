@@ -35,7 +35,7 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
-
+  
   const colorScheme = useColorScheme();
 
   useEffect(() => {
@@ -59,34 +59,35 @@ export default function LoginScreen() {
         setError("Els dos camps són necessaris per iniciar sessió.");
         return;
       }
-      const res = await Utils.tryLogin(dni, data_naixement);
-      const data = await Utils.cleanResponse(res);
-      setData(data);
+      const month = String(data_naixement.getMonth() + 1).padStart(2, "0");
+      const day = String(data_naixement.getDate()).padStart(2, "0");
+      const year = String(data_naixement.getFullYear()).padStart(4, "0");
+      const storedDevice = await Utils.getDeviceId();
+      const res = await Utils.tryLogin(dni, new Date(year + '-' + month + '-' + day), storedDevice ?? undefined);
 
-      const USER = JSON.parse(data.user) as MODEL.User;
-      const AEiGs = JSON.parse(data.agrupaments) as string[];
-      const Unitats = JSON.parse(data.unitats) as string[];
-      await Utils.setUser(USER);
+      if (res.error) {
+        setError(res.error);
+        return;
+      }
 
-      const [afiliat_string, funcions_string] = await Promise.all([
-        DATABASE.getAfiliatByAfiliatID(USER.afiliat_id),
-        DATABASE.getFuncionsByAfiliatID(USER.afiliat_id),
-      ]);
+      // If backend suggests a dispositiu_id and we don't have it, store it
+      if (res.dispositiu_id && !storedDevice) {
+        await Utils.setDeviceId(res.dispositiu_id);
+      }
 
-      const afiliat_parsed = JSON.parse(afiliat_string) as MODEL.Afiliat;
-      const funcions_parsed = JSON.parse(funcions_string) as MODEL.Funcio[];
-      await Promise.all([
-        Utils.setFuncions(funcions_parsed),
-        Utils.setAfiliat(afiliat_parsed),
-        Utils.setAEiGs_ID(AEiGs),
-        Utils.setUnitats_ID(Unitats),
-      ]);
-      Alert.alert(
-        "SESSIÓ INICIADA",
-        `Hola, ${afiliat_parsed.nom} ${afiliat_parsed.cognoms}! \n :)`,
-      );
+      // If a challenge is required, prompt user to check email and show OTP screen
+      if (res.challenge_id) {
+        Alert.alert(
+          "LOGIN INTENTAT",
+          "S'ha intentat iniciar sessió. Revisa el correu per l'OTP",
+        );
+        const params = `?challenge_id=${encodeURIComponent(res.challenge_id)}${res.dispositiu_id ? `&dispositiu_id=${encodeURIComponent(res.dispositiu_id)}` : ''}`;
+        router.push(`./otp${params}`);
+        return;
+      }
 
-      router.replace("./(app)/dashboard");
+      // Otherwise it's a successful login payload
+      await Utils.finalizeLogin(res);
     } catch (e) {
       setError("Error iniciant sessió. Comprova les dades introduïdes.");
       console.log(e);

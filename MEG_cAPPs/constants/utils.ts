@@ -4,6 +4,7 @@ import { router } from 'expo-router';
 import * as Sharing from "expo-sharing";
 import { fetch } from 'expo/fetch';
 import { Alert, Linking } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 import { Timestamp } from 'react-native-reanimated/lib/typescript/commonTypes';
 import * as MODEL from './model';
 
@@ -33,9 +34,60 @@ export function formatDate(date: Date|string|Timestamp): string {
   return d.toLocaleDateString("ca-ES"); // or your locale
 }
 
-export const tryLogin = async (dni : string, data_naixement : Date) => 
-    fetch(`${API}/login?dni=${dni}&data_naixement=${parseDate(data_naixement)}`, 
-    {method: "GET", headers: {"Content-Type": "application/json"},});
+const DEVICE_KEY = 'DISPOSITIU_ID';
+
+export const getDeviceId = async (): Promise<string | null> => {
+    try {
+        return await SecureStore.getItemAsync(DEVICE_KEY);
+    } catch {
+        return null;
+    }
+};
+export const setDeviceId = async (id: string) => {
+    try {
+        await SecureStore.setItemAsync(DEVICE_KEY, id);
+    } catch (e) {
+        console.log(e);
+    }
+};
+export const deleteDeviceId = async () => {
+    try {
+        await SecureStore.deleteItemAsync(DEVICE_KEY);
+    } catch {}
+};
+
+export const tryLogin = async (dni: string, data_naixement: Date, dispositiu_id?: string) => {
+    let url = `${API}/login?dni=${encodeURIComponent(dni)}&data_naixement=${encodeURIComponent(parseDate(data_naixement))}`;
+    if (dispositiu_id) url += `&dispositiu_id=${encodeURIComponent(dispositiu_id)}`;
+    const res = await fetch(url, { method: "GET", headers: { "Content-Type": "application/json" } });
+    const text = await res.text();
+    const cleanedText = text.replace("<pre></pre>", "");
+    const json = JSON.parse(cleanedText);
+    // Unwrap success envelope if present
+    if (json.success) {
+        return json.success;
+    } else if (json.error) {
+        return { error: json.error };
+    }
+    return json;
+};
+
+export const checkOTP = async (challenge_id: string, otp: string, trust30?: boolean, dispositiu_id?: string) => {
+    let url = `${API}/check_otp?challenge_id=${encodeURIComponent(challenge_id)}&otp=${encodeURIComponent(otp)}`;
+    if (trust30) url += `&trust_days=30`;
+    if (dispositiu_id) url += `&dispositiu_id=${encodeURIComponent(dispositiu_id)}`;
+    const res = await fetch(url, { method: 'GET', headers: { 'Content-Type': 'application/json' } });
+    const text = await res.text();
+    const cleanedText = text.replace("<pre></pre>", "");
+    const json = JSON.parse(cleanedText);
+    // Unwrap success envelope if present
+    if (json.success) {
+        return json.success;
+    } else if (json.error) {
+        return { error: json.error };
+    }
+    return json;
+};
 
 export const fetchQuery = async (query: string, params: Record<string, string>) => {
     const url = new URL(`${API}/fetch`);
@@ -58,6 +110,36 @@ export const cleanResponse = async (response: Response) => {
     const json = JSON.parse(cleanedText);    
     if(json.error) throw new Error(json.error || 'An error occurred while fetching data');
     return json.success;
+};
+
+export const finalizeLogin = async (data: any) => {
+    // Lazy import to avoid circular dependency
+    const DATABASE = await import('../constants/database');
+    
+    const USER = JSON.parse(data.user) as MODEL.User;
+    const AEiGs = JSON.parse(data.agrupaments) as string[];
+    const Unitats = JSON.parse(data.unitats) as string[];
+    await setUser(USER);
+
+    const [afiliat_string, funcions_string] = await Promise.all([
+        DATABASE.getAfiliatByAfiliatID(USER.afiliat_id),
+        DATABASE.getFuncionsByAfiliatID(USER.afiliat_id),
+    ]);
+
+    const afiliat_parsed = JSON.parse(afiliat_string) as MODEL.Afiliat;
+    const funcions_parsed = JSON.parse(funcions_string) as MODEL.Funcio[];
+    await Promise.all([
+        setFuncions(funcions_parsed),
+        setAfiliat(afiliat_parsed),
+        setAEiGs_ID(AEiGs),
+        setUnitats_ID(Unitats),
+    ]);
+    Alert.alert(
+        "SESSIÓ INICIADA",
+        `Hola, ${afiliat_parsed.nom} ${afiliat_parsed.cognoms}! \n :)`,
+    );
+
+    router.replace("./(app)/dashboard");
 };
 
 export const anysFuncions = (funcions: MODEL.Funcio[]) : number => funcions.reduce((acc, f) => {

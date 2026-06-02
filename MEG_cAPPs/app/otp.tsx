@@ -1,12 +1,12 @@
 import Logo from "@/components/logo";
 import { ThemedText } from "@/components/themed-text";
 import { LIGHT_GRAY, LILA, PADDING } from "@/constants/styles";
+import * as Utils from "@/constants/utils";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { router, useLocalSearchParams } from "expo-router";
 import { useRef, useState } from "react";
-import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import * as Utils from "@/constants/utils";
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import ErrorScreen from "./error";
 import LoadingScreen from "./loading";
 
@@ -68,11 +68,14 @@ export default function OTPScreen() {
         setError("Introdueix un codi de 6 dígits");
         return;
       }
-      let dispositivoToSend: string | undefined = undefined;
-      if (trust) {
-        dispositivoToSend = dispositiu_id ?? (await Utils.getDeviceId()) ?? undefined;
+
+      let dispositiu_ID = dispositiu_id ?? (await Utils.getDeviceId()) ?? undefined;
+      if(!dispositiu_ID) {
+        setError("No s'ha pogut identificar el dispositiu. Torna a iniciar sessió.");
+        return;
       }
-      const res = await Utils.checkOTP(String(challenge_id), fullOtp, trust, dispositivoToSend);
+
+      const res = await Utils.checkOTP(String(challenge_id), fullOtp, trust, dispositiu_ID);
       if (res.error) {
         setError(res.error);
         return;

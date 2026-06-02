@@ -1,10 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { File, Paths } from 'expo-file-system';
 import { router } from 'expo-router';
+import * as SecureStore from 'expo-secure-store';
 import * as Sharing from "expo-sharing";
 import { fetch } from 'expo/fetch';
 import { Alert, Linking } from 'react-native';
-import * as SecureStore from 'expo-secure-store';
 import { Timestamp } from 'react-native-reanimated/lib/typescript/commonTypes';
 import * as MODEL from './model';
 
@@ -76,6 +76,7 @@ export const checkOTP = async (challenge_id: string, otp: string, trust30?: bool
     let url = `${API}/check_otp?challenge_id=${encodeURIComponent(challenge_id)}&otp=${encodeURIComponent(otp)}`;
     if (trust30) url += `&trust_days=30`;
     if (dispositiu_id) url += `&dispositiu_id=${encodeURIComponent(dispositiu_id)}`;
+    console.log(url);
     const res = await fetch(url, { method: 'GET', headers: { 'Content-Type': 'application/json' } });
     const text = await res.text();
     const cleanedText = text.replace("<pre></pre>", "");
@@ -234,7 +235,7 @@ export function properDissabte(): Date {
   if (dissabte < now) dissabte.setDate(dissabte.getDate() + 7)
   return dissabte;
 }
-export const logout = async() => {Promise.all([clearAfiliat(), clearFuncions(), clearUnitats_ID(), clearAEiGs_ID(), ])}; // TEST clearUser()]);}
+export const logout = async() => {Promise.all([clearAfiliat(), clearFuncions(), clearUnitats_ID(), clearAEiGs_ID(), clearUser()]);}
 
 export const funcioActiva = (f : MODEL.Funcio): boolean => {
     if(!f.data_inici || f.data_inici > new Date()) return false;

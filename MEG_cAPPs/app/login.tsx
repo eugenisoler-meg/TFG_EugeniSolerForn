@@ -17,8 +17,6 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import * as DATABASE from "../constants/database";
-import * as MODEL from "../constants/model";
 import * as Utils from "../constants/utils";
 import ErrorScreen from "./error";
 import LoadingScreen from "./loading";
@@ -62,7 +60,9 @@ export default function LoginScreen() {
       const month = String(data_naixement.getMonth() + 1).padStart(2, "0");
       const day = String(data_naixement.getDate()).padStart(2, "0");
       const year = String(data_naixement.getFullYear()).padStart(4, "0");
+      
       const storedDevice = await Utils.getDeviceId();
+      
       const res = await Utils.tryLogin(dni, new Date(year + '-' + month + '-' + day), storedDevice ?? undefined);
 
       if (res.error) {
@@ -71,7 +71,7 @@ export default function LoginScreen() {
       }
 
       // If backend suggests a dispositiu_id and we don't have it, store it
-      if (res.dispositiu_id && !storedDevice) {
+      if (res.dispositiu_id) {
         await Utils.setDeviceId(res.dispositiu_id);
       }
 

@@ -54,7 +54,7 @@ export default function AppLayout() {
         >
           <Icon size={50} />
           <ThemedText type="defaultSemiBold" style={{ color: LIGHT }}>
-            MEG cAPP's
+            MEG cAPPs
           </ThemedText>
         </View>
         <TouchableOpacity

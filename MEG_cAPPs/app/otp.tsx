@@ -1,8 +1,7 @@
 import Logo from "@/components/logo";
 import { ThemedText } from "@/components/themed-text";
-import { LIGHT_GRAY, LILA, PADDING } from "@/constants/styles";
+import { BACKGROUND, DARK, LIGHT, LIGHT_GRAY, LILA, LILA_FOSC, PADDING } from "@/constants/styles";
 import * as Utils from "@/constants/utils";
-import { useColorScheme } from "@/hooks/use-color-scheme";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { router, useLocalSearchParams } from "expo-router";
 import { useRef, useState } from "react";
@@ -17,7 +16,6 @@ export default function OTPScreen() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const inputRefs = useRef<Array<TextInput | null>>([]);
-  const colorScheme = useColorScheme();
 
   const handleOtpChange = (index: number, value: string) => {
     // User pasted the whole OTP
@@ -185,7 +183,7 @@ export default function OTPScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: BACKGROUND,
     paddingHorizontal: PADDING,
   },
   logoContainer: {
@@ -203,11 +201,12 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     fontSize: 24,
     fontWeight: "600",
+    color: LIGHT,
   },
   subtitle: {
     textAlign: "center",
     fontSize: 14,
-    color: "#666",
+    color: LIGHT_GRAY,
     marginBottom: 35,
     lineHeight: 20,
   },
@@ -225,15 +224,15 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 24,
     fontWeight: "600",
-    color: "#000",
+    color: LIGHT,
   },
   otpInputEmpty: {
     borderColor: LIGHT_GRAY,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: DARK,
   },
   otpInputFilled: {
     borderColor: LILA,
-    backgroundColor: "#f3ecff",
+    backgroundColor: LILA_FOSC,
   },
   trustContainer: {
     flexDirection: "row",
@@ -251,17 +250,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginRight: 12,
-    backgroundColor: "#fff",
+    backgroundColor: DARK,
   },
   checkboxChecked: {
     borderColor: LILA,
-    backgroundColor: "#f3ecff",
+    backgroundColor: LILA_FOSC,
   },
   trustText: {
     fontSize: 14,
     fontWeight: "500",
     flex: 1,
     lineHeight: 20,
+    color: LIGHT,
   },
   submitBtn: {
     height: 56,
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   submitBtnText: {
-    color: "#fff",
+    color: LIGHT,
     fontSize: 16,
     fontWeight: "600",
     letterSpacing: 0.5,

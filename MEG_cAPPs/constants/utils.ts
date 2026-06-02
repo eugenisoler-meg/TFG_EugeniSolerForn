@@ -76,7 +76,6 @@ export const checkOTP = async (challenge_id: string, otp: string, trust30?: bool
     let url = `${API}/check_otp?challenge_id=${encodeURIComponent(challenge_id)}&otp=${encodeURIComponent(otp)}`;
     if (trust30) url += `&trust_days=30`;
     if (dispositiu_id) url += `&dispositiu_id=${encodeURIComponent(dispositiu_id)}`;
-    console.log(url);
     const res = await fetch(url, { method: 'GET', headers: { 'Content-Type': 'application/json' } });
     const text = await res.text();
     const cleanedText = text.replace("<pre></pre>", "");

@@ -110,7 +110,7 @@ export default function LoginScreen() {
       <View style={styles.formContainer}>
         {/* CAPÇALERA */}
         <ThemedText style={styles.formTitle} type="title">
-          Entra a l'aplicatiu MEG cAPP's
+          Entra a l'aplicatiu MEG cAPPs
         </ThemedText>
 
         {/* FORMULARI */}

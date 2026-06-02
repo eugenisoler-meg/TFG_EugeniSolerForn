@@ -21,7 +21,7 @@ export default function ModalScreen() {
   return (
     <ThemedView style={styles.container}>
       <Logo />
-      <ThemedText type="title">MEG cAPP's</ThemedText>
+      <ThemedText type="title">MEG cAPPs</ThemedText>
       <Link href="./login" dismissTo style={styles.link}>
         <ThemedText type="link">Inicia sessió</ThemedText>
       </Link>

@@ -20,13 +20,22 @@ export default function ErrorScreen({ message }: { message: string }) {
           {typeof message === "string" ? message : JSON.stringify(message)}
         </ThemedText>
 
+        <View style={{ flexDirection: "row", gap: 12 }}>
         <ThemedText
           type="link"
           onPress={() => router.replace("/login")}
           style={styles.link}
-        >
+          >
           Torna a iniciar sessio
         </ThemedText>
+        <ThemedText
+          type="link"
+          onPress={() => router.back()}
+          style={styles.link}
+          >
+          Torna enrere
+        </ThemedText>
+        </View>
 
         <Pressable
           onPress={() =>
@@ -37,7 +46,7 @@ export default function ErrorScreen({ message }: { message: string }) {
           style={styles.report}
         >
           <ThemedText type="link">
-            Notificar incidència de l'aplicació
+            Notifica la incidència
           </ThemedText>
         </Pressable>
       </View>
@@ -95,6 +104,7 @@ const styles = StyleSheet.create({
     opacity: 0.85,
   },
   report: {
+    fontSize: 14,
     marginTop: 12,
     paddingVertical: 6,
   },

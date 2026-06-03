@@ -1,50 +1,51 @@
-# Welcome to your Expo app 👋
+# MEG cAPPs
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Aquest repositori conté el codi per al client mòbil de **MEG cAPPs**, una aplicació Expo amb React Native desenvolupada com a part del Treball de Fi de Grau per a Minyons Escoltes i Guies de Catalunya (MEG) am títol _MEG cAPPs: desenvolupament de pila completa d'un aplicatiu mòbil per a una entitat del tercer sector_.
 
-## Get started
+L'objectiu principal del projecte és crear un Producte Mínim Viable (PMV) que ajudi les caps voluntàries a navegar dades, consultar rols i gestionar activitats des d'un dispositiu mòbil.
 
-1. Install dependencies
+## Context del projecte
+- MEG és una organització d'escoltisme i guiatge catalana amb una forta estructura basada en el voluntariat.
+- L'aplicació és part d'un procés més ampli de transformació digital l'entitat.
+- L'objectiu és connectar els fluxos de treball de les voluntàries amb una experiència mòbil, respectant la privadesa de les dades i el model de permisos per rols de MEG, així com explotar l'eina de CRM de l'entitat.
 
-   ```bash
-   npm install
-   ```
+## Objectius principals
+- Desenvolupar una interfície mòbil per a la gestió del voluntariat de MEG.
+- Consumir una capa intermèdia d'API / middleware que abstrau SinergiaCRM i protegeix la privacitat.
+- Proporcionar accés basat en rols a dades d'unitats, agrupaments i equips de direcció.
+- Donar suport a la visualització de dades i a la generació d'informes de mètriques de l'entitat.
+- Integrar una funcionalitat d'IA generativa amb OpenAI per millorar el suport a tasques.
+- Alinear la interfície mòbil amb la imatge de MEG i les pautes d'ús mòbil.
 
-2. Start the app
+## Què fa l'aplicació?
+MEG cAPPs ofereix una experiència mòbil pensada per als diferents rols de l'entitat.
 
-   ```bash
-   npx expo start
-   ```
+- Permet iniciar sessió amb credencials i mantenir una sessió segura.
+- Mostra un panell de control amb informació rellevant segons el perfil de la persona usuària.
+- Accedeix a dades d'afiliats, funcions, unitats, sortides i llistes.
+- Gestió d'assistència a activitats de les unitats.
+- Genera documents i certificats que avalen la participació o la pertinença a una funció.
+- Visualitza mètriques resumides del grup i la unitat mitjançant gràfiques i estadístiques.
+- Integra una eina d'IA per generar text.
 
-In the output, you'll find options to open the app in a
+## Contingut del repositori
+- `app/`: pàgines i pantalles de l'aplicació.
+- `components/`: components reutilitzables d'interfície i funcionalitat.
+- `constants/`: configuració de l'app, helpers d'API, lògica d'IA i models de dades.
+- `assets/`: imatges i icones utilitzades per l'aplicació.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Notes d'execució
+- Aquest repositori és principalment el client mòbil; l'accés a l'API depèn d'un middleware/backend que fa de proxy de SinergiaCRM.
+- Es requereixen credencials externes i endpoints d'API per accedir a la font de dades de producció.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Desenvolupament
+- L'aplicació utilitza una arquitectura de rutes basada en fitxers dins `app/`.
+- Constants compartides i helpers d'API es troben a `constants/`.
+- Els components d'interfície es classifiquen per funcionalitat i patrons compartits.
+- El projecte utilitza eines gestionades per Expo i TypeScript.
 
-## Get a fresh project
+## Llicència i crèdits
+Aquest repositori forma part d'un treball de fi de grau i està mantingut per l'autor de la tesi.
+Per a un context més detallat, podeu consultar la memòria del treball o contactar amb l'autor.
 
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+_Sempre a punt_

@@ -1,9 +1,10 @@
 import { Sortida } from '@/constants/model';
 import * as Clipboard from "expo-clipboard";
+import Constants from 'expo-constants';
 import { Alert } from 'react-native';
 
-const API_AIendpoint = 'https://testapi.escoltesiguies.cat/ai';
 const AI_MODEL = 'gpt-5.4-mini';
+const API_AIendpoint = (Constants.expoConfig?.extra as any)?.AI_ENDPOINT; 
 const formatter = new Intl.DateTimeFormat("ca-ES", {
   weekday: "long",
   day: "numeric",

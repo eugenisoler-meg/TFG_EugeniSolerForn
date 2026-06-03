@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constants from 'expo-constants';
 import { File, Paths } from 'expo-file-system';
 import { router } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
@@ -8,7 +9,7 @@ import { Alert, Linking } from 'react-native';
 import { Timestamp } from 'react-native-reanimated/lib/typescript/commonTypes';
 import * as MODEL from './model';
 
-const API = 'https://testapi.escoltesiguies.cat';
+const API = (Constants.expoConfig?.extra as any)?.API_URL;
 
 export const __LLEI:string[] = [
     "Ens esforcem a merèixer confiança i fem confiança a tothom.",

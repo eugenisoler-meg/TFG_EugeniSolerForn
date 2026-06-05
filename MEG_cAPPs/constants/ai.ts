@@ -3,8 +3,14 @@ import * as Clipboard from "expo-clipboard";
 import Constants from 'expo-constants';
 import { Alert } from 'react-native';
 
+const normalizeUrl = (value?: string | null) => {
+  if (!value || typeof value !== 'string') return value;
+  if (/^https?:\/\//i.test(value)) return value;
+  return `https://${value.replace(/^\/+/, '')}`;
+};
+
 const AI_MODEL = 'gpt-5.4-mini';
-const API_AIendpoint = (Constants.expoConfig?.extra as any)?.AI_ENDPOINT; 
+const API_AIendpoint = normalizeUrl((Constants.expoConfig?.extra as any)?.AI_ENDPOINT);
 const formatter = new Intl.DateTimeFormat("ca-ES", {
   weekday: "long",
   day: "numeric",

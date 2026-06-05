@@ -9,7 +9,13 @@ import { Alert, Linking } from 'react-native';
 import { Timestamp } from 'react-native-reanimated/lib/typescript/commonTypes';
 import * as MODEL from './model';
 
-const API = (Constants.expoConfig?.extra as any)?.API_URL;
+const normalizeUrl = (value?: string | null) => {
+  if (!value || typeof value !== 'string') return value;
+  if (/^https?:\/\//i.test(value)) return value;
+  return `https://${value.replace(/^\/+/, '')}`;
+};
+
+const API = normalizeUrl((Constants.expoConfig?.extra as any)?.API_URL);
 
 export const __LLEI:string[] = [
     "Ens esforcem a merèixer confiança i fem confiança a tothom.",

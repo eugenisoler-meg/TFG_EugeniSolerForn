@@ -2,15 +2,13 @@ require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
 
-const appJsonPath = path.join(__dirname, 'app.json');
-let appJsonRaw = fs.readFileSync(appJsonPath, 'utf8');
-appJsonRaw = appJsonRaw.replace(/\/\*[\s\S]*?\*\//g, ''); // remove block comments
-appJsonRaw = appJsonRaw.replace(/\/\/.*$/gm, ''); // remove line comments
-const appJson = JSON.parse(appJsonRaw);
+const appJson = require('./app.json');
 
-module.exports = () => ({
+module.exports = ({ config }) => ({
+  ...config,
   ...appJson,
   expo: {
+    ...config.expo,
     ...appJson.expo,
     extra: {
       ...(appJson.expo?.extra || {}),

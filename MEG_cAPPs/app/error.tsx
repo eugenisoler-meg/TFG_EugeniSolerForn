@@ -6,6 +6,8 @@ import { router } from "expo-router";
 import { Linking, Pressable, StyleSheet, View } from "react-native";
 
 export default function ErrorScreen({ message }: { message: string }) {
+  const canGoBack = router.canGoBack();
+
   return (
     <View style={styles.screen}>
       <View style={styles.card}>
@@ -21,20 +23,22 @@ export default function ErrorScreen({ message }: { message: string }) {
         </ThemedText>
 
         <View style={{ flexDirection: "row", gap: 12 }}>
-        <ThemedText
-          type="link"
-          onPress={() => router.replace("/login")}
-          style={styles.link}
+          <ThemedText
+            type="link"
+            onPress={() => router.replace("/login")}
+            style={styles.link}
           >
-          Torna a iniciar sessio
-        </ThemedText>
-        <ThemedText
-          type="link"
-          onPress={() => router.back()}
-          style={styles.link}
-          >
-          Torna enrere
-        </ThemedText>
+            Torna a iniciar sessio
+          </ThemedText>
+          {canGoBack && (
+            <ThemedText
+              type="link"
+              onPress={() => router.back()}
+              style={styles.link}
+            >
+              Torna enrere
+            </ThemedText>
+          )}
         </View>
 
         <Pressable

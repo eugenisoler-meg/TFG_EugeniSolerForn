@@ -74,6 +74,9 @@ export const tryLogin = async (dni: string, data_naixement: Date, dispositiu_id?
     if (json.success) {
         return json.success;
     } else if (json.error) {
+        if(json.error === "Dispositiu no reconegut") {
+            await deleteDeviceId();
+        }
         return { error: json.error };
     }
     return json;

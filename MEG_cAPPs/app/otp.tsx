@@ -16,8 +16,13 @@ export default function OTPScreen() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const inputRefs = useRef<Array<TextInput | null>>([]);
+  const ignoreNextChange = useRef(false);
 
   const handleOtpChange = (index: number, value: string) => {
+    if (ignoreNextChange.current) {
+      ignoreNextChange.current = false;
+      return;
+    }
     // User pasted the whole OTP
     if (value.length > 1) {
         const digits = value.replace(/\D/g, "").slice(0, 6).split("");
@@ -33,6 +38,8 @@ export default function OTPScreen() {
 
         const nextIndex = Math.min(index + digits.length, 5);
         inputRefs.current[nextIndex]?.focus();
+        // prevent the subsequent onChangeText (single-char) from overwriting
+        ignoreNextChange.current = true;
         return;
     }
 
@@ -50,6 +57,27 @@ export default function OTPScreen() {
   const handleBackspace = (index: number, value: string) => {
     if (!value && index > 0) {
       inputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  // Handle low-level text input events (useful to capture paste on some platforms)
+  const handleTextInput = (index: number, text: string) => {
+    if (!text) return;
+    // If the user pasted multiple digits, populate them
+    if (text.length > 1) {
+      const digits = text.replace(/\D/g, "").slice(0, 6).split("");
+      const newOtp = [...otp];
+
+      digits.forEach((digit, i) => {
+        if (index + i < 6) newOtp[index + i] = digit;
+      });
+
+      setOtp(newOtp);
+
+      const nextIndex = Math.min(index + digits.length, 5);
+      inputRefs.current[nextIndex]?.focus();
+      // Ignore the immediate single-char onChangeText that follows the paste
+      ignoreNextChange.current = true;
     }
   };
 
@@ -124,6 +152,7 @@ export default function OTPScreen() {
                 ]}
                 value={digit}
                 onChangeText={(value) => handleOtpChange(index, value)}
+                onChange={({ nativeEvent }) => handleTextInput(index, nativeEvent.text)}
                 onKeyPress={({ nativeEvent }) => {
                     if (nativeEvent.key === "Backspace") {
                     handleBackspace(index, digit);
